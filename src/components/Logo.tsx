@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 
 interface LogoProps {
   logoUrl?: string;
@@ -7,13 +7,16 @@ interface LogoProps {
 }
 
 export const Logo: React.FC<LogoProps> = ({ logoUrl, subtext = "Maquinados CNC • Moldes • Mantenimiento Industrial", className = "" }) => {
+  const [imgError, setImgError] = useState(false);
+
   return (
     <div className={`flex items-center gap-2.5 sm:gap-3.5 group cursor-pointer ${className}`}>
-      {logoUrl ? (
+      {logoUrl && !imgError ? (
         <img 
           src={logoUrl} 
           alt="Servicios Industriales Moldmaq S.A." 
-          className="h-10 sm:h-12 w-auto max-w-[120px] sm:max-w-[180px] object-contain shrink-0 rounded"
+          onError={() => setImgError(true)}
+          className="h-10 sm:h-12 w-auto max-w-[160px] sm:max-w-[220px] object-contain shrink-0 rounded"
         />
       ) : (
         <div className="relative flex items-center justify-center shrink-0">

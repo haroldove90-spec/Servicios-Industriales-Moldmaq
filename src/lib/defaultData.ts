@@ -2,7 +2,7 @@ import { SiteConfig } from '../types';
 
 export const DEFAULT_SITE_CONFIG: SiteConfig = {
   pageTitle: "Servicios Industriales Moldmaq S.A. | Maquinados CNC, Moldes y Mantenimiento Industrial",
-  logoUrl: "", // Blank uses SVG logo component by default or image if uploaded
+  logoUrl: "https://glqyclphjelrdminvetb.supabase.co/storage/v1/object/public/logo/moldmaqlogo.png",
   logoSubtext: "Maquinados CNC • Moldes • Mantenimiento Industrial",
   faviconUrl: "",
   primaryColor: "#0F3B68",

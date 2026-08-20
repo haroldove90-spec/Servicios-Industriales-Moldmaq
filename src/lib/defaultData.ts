@@ -182,8 +182,8 @@ export const DEFAULT_SITE_CONFIG: SiteConfig = {
 
   isSuspended: false,
 
-  supabaseUrl: "https://snjcjrjyoouzhixymbnq.supabase.co",
-  supabaseAnonKey: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InNuamNqcmp5b291emhpeHltYm5xIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODY0NTA4ODUsImV4cCI6MjEwMjAyNjg4NX0.7oyCWh91A6fEDmKfgijnhABrkuiWulLJmKUXz5W1WQI",
+  supabaseUrl: "https://glqyclphjelrdminvetb.supabase.co",
+  supabaseAnonKey: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImdscXljbHBoamVscmRtaW52ZXRiIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODcyNTgwODQsImV4cCI6MjEwMjgzNDA4NH0.hRS-aJVB0TaejtfD-NaGUAjJodNiGJ9rufS2VGazfmw",
   supabaseBucketName: "moldmaq-media",
   useSupabaseStorage: true
 };

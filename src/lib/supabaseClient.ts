@@ -2,7 +2,7 @@ import { createClient, SupabaseClient } from '@supabase/supabase-js';
 import { SiteConfig } from '../types';
 import { DEFAULT_SITE_CONFIG } from './defaultData';
 
-const LOCAL_STORAGE_KEY = 'moldmaq_site_config_v3';
+const LOCAL_STORAGE_KEY = 'moldmaq_site_config_v4';
 
 let supabaseInstance: SupabaseClient | null = null;
 

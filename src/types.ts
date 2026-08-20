@@ -30,7 +30,11 @@ export interface GalleryImage {
 export interface SiteConfig {
   pageTitle: string;
   logoUrl: string;
+  brandName?: string;
+  brandSuffix?: string;
+  brandSubtitle?: string;
   logoSubtext: string;
+  showLogoText?: boolean;
   primaryColor: string;
   secondaryColor: string;
   

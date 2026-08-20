@@ -183,22 +183,30 @@ export const AboutSection: React.FC<AboutSectionProps> = ({
             </div>
 
             {/* Right Quick WhatsApp Quote Card */}
-            <div className="bg-slate-50 rounded-xl p-6 flex flex-col justify-center items-center text-center border border-gray-200 shadow-xs">
-              <div className="w-12 h-12 rounded-full bg-[#D97706] text-white flex items-center justify-center mb-3 shadow-sm">
-                <WhatsAppIcon className="w-6 h-6 text-white shrink-0" />
+            {(quoteBoxTitle || quoteBoxSubtitle || (quoteBoxButtonText && quoteBoxButtonText.trim() !== '')) && (
+              <div className="bg-slate-50 rounded-xl p-6 flex flex-col justify-center items-center text-center border border-gray-200 shadow-xs">
+                <div className="w-12 h-12 rounded-full bg-[#D97706] text-white flex items-center justify-center mb-3 shadow-sm">
+                  <WhatsAppIcon className="w-6 h-6 text-white shrink-0" />
+                </div>
+                {quoteBoxTitle && quoteBoxTitle.trim() !== '' && (
+                  <h4 className="text-sm font-bold text-gray-800 mb-1">{quoteBoxTitle}</h4>
+                )}
+                {quoteBoxSubtitle && quoteBoxSubtitle.trim() !== '' && (
+                  <p className="text-[10px] text-gray-500 mb-4">{quoteBoxSubtitle}</p>
+                )}
+                {quoteBoxButtonText && quoteBoxButtonText.trim() !== '' && (
+                  <a
+                    href={getWaUrl()}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="w-full py-3 bg-[#D97706] hover:bg-amber-600 text-white rounded-xl text-xs font-bold text-center transition-all shadow-md flex items-center justify-center gap-2 cursor-pointer"
+                  >
+                    <WhatsAppIcon className="w-4 h-4 text-white shrink-0" />
+                    <span>{quoteBoxButtonText}</span>
+                  </a>
+                )}
               </div>
-              <h4 className="text-sm font-bold text-gray-800 mb-1">{quoteBoxTitle}</h4>
-              <p className="text-[10px] text-gray-500 mb-4">{quoteBoxSubtitle}</p>
-              <a
-                href={getWaUrl()}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="w-full py-3 bg-[#D97706] hover:bg-amber-600 text-white rounded-xl text-xs font-bold text-center transition-all shadow-md flex items-center justify-center gap-2"
-              >
-                <WhatsAppIcon className="w-4 h-4 text-white shrink-0" />
-                <span>{quoteBoxButtonText}</span>
-              </a>
-            </div>
+            )}
           </div>
         </div>
       </div>

@@ -5,7 +5,11 @@ import { WhatsAppIcon } from './WhatsAppIcon';
 
 interface FooterProps {
   logoUrl?: string;
+  brandName?: string;
+  brandSuffix?: string;
+  brandSubtitle?: string;
   logoSubtext?: string;
+  showLogoText?: boolean;
   whatsappNumber: string;
   phones: string[];
   onOpenAdmin: () => void;
@@ -15,7 +19,11 @@ interface FooterProps {
 
 export const Footer: React.FC<FooterProps> = ({
   logoUrl,
+  brandName,
+  brandSuffix,
+  brandSubtitle,
   logoSubtext,
+  showLogoText,
   whatsappNumber,
   phones,
   onOpenAdmin,
@@ -48,7 +56,15 @@ export const Footer: React.FC<FooterProps> = ({
           {/* Brand Info */}
           <div className="lg:col-span-5 space-y-4">
             <div className="bg-white p-3 rounded-xl inline-block shadow-md">
-              <Logo logoUrl={logoUrl} subtext={logoSubtext} />
+              <Logo 
+                logoUrl={logoUrl} 
+                brandName={brandName}
+                brandSuffix={brandSuffix}
+                brandSubtitle={brandSubtitle}
+                subtext={logoSubtext} 
+                showLogoText={showLogoText}
+                isDarkHeader={false}
+              />
             </div>
             <p className="text-sm leading-relaxed max-w-sm opacity-90">
               Servicios Industriales Moldmaq S.A. Especialistas en maquinados CNC de precisión, diseño y fabricación de moldes de inyección, pailería y mantenimiento industrial integral con cobertura nacional.

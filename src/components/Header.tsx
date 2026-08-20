@@ -6,7 +6,11 @@ import { WhatsAppIcon } from './WhatsAppIcon';
 
 interface HeaderProps {
   logoUrl?: string;
+  brandName?: string;
+  brandSuffix?: string;
+  brandSubtitle?: string;
   logoSubtext?: string;
+  showLogoText?: boolean;
   whatsappNumber: string;
   onOpenAdmin: () => void;
   headerBgColor?: string;
@@ -19,7 +23,11 @@ interface HeaderProps {
 
 export const Header: React.FC<HeaderProps> = ({
   logoUrl,
+  brandName,
+  brandSuffix,
+  brandSubtitle,
   logoSubtext,
+  showLogoText,
   whatsappNumber,
   onOpenAdmin,
   headerBgColor = '#ffffff',
@@ -117,7 +125,15 @@ export const Header: React.FC<HeaderProps> = ({
       <div className="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8 flex items-center justify-between gap-2">
         {/* Brand Logo */}
         <a href="#inicio" onClick={(e) => handleNavClick(e, '#inicio')} className="focus:outline-hidden shrink-0">
-          <Logo logoUrl={logoUrl} subtext={logoSubtext} />
+          <Logo 
+            logoUrl={logoUrl} 
+            brandName={brandName}
+            brandSuffix={brandSuffix}
+            brandSubtitle={brandSubtitle}
+            subtext={logoSubtext} 
+            showLogoText={showLogoText}
+            isDarkHeader={isDarkHeader}
+          />
         </a>
 
         {/* Desktop Navigation Links */}
@@ -151,16 +167,18 @@ export const Header: React.FC<HeaderProps> = ({
 
         {/* Right Action Buttons */}
         <div className="hidden lg:flex items-center gap-3">
-          <a
-            href={`https://wa.me/${whatsappNumber.replace(/\D/g, '') || '525558724410'}`}
-            target="_blank"
-            rel="noopener noreferrer"
-            style={{ backgroundColor: headerCtaBgColor, color: headerCtaTextColor }}
-            className="inline-flex items-center gap-2 font-bold text-xs px-4 py-2.5 rounded-md transition-all shadow-md hover:shadow-lg transform hover:-translate-y-0.5 hover:opacity-90 cursor-pointer"
-          >
-            <WhatsAppIcon className="w-4 h-4 text-white shrink-0" />
-            <span>{headerCtaText}</span>
-          </a>
+          {headerCtaText && headerCtaText.trim() !== '' && (
+            <a
+              href={`https://wa.me/${whatsappNumber.replace(/\D/g, '') || '525558724410'}`}
+              target="_blank"
+              rel="noopener noreferrer"
+              style={{ backgroundColor: headerCtaBgColor, color: headerCtaTextColor }}
+              className="inline-flex items-center gap-2 font-bold text-xs px-4 py-2.5 rounded-md transition-all shadow-md hover:shadow-lg transform hover:-translate-y-0.5 hover:opacity-90 cursor-pointer"
+            >
+              <WhatsAppIcon className="w-4 h-4 text-white shrink-0" />
+              <span>{headerCtaText}</span>
+            </a>
+          )}
 
           <button
             onClick={onOpenAdmin}
@@ -227,18 +245,20 @@ export const Header: React.FC<HeaderProps> = ({
                 );
               })}
 
-              <div className="pt-2">
-                <a
-                  href={`https://wa.me/${whatsappNumber.replace(/\D/g, '') || '525558724410'}`}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  style={{ backgroundColor: headerCtaBgColor, color: headerCtaTextColor }}
-                  className="flex items-center justify-center gap-2.5 font-bold px-4 py-3 rounded-xl w-full text-center shadow-xs"
-                >
-                  <WhatsAppIcon className="w-5 h-5 text-white shrink-0" />
-                  <span>{headerCtaText}</span>
-                </a>
-              </div>
+              {headerCtaText && headerCtaText.trim() !== '' && (
+                <div className="pt-2">
+                  <a
+                    href={`https://wa.me/${whatsappNumber.replace(/\D/g, '') || '525558724410'}`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    style={{ backgroundColor: headerCtaBgColor, color: headerCtaTextColor }}
+                    className="flex items-center justify-center gap-2.5 font-bold px-4 py-3 rounded-xl w-full text-center shadow-xs"
+                  >
+                    <WhatsAppIcon className="w-5 h-5 text-white shrink-0" />
+                    <span>{headerCtaText}</span>
+                  </a>
+                </div>
+              )}
             </div>
           </motion.div>
         )}

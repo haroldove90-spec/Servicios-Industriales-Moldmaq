@@ -2,19 +2,39 @@ import React, { useState } from 'react';
 
 interface LogoProps {
   logoUrl?: string;
+  brandName?: string;
+  brandSuffix?: string;
+  brandSubtitle?: string;
   subtext?: string;
+  showLogoText?: boolean;
+  isDarkHeader?: boolean;
   className?: string;
 }
 
-export const Logo: React.FC<LogoProps> = ({ logoUrl, subtext = "Maquinados CNC • Moldes • Mantenimiento Industrial", className = "" }) => {
+export const Logo: React.FC<LogoProps> = ({
+  logoUrl,
+  brandName = "MOLDMAQ",
+  brandSuffix = "S.A.",
+  brandSubtitle = "Servicios Industriales",
+  subtext = "Maquinados CNC • Moldes • Mantenimiento Industrial",
+  showLogoText = true,
+  isDarkHeader = false,
+  className = ""
+}) => {
   const [imgError, setImgError] = useState(false);
+
+  const hasAnyText = showLogoText && (
+    (brandName && brandName.trim() !== '') ||
+    (brandSubtitle && brandSubtitle.trim() !== '') ||
+    (subtext && subtext.trim() !== '')
+  );
 
   return (
     <div className={`flex items-center gap-2.5 sm:gap-3.5 group cursor-pointer ${className}`}>
       {logoUrl && !imgError ? (
         <img 
           src={logoUrl} 
-          alt="Servicios Industriales Moldmaq S.A." 
+          alt={brandName || "Servicios Industriales Moldmaq S.A."} 
           onError={() => setImgError(true)}
           className="h-10 sm:h-12 w-auto max-w-[160px] sm:max-w-[220px] object-contain shrink-0 rounded"
         />
@@ -37,8 +57,8 @@ export const Logo: React.FC<LogoProps> = ({ logoUrl, subtext = "Maquinados CNC �
               points="50,4 92,26 92,74 50,96 8,74 8,26" 
               fill="url(#moldmaqGrad)" 
               stroke="var(--secondary-color, #D97706)" 
-              strokeWidth="3.5"
-              strokeLinejoin="round"
+              strokeWidth="3.5" 
+              strokeLinejoin="round" 
             />
 
             {/* Precision Gear / CNC Milling Cutters */}
@@ -62,21 +82,44 @@ export const Logo: React.FC<LogoProps> = ({ logoUrl, subtext = "Maquinados CNC �
         </div>
       )}
 
-      <div className="flex flex-col leading-tight min-w-0">
-        <span className="font-black text-base sm:text-xl md:text-2xl tracking-tight text-[#0F3B68] leading-none whitespace-nowrap flex items-center gap-1">
-          MOLDMAQ <span className="text-[#D97706] font-bold text-xs sm:text-sm px-1.5 py-0.5 rounded bg-amber-50 border border-amber-200">S.A.</span>
-        </span>
-        <span className="text-[9px] sm:text-[11px] font-extrabold text-slate-600 uppercase tracking-widest mt-0.5 truncate max-w-[200px] sm:max-w-sm">
-          Servicios Industriales
-        </span>
-        {subtext && (
-          <span className="text-[8px] sm:text-[9px] font-semibold text-slate-400 uppercase tracking-wider truncate max-w-[180px] sm:max-w-xs hidden sm:block">
-            {subtext}
-          </span>
-        )}
-      </div>
+      {hasAnyText && (
+        <div className="flex flex-col leading-tight min-w-0">
+          {brandName && brandName.trim() !== '' && (
+            <span 
+              style={{ color: isDarkHeader ? '#ffffff' : '#0F3B68' }}
+              className="font-black text-base sm:text-xl md:text-2xl tracking-tight leading-none whitespace-nowrap flex items-center gap-1.5"
+            >
+              {brandName}
+              {brandSuffix && brandSuffix.trim() !== '' && (
+                <span className="text-[#D97706] font-bold text-xs sm:text-sm px-1.5 py-0.5 rounded bg-amber-500/10 border border-amber-500/30">
+                  {brandSuffix}
+                </span>
+              )}
+            </span>
+          )}
+
+          {brandSubtitle && brandSubtitle.trim() !== '' && (
+            <span 
+              style={{ color: isDarkHeader ? '#cbd5e1' : '#475569' }}
+              className="text-[9px] sm:text-[11px] font-extrabold uppercase tracking-widest mt-0.5 truncate max-w-[200px] sm:max-w-sm"
+            >
+              {brandSubtitle}
+            </span>
+          )}
+
+          {subtext && subtext.trim() !== '' && (
+            <span 
+              style={{ color: isDarkHeader ? '#94a3b8' : '#94a3b8' }}
+              className="text-[8px] sm:text-[9px] font-semibold uppercase tracking-wider truncate max-w-[200px] sm:max-w-xs hidden sm:block mt-0.5"
+            >
+              {subtext}
+            </span>
+          )}
+        </div>
+      )}
     </div>
   );
 };
+
 
 

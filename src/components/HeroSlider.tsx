@@ -109,25 +109,29 @@ export const HeroSlider: React.FC<HeroSliderProps> = ({
             <span>Mantenimiento Industrial</span>
           </motion.div>
 
-          <motion.h1
-            key={`title-${currentIndex}`}
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.2, duration: 0.5 }}
-            className="text-2xl sm:text-4xl lg:text-5xl font-bold text-white mb-2 sm:mb-4 leading-tight drop-shadow-md"
-          >
-            {currentSlide.title}
-          </motion.h1>
+          {currentSlide.title && currentSlide.title.trim() !== '' && (
+            <motion.h1
+              key={`title-${currentIndex}`}
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.2, duration: 0.5 }}
+              className="text-2xl sm:text-4xl lg:text-5xl font-bold text-white mb-2 sm:mb-4 leading-tight drop-shadow-md"
+            >
+              {currentSlide.title}
+            </motion.h1>
+          )}
 
-          <motion.p
-            key={`subtitle-${currentIndex}`}
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.3, duration: 0.5 }}
-            className="text-sm sm:text-lg text-gray-200 font-normal leading-relaxed drop-shadow-xs max-w-xl"
-          >
-            {currentSlide.subtitle}
-          </motion.p>
+          {currentSlide.subtitle && currentSlide.subtitle.trim() !== '' && (
+            <motion.p
+              key={`subtitle-${currentIndex}`}
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.3, duration: 0.5 }}
+              className="text-sm sm:text-lg text-gray-200 font-normal leading-relaxed drop-shadow-xs max-w-xl"
+            >
+              {currentSlide.subtitle}
+            </motion.p>
+          )}
 
           <motion.div
             key={`btn-${currentIndex}`}
@@ -136,19 +140,21 @@ export const HeroSlider: React.FC<HeroSliderProps> = ({
             transition={{ delay: 0.4, duration: 0.5 }}
             className="pt-2 flex flex-wrap gap-3 sm:gap-4"
           >
-            <a
-              href={waUrl}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="inline-flex items-center gap-2 sm:gap-2.5 bg-[#D97706] hover:bg-amber-600 text-white font-bold text-xs sm:text-sm px-5 sm:px-6 py-2.5 sm:py-3 rounded-md transition-all shadow-lg hover:shadow-amber-900/40"
-            >
-              <WhatsAppIcon className="w-4 h-4 sm:w-5 sm:h-5 text-white shrink-0" />
-              <span>{currentSlide.buttonText || "Cotizar Proyecto"}</span>
-            </a>
+            {currentSlide.buttonText && currentSlide.buttonText.trim() !== '' && (
+              <a
+                href={waUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-2 sm:gap-2.5 bg-[#D97706] hover:bg-amber-600 text-white font-bold text-xs sm:text-sm px-5 sm:px-6 py-2.5 sm:py-3 rounded-md transition-all shadow-lg hover:shadow-amber-900/40 cursor-pointer"
+              >
+                <WhatsAppIcon className="w-4 h-4 sm:w-5 sm:h-5 text-white shrink-0" />
+                <span>{currentSlide.buttonText}</span>
+              </a>
+            )}
 
             <a
               href="#servicios"
-              className="inline-flex items-center gap-2 bg-white/10 hover:bg-white/20 backdrop-blur-sm text-white font-bold text-xs sm:text-sm border border-white/30 px-5 sm:px-6 py-2.5 sm:py-3 rounded-md transition-all"
+              className="inline-flex items-center gap-2 bg-white/10 hover:bg-white/20 backdrop-blur-sm text-white font-bold text-xs sm:text-sm border border-white/30 px-5 sm:px-6 py-2.5 sm:py-3 rounded-md transition-all cursor-pointer"
             >
               Ver Soluciones
             </a>

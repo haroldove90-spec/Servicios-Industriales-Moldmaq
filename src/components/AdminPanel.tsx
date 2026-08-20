@@ -557,35 +557,98 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({
                 </div>
               </div>
 
-              {/* General Page Information */}
+              {/* General Page & Brand Identity Information */}
               <div className="bg-gray-50 p-5 rounded-2xl border border-gray-200 space-y-4">
-                <h3 className="font-extrabold text-base text-gray-900">1. Título & Subtítulo de la Página</h3>
+                <div className="flex items-center justify-between">
+                  <h3 className="font-extrabold text-base text-gray-900">1. Identidad de Marca, Textos del Logo & Títulos</h3>
+                  <span className="text-xs font-semibold bg-blue-100 text-[#0F3B68] px-2.5 py-0.5 rounded-full">Textos & Logo</span>
+                </div>
+                <p className="text-xs text-gray-600">
+                  Modifique el nombre comercial, subtítulos, eslogan y título de pestaña del navegador. Si deja algún campo de botón o texto vacío, se ocultará automáticamente sin mostrar errores.
+                </p>
 
-                <div className="space-y-3">
+                <div className="space-y-4">
                   <div>
                     <label className="block text-xs font-bold text-gray-700 uppercase mb-1">
-                      Título de la Página (Pestaña del Navegador y Encabezado SEO)
+                      Título de la Página Web (Pestaña del Navegador y SEO)
                     </label>
                     <input
                       type="text"
                       value={formData.pageTitle || ''}
                       onChange={(e) => setFormData({ ...formData, pageTitle: e.target.value })}
-                      placeholder="Servicios Industriales Moldmaq S.A. | Maquinados CNC..."
+                      placeholder="Servicios Industriales Moldmaq S.A. | Maquinados CNC, Moldes..."
                       className="w-full px-4 py-2.5 rounded-xl border border-gray-300 text-sm font-medium focus:ring-2 focus:ring-[#0F3B68]"
                     />
                   </div>
 
-                  <div>
-                    <label className="block text-xs font-bold text-gray-700 uppercase mb-1">
-                      Subtexto / Eslogan debajo del Logotipo
+                  <div className="grid grid-cols-1 sm:grid-cols-12 gap-4">
+                    <div className="sm:col-span-8">
+                      <label className="block text-xs font-bold text-gray-700 uppercase mb-1">
+                        Nombre Principal de la Empresa (Línea 1 del Logo)
+                      </label>
+                      <input
+                        type="text"
+                        value={formData.brandName ?? 'MOLDMAQ'}
+                        onChange={(e) => setFormData({ ...formData, brandName: e.target.value })}
+                        placeholder="MOLDMAQ"
+                        className="w-full px-4 py-2.5 rounded-xl border border-gray-300 text-sm font-bold text-[#0F3B68] focus:ring-2 focus:ring-[#0F3B68]"
+                      />
+                    </div>
+
+                    <div className="sm:col-span-4">
+                      <label className="block text-xs font-bold text-gray-700 uppercase mb-1">
+                        Sufijo / Distintivo (Ej. S.A.)
+                      </label>
+                      <input
+                        type="text"
+                        value={formData.brandSuffix ?? 'S.A.'}
+                        onChange={(e) => setFormData({ ...formData, brandSuffix: e.target.value })}
+                        placeholder="S.A. (dejar vacío si no aplica)"
+                        className="w-full px-4 py-2.5 rounded-xl border border-gray-300 text-sm font-bold text-[#D97706] focus:ring-2 focus:ring-[#0F3B68]"
+                      />
+                    </div>
+                  </div>
+
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div>
+                      <label className="block text-xs font-bold text-gray-700 uppercase mb-1">
+                        Subtítulo del Logo (Línea 2 - Ej: SERVICIOS INDUSTRIALES)
+                      </label>
+                      <input
+                        type="text"
+                        value={formData.brandSubtitle ?? 'Servicios Industriales'}
+                        onChange={(e) => setFormData({ ...formData, brandSubtitle: e.target.value })}
+                        placeholder="SERVICIOS INDUSTRIALES (dejar vacío para ocultar)"
+                        className="w-full px-4 py-2.5 rounded-xl border border-gray-300 text-sm font-medium focus:ring-2 focus:ring-[#0F3B68]"
+                      />
+                    </div>
+
+                    <div>
+                      <label className="block text-xs font-bold text-gray-700 uppercase mb-1">
+                        Eslogan / Línea 3 (Ej: MAQUINADOS CNC • MOLDES • MANTENIMIENTO)
+                      </label>
+                      <input
+                        type="text"
+                        value={formData.logoSubtext ?? 'Maquinados CNC • Moldes • Mantenimiento Industrial'}
+                        onChange={(e) => setFormData({ ...formData, logoSubtext: e.target.value })}
+                        placeholder="MAQUINADOS CNC • MOLDES • MANTENIMIENTO INDUSTRIAL (dejar vacío para ocultar)"
+                        className="w-full px-4 py-2.5 rounded-xl border border-gray-300 text-sm font-medium focus:ring-2 focus:ring-[#0F3B68]"
+                      />
+                    </div>
+                  </div>
+
+                  <div className="pt-1">
+                    <label className="flex items-center gap-3 p-3 bg-white rounded-xl border border-gray-200 cursor-pointer hover:bg-slate-50 transition-colors">
+                      <input
+                        type="checkbox"
+                        checked={formData.showLogoText !== false}
+                        onChange={(e) => setFormData({ ...formData, showLogoText: e.target.checked })}
+                        className="w-4 h-4 text-blue-600 rounded focus:ring-blue-500 cursor-pointer"
+                      />
+                      <span className="text-xs font-bold text-gray-800">
+                        Mostrar textos al lado del logotipo (Desmarque si su imagen de logo ya incluye el texto integrado)
+                      </span>
                     </label>
-                    <input
-                      type="text"
-                      value={formData.logoSubtext || ''}
-                      onChange={(e) => setFormData({ ...formData, logoSubtext: e.target.value })}
-                      placeholder="Maquinados CNC • Moldes • Mantenimiento Industrial"
-                      className="w-full px-4 py-2.5 rounded-xl border border-gray-300 text-sm font-medium focus:ring-2 focus:ring-[#0F3B68]"
-                    />
                   </div>
                 </div>
               </div>
@@ -672,13 +735,13 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-1">
                     <div>
                       <label className="block text-xs font-bold text-gray-700 uppercase mb-1">
-                        Texto del Botón en Barra Superior
+                        Texto del Botón en Barra Superior <span className="text-[10px] text-gray-500 font-normal lowercase">(dejar vacío para ocultar)</span>
                       </label>
                       <input
                         type="text"
-                        value={formData.topBarButtonText ?? 'Cotizar Maquinado'}
+                        value={formData.topBarButtonText ?? ''}
                         onChange={(e) => setFormData({ ...formData, topBarButtonText: e.target.value })}
-                        placeholder="Cotizar Maquinado"
+                        placeholder="Ej: Cotizar Maquinado (o dejar en blanco para ocultar)"
                         className="w-full px-4 py-2 rounded-xl border border-gray-300 text-sm font-medium"
                       />
                     </div>
@@ -784,13 +847,13 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-2">
                   <div>
                     <label className="block text-xs font-bold text-gray-700 uppercase mb-1">
-                      Texto del Botón Principal (CTA Header)
+                      Texto del Botón Principal (CTA Header) <span className="text-[10px] text-gray-500 font-normal lowercase">(dejar vacío para ocultar)</span>
                     </label>
                     <input
                       type="text"
-                      value={formData.headerCtaText ?? 'Cotizar Proyecto'}
+                      value={formData.headerCtaText ?? ''}
                       onChange={(e) => setFormData({ ...formData, headerCtaText: e.target.value })}
-                      placeholder="Cotizar Proyecto"
+                      placeholder="Ej: Cotizar Proyecto (o dejar en blanco para ocultar)"
                       className="w-full px-4 py-2 rounded-xl border border-gray-300 text-sm font-medium"
                     />
                   </div>
@@ -1374,6 +1437,23 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({
                       className="w-full px-4 py-2 rounded-xl border border-gray-300 text-sm"
                     />
                   </div>
+
+                  <div>
+                    <label className="block text-xs font-bold text-gray-700 uppercase mb-1">
+                      Texto del Botón de la Diapositiva <span className="text-[10px] text-gray-500 font-normal lowercase">(dejar vacío para ocultar el botón)</span>
+                    </label>
+                    <input
+                      type="text"
+                      placeholder="Ej: Cotizar Proyecto (o dejar en blanco para ocultar)"
+                      value={slide.buttonText || ''}
+                      onChange={(e) => {
+                        const newSlides = [...formData.heroSlides];
+                        newSlides[idx] = { ...newSlides[idx], buttonText: e.target.value };
+                        setFormData({ ...formData, heroSlides: newSlides });
+                      }}
+                      className="w-full px-4 py-2.5 rounded-xl border border-gray-300 text-sm font-medium"
+                    />
+                  </div>
                 </div>
               ))}
 
@@ -1652,12 +1732,15 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({
                       />
                     </div>
                     <div>
-                      <label className="block text-[10px] font-bold text-gray-600 mb-0.5">Texto del Botón</label>
+                      <label className="block text-[10px] font-bold text-gray-600 mb-0.5">
+                        Texto del Botón <span className="text-gray-400 font-normal lowercase">(dejar vacío para ocultar)</span>
+                      </label>
                       <input
                         type="text"
+                        placeholder="Ej: COTIZAR PROYECTO (o dejar en blanco para ocultar)"
                         value={formData.aboutQuoteBoxButtonText || ''}
                         onChange={(e) => setFormData({ ...formData, aboutQuoteBoxButtonText: e.target.value })}
-                        className="w-full px-3 py-1.5 rounded-lg border border-gray-300 text-xs font-bold text-[#1D7946]"
+                        className="w-full px-3 py-1.5 rounded-lg border border-gray-300 text-xs font-bold text-[#D97706]"
                       />
                     </div>
                   </div>

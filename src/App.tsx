@@ -193,7 +193,11 @@ export default function App() {
       {/* 2. Header Navigation */}
       <Header
         logoUrl={config.logoUrl}
+        brandName={config.brandName}
+        brandSuffix={config.brandSuffix}
+        brandSubtitle={config.brandSubtitle}
         logoSubtext={config.logoSubtext}
+        showLogoText={config.showLogoText}
         whatsappNumber={config.whatsappNumber}
         onOpenAdmin={handleOpenAdmin}
         headerBgColor={config.headerBgColor}
@@ -277,7 +281,11 @@ export default function App() {
       {/* 9. Footer */}
       <Footer
         logoUrl={config.logoUrl}
+        brandName={config.brandName}
+        brandSuffix={config.brandSuffix}
+        brandSubtitle={config.brandSubtitle}
         logoSubtext={config.logoSubtext}
+        showLogoText={config.showLogoText}
         whatsappNumber={config.whatsappNumber}
         phones={config.topPhones}
         onOpenAdmin={handleOpenAdmin}

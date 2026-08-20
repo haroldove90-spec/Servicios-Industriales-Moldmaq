@@ -1,5 +1,5 @@
 import React from 'react';
-import { Phone, MessageCircle, Clock, MapPin, Database } from 'lucide-react';
+import { Phone, MessageCircle, Clock, MapPin } from 'lucide-react';
 
 interface TopBarProps {
   phones: string[];
@@ -10,17 +10,17 @@ export const TopBar: React.FC<TopBarProps> = ({ phones, whatsappNumber }) => {
   const cleanPhone = (phone: string) => phone.replace(/\D/g, '');
 
   return (
-    <div className="hidden md:block bg-slate-900 text-white text-xs py-2 px-4 border-b border-slate-800 transition-colors">
+    <div className="hidden md:block bg-slate-950 text-white text-xs py-2 px-4 border-b border-slate-800 transition-colors">
       <div className="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center gap-2">
         {/* Left: Schedule & Coverage */}
         <div className="flex items-center gap-4 text-slate-300 text-[11px] sm:text-xs">
           <div className="flex items-center gap-1.5 font-medium tracking-tight">
-            <Clock className="w-3.5 h-3.5 text-emerald-400" />
-            <span>Servicio Local y Nacional los 365 Días</span>
+            <Clock className="w-3.5 h-3.5 text-amber-400" />
+            <span>Atención a Plantas Industriales y Maquinados Urgentes</span>
           </div>
           <div className="hidden lg:flex items-center gap-1.5 font-medium border-l border-slate-700 pl-4">
-            <MapPin className="w-3.5 h-3.5 text-emerald-400" />
-            <span className="text-slate-300">CDMX, Edomex, Toluca, Pachuca, Querétaro y Toda la República</span>
+            <MapPin className="w-3.5 h-3.5 text-amber-400" />
+            <span className="text-slate-300">Zona Metropolitana, CDMX, Edo. Mex, Querétaro y Bajío</span>
           </div>
         </div>
 
@@ -41,7 +41,7 @@ export const TopBar: React.FC<TopBarProps> = ({ phones, whatsappNumber }) => {
                 </a>
               ))
             ) : (
-              <span className="font-semibold">55-6347-7853</span>
+              <span className="font-semibold">+52 55 5872 4410</span>
             )}
           </div>
 
@@ -50,10 +50,10 @@ export const TopBar: React.FC<TopBarProps> = ({ phones, whatsappNumber }) => {
               href={`https://wa.me/${whatsappNumber}`}
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center gap-1.5 bg-[#1D7946] hover:bg-emerald-600 text-white font-bold px-3 py-1 rounded-md text-[11px] transition-all shadow-xs hover:shadow-md"
+              className="inline-flex items-center gap-1.5 bg-[#D97706] hover:bg-amber-600 text-white font-bold px-3 py-1 rounded-md text-[11px] transition-all shadow-xs hover:shadow-md"
             >
               <MessageCircle className="w-3.5 h-3.5" />
-              <span>WhatsApp Directo</span>
+              <span>Cotizar Maquinado</span>
             </a>
           )}
         </div>
@@ -61,4 +61,5 @@ export const TopBar: React.FC<TopBarProps> = ({ phones, whatsappNumber }) => {
     </div>
   );
 };
+
 

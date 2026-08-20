@@ -104,9 +104,9 @@ export const HeroSlider: React.FC<HeroSliderProps> = ({
             transition={{ delay: 0.1, duration: 0.4 }}
             className="inline-flex items-center gap-2 text-white/90 text-xs sm:text-sm font-medium uppercase tracking-widest mb-1"
           >
-            <span className="text-emerald-400 font-bold">Mudanzas Profesionales</span>
+            <span className="text-amber-400 font-bold">Maquinados CNC & Moldes</span>
             <span className="opacity-50">•</span>
-            <span>Servicio 365 Días</span>
+            <span>Mantenimiento Industrial</span>
           </motion.div>
 
           <motion.h1
@@ -140,17 +140,17 @@ export const HeroSlider: React.FC<HeroSliderProps> = ({
               href={waUrl}
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center gap-2 sm:gap-2.5 bg-[#1D7946] hover:bg-emerald-700 text-white font-bold text-xs sm:text-sm px-5 sm:px-6 py-2.5 sm:py-3 rounded-md transition-all shadow-lg hover:shadow-emerald-900/40"
+              className="inline-flex items-center gap-2 sm:gap-2.5 bg-[#D97706] hover:bg-amber-600 text-white font-bold text-xs sm:text-sm px-5 sm:px-6 py-2.5 sm:py-3 rounded-md transition-all shadow-lg hover:shadow-amber-900/40"
             >
               <WhatsAppIcon className="w-4 h-4 sm:w-5 sm:h-5 text-white shrink-0" />
-              <span>{currentSlide.buttonText || "WhatsApp Directo"}</span>
+              <span>{currentSlide.buttonText || "Cotizar Proyecto"}</span>
             </a>
 
             <a
               href="#servicios"
               className="inline-flex items-center gap-2 bg-white/10 hover:bg-white/20 backdrop-blur-sm text-white font-bold text-xs sm:text-sm border border-white/30 px-5 sm:px-6 py-2.5 sm:py-3 rounded-md transition-all"
             >
-              Ver Servicios
+              Ver Soluciones
             </a>
           </motion.div>
         </div>

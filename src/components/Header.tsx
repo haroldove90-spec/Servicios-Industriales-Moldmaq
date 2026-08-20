@@ -119,19 +119,19 @@ export const Header: React.FC<HeaderProps> = ({
         {/* Right Action Buttons */}
         <div className="hidden lg:flex items-center gap-3">
           <a
-            href={`https://wa.me/${whatsappNumber.replace(/\D/g, '') || '5523068535'}`}
+            href={`https://wa.me/${whatsappNumber.replace(/\D/g, '') || '525558724410'}`}
             target="_blank"
             rel="noopener noreferrer"
-            className="inline-flex items-center gap-2 bg-[#1D7946] hover:bg-emerald-700 text-white font-bold text-xs px-4 py-2.5 rounded-md transition-all shadow-md hover:shadow-lg transform hover:-translate-y-0.5"
+            className="inline-flex items-center gap-2 bg-[#D97706] hover:bg-amber-600 text-white font-bold text-xs px-4 py-2.5 rounded-md transition-all shadow-md hover:shadow-lg transform hover:-translate-y-0.5"
           >
             <WhatsAppIcon className="w-4 h-4 text-white shrink-0" />
-            <span>Cotizar WhatsApp</span>
+            <span>Cotizar Proyecto</span>
           </a>
 
           <button
             onClick={onOpenAdmin}
             title="Panel de Administración"
-            className="p-2 text-gray-500 hover:text-[#0E5197] hover:bg-gray-100 rounded-md transition-colors border border-gray-200"
+            className="p-2 text-gray-500 hover:text-[#0F3B68] hover:bg-gray-100 rounded-md transition-colors border border-gray-200"
           >
             <Settings className="w-4 h-4" />
           </button>
@@ -188,13 +188,13 @@ export const Header: React.FC<HeaderProps> = ({
 
               <div className="pt-2">
                 <a
-                  href={`https://wa.me/${whatsappNumber.replace(/\D/g, '') || '5523068535'}`}
+                  href={`https://wa.me/${whatsappNumber.replace(/\D/g, '') || '525558724410'}`}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="flex items-center justify-center gap-2.5 bg-[#1D7946] hover:bg-emerald-700 text-white font-bold px-4 py-3 rounded-xl w-full text-center shadow-xs"
+                  className="flex items-center justify-center gap-2.5 bg-[#D97706] hover:bg-amber-600 text-white font-bold px-4 py-3 rounded-xl w-full text-center shadow-xs"
                 >
                   <WhatsAppIcon className="w-5 h-5 text-white shrink-0" />
-                  <span>Cotizar por WhatsApp Directo</span>
+                  <span>Cotizar Proyecto por WhatsApp</span>
                 </a>
               </div>
             </div>

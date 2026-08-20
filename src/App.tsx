@@ -18,26 +18,39 @@ import { AlertTriangle, ArrowLeft, ShieldAlert } from 'lucide-react';
 
 export default function App() {
   const [config, setConfig] = useState<SiteConfig>(loadSiteConfig());
-  const [currentView, setCurrentView] = useState<'suspended' | 'landing' | 'admin'>('suspended');
+  const [currentView, setCurrentView] = useState<'suspended' | 'landing' | 'admin'>(() => {
+    const initialConfig = loadSiteConfig();
+    if (typeof window !== 'undefined') {
+      if (window.location.hash === '#admin' || window.location.pathname === '/admin') {
+        return 'admin';
+      }
+      if (window.location.hash === '#sitio' || window.location.hash === '#preview') {
+        return 'landing';
+      }
+    }
+    return initialConfig.isSuspended ? 'suspended' : 'landing';
+  });
   const [isAdminAuthenticated, setIsAdminAuthenticated] = useState<boolean>(() => {
-    return sessionStorage.getItem('vazquez_admin_authenticated') === 'true';
+    return sessionStorage.getItem('moldmaq_admin_authenticated') === 'true';
   });
 
-  // Check URL hash for direct #admin or #preview access
+  // Check URL hash for direct #admin or #preview or #sitio access
   useEffect(() => {
     const handleHashChange = () => {
       if (window.location.hash === '#admin' || window.location.pathname === '/admin') {
         setCurrentView('admin');
       } else if (window.location.hash === '#sitio' || window.location.hash === '#preview') {
         setCurrentView('landing');
-      } else {
+      } else if (window.location.hash === '#suspendido') {
         setCurrentView('suspended');
+      } else {
+        setCurrentView(config.isSuspended ? 'suspended' : 'landing');
       }
     };
     handleHashChange();
     window.addEventListener('hashchange', handleHashChange);
     return () => window.removeEventListener('hashchange', handleHashChange);
-  }, []);
+  }, [config.isSuspended]);
 
   // Fetch live config from Supabase on mount
   useEffect(() => {
@@ -46,6 +59,9 @@ export default function App() {
       if (remoteConfig) {
         setConfig(remoteConfig);
         applyThemeColors(remoteConfig.primaryColor, remoteConfig.secondaryColor);
+        if (window.location.hash !== '#admin' && window.location.hash !== '#preview' && window.location.hash !== '#sitio') {
+          setCurrentView(remoteConfig.isSuspended ? 'suspended' : 'landing');
+        }
       }
     }
     fetchRemoteConfig();
@@ -84,7 +100,7 @@ export default function App() {
   };
 
   const handleCloseAdmin = () => {
-    setCurrentView('suspended');
+    setCurrentView(config.isSuspended ? 'suspended' : 'landing');
     if (window.location.hash === '#admin') {
       window.history.pushState("", document.title, window.location.pathname + window.location.search);
     }
@@ -93,12 +109,12 @@ export default function App() {
 
   const handleGoToSuspended = () => {
     setCurrentView('suspended');
-    window.history.pushState("", document.title, window.location.pathname + window.location.search);
+    window.location.hash = 'suspendido';
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
   const handleAdminLogout = () => {
-    sessionStorage.removeItem('vazquez_admin_authenticated');
+    sessionStorage.removeItem('moldmaq_admin_authenticated');
     setIsAdminAuthenticated(false);
   };
 
@@ -114,7 +130,7 @@ export default function App() {
     }
 
     return (
-      <div className="min-h-screen bg-gray-100 font-sans text-gray-900 selection:bg-[#0E5197] selection:text-white">
+      <div className="min-h-screen bg-gray-100 font-sans text-gray-900 selection:bg-[#0F3B68] selection:text-white">
         <AdminPanel
           isOpen={true}
           onClose={handleCloseAdmin}
@@ -126,7 +142,7 @@ export default function App() {
     );
   }
 
-  // Suspended Home view (Default)
+  // Suspended Home view (only if site is suspended and not previewing)
   if (currentView === 'suspended') {
     return (
       <SuspendedHome
@@ -142,22 +158,24 @@ export default function App() {
   }
 
   return (
-    <div className="min-h-screen bg-white text-gray-900 font-sans selection:bg-[#0E5197] selection:text-white flex flex-col">
+    <div className="min-h-screen bg-white text-gray-900 font-sans selection:bg-[#0F3B68] selection:text-white flex flex-col">
       
-      {/* Preview Mode Alert Banner */}
-      <div className="bg-amber-500 text-slate-950 px-4 py-2 text-xs font-bold flex items-center justify-between shadow-sm sticky top-0 z-50">
-        <div className="flex items-center gap-2">
-          <AlertTriangle className="w-4 h-4 text-slate-950 shrink-0" />
-          <span>MODO VISTA PREVIA: El sitio público muestra la pantalla de suspensión por falta de pago.</span>
+      {/* Preview Mode Alert Banner - Only shown if site is in suspended mode */}
+      {config.isSuspended && (
+        <div className="bg-amber-500 text-slate-950 px-4 py-2 text-xs font-bold flex items-center justify-between shadow-sm sticky top-0 z-50">
+          <div className="flex items-center gap-2">
+            <AlertTriangle className="w-4 h-4 text-slate-950 shrink-0" />
+            <span>MODO VISTA PREVIA: El sitio público muestra la pantalla de suspensión por falta de pago.</span>
+          </div>
+          <button
+            onClick={handleGoToSuspended}
+            className="inline-flex items-center gap-1.5 bg-slate-950 text-white hover:bg-slate-800 px-3 py-1 rounded-md text-[11px] font-bold transition-all shrink-0 ml-2"
+          >
+            <ArrowLeft className="w-3 h-3" />
+            <span>Volver al Home Suspendido</span>
+          </button>
         </div>
-        <button
-          onClick={handleGoToSuspended}
-          className="inline-flex items-center gap-1.5 bg-slate-950 text-white hover:bg-slate-800 px-3 py-1 rounded-md text-[11px] font-bold transition-all shrink-0 ml-2"
-        >
-          <ArrowLeft className="w-3 h-3" />
-          <span>Volver al Home Suspendido</span>
-        </button>
-      </div>
+      )}
 
       {/* 1. Top Bar */}
       <TopBar
@@ -251,10 +269,10 @@ export default function App() {
       {/* Floating WhatsApp Action Button */}
       {config.whatsappNumber && (
         <a
-          href={`https://wa.me/${config.whatsappNumber.replace(/\D/g, '') || '5523068535'}?text=${encodeURIComponent(config.whatsappMessage || 'Hola, quisiera cotizar un flete/mudanza con Vazquez Multitransport.')}`}
+          href={`https://wa.me/${config.whatsappNumber.replace(/\D/g, '') || '525558724410'}?text=${encodeURIComponent(config.whatsappMessage || 'Hola, quisiera cotizar un maquinado/proyecto con Servicios Industriales Moldmaq S.A.')}`}
           target="_blank"
           rel="noopener noreferrer"
-          className="fixed bottom-6 right-6 z-40 bg-[#1D7946] hover:bg-emerald-700 text-white p-3.5 sm:p-4 rounded-full shadow-2xl transition-all transform hover:scale-110 flex items-center justify-center border-2 border-white group"
+          className="fixed bottom-6 right-6 z-40 bg-[#D97706] hover:bg-amber-600 text-white p-3.5 sm:p-4 rounded-full shadow-2xl transition-all transform hover:scale-110 flex items-center justify-center border-2 border-white group"
           aria-label="Contactar por WhatsApp"
         >
           <WhatsAppIcon className="w-7 h-7 text-white shrink-0" />

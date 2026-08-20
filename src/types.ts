@@ -84,6 +84,9 @@ export interface SiteConfig {
   contactSubtitle: string;
   contactMessage: string;
   
+  // Site Status
+  isSuspended?: boolean;
+
   // Supabase connection config
   supabaseUrl: string;
   supabaseAnonKey: string;

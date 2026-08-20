@@ -2,7 +2,7 @@ import { createClient, SupabaseClient } from '@supabase/supabase-js';
 import { SiteConfig } from '../types';
 import { DEFAULT_SITE_CONFIG } from './defaultData';
 
-const LOCAL_STORAGE_KEY = 'vazquez_multitransport_config_v1';
+const LOCAL_STORAGE_KEY = 'moldmaq_site_config_v2';
 
 let supabaseInstance: SupabaseClient | null = null;
 

@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { GalleryImage } from '../types';
-import { ChevronLeft, ChevronRight, Truck, Maximize2, X } from 'lucide-react';
+import { ChevronLeft, ChevronRight, Factory, Maximize2, X, Cog } from 'lucide-react';
 
 interface GallerySliderProps {
   title: string;
@@ -57,9 +57,9 @@ export const GallerySlider: React.FC<GallerySliderProps> = ({
         {/* Title and Controls */}
         <div className="flex flex-col md:flex-row md:items-end justify-between mb-12 gap-6">
           <div>
-            <div className="inline-flex items-center gap-1.5 bg-[#0E5197]/10 text-[#0E5197] font-extrabold text-xs uppercase tracking-widest px-3 py-1 rounded-full mb-3">
-              <Truck className="w-3.5 h-3.5" />
-              <span>Galería de Unidades</span>
+            <div className="inline-flex items-center gap-1.5 bg-[#0F3B68]/10 text-[#0F3B68] font-extrabold text-xs uppercase tracking-widest px-3 py-1 rounded-full mb-3">
+              <Factory className="w-3.5 h-3.5 text-[#D97706]" />
+              <span>Instalaciones y Proyectos</span>
             </div>
             <h2 className="text-3xl sm:text-4xl font-extrabold text-gray-900 tracking-tight">
               {title}
@@ -72,14 +72,14 @@ export const GallerySlider: React.FC<GallerySliderProps> = ({
           <div className="flex items-center gap-3">
             <button
               onClick={handleScrollLeft}
-              className="p-3 rounded-full border border-gray-200 hover:bg-[#0E5197] hover:text-white hover:border-[#0E5197] text-gray-700 transition-colors shadow-2xs"
+              className="p-3 rounded-full border border-gray-200 hover:bg-[#0F3B68] hover:text-white hover:border-[#0F3B68] text-gray-700 transition-colors shadow-2xs cursor-pointer"
               aria-label="Scroll Izquierda"
             >
               <ChevronLeft className="w-5 h-5" />
             </button>
             <button
               onClick={handleScrollRight}
-              className="p-3 rounded-full border border-gray-200 hover:bg-[#0E5197] hover:text-white hover:border-[#0E5197] text-gray-700 transition-colors shadow-2xs"
+              className="p-3 rounded-full border border-gray-200 hover:bg-[#0F3B68] hover:text-white hover:border-[#0F3B68] text-gray-700 transition-colors shadow-2xs cursor-pointer"
               aria-label="Scroll Derecha"
             >
               <ChevronRight className="w-5 h-5" />
@@ -106,14 +106,14 @@ export const GallerySlider: React.FC<GallerySliderProps> = ({
                 alt={img.title}
                 className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
               />
-              <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent opacity-80 group-hover:opacity-90 transition-opacity" />
+              <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/25 to-transparent opacity-80 group-hover:opacity-90 transition-opacity" />
 
               <div className="absolute bottom-4 left-4 right-4 text-white flex items-center justify-between">
                 <div>
                   <p className="font-extrabold text-base tracking-tight drop-shadow-xs">{img.title}</p>
-                  <p className="text-xs text-emerald-300 font-semibold">Vazquez Multitransport</p>
+                  <p className="text-xs text-amber-400 font-semibold">Moldmaq S.A.</p>
                 </div>
-                <div className="p-2 rounded-lg bg-white/20 backdrop-blur-xs group-hover:bg-[#1D7946] transition-colors">
+                <div className="p-2 rounded-lg bg-white/20 backdrop-blur-xs group-hover:bg-[#D97706] transition-colors">
                   <Maximize2 className="w-4 h-4 text-white" />
                 </div>
               </div>
@@ -131,7 +131,7 @@ export const GallerySlider: React.FC<GallerySliderProps> = ({
           <div className="relative max-w-4xl w-full bg-black rounded-2xl overflow-hidden shadow-2xl border border-gray-800" onClick={(e) => e.stopPropagation()}>
             <button
               onClick={() => setSelectedImage(null)}
-              className="absolute top-4 right-4 p-2 rounded-full bg-white/20 text-white hover:bg-white/40 transition-colors z-10"
+              className="absolute top-4 right-4 p-2 rounded-full bg-white/20 text-white hover:bg-white/40 transition-colors z-10 cursor-pointer"
             >
               <X className="w-6 h-6" />
             </button>
@@ -149,3 +149,4 @@ export const GallerySlider: React.FC<GallerySliderProps> = ({
     </section>
   );
 };
+

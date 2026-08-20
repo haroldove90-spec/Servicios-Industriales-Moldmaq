@@ -56,7 +56,7 @@ export const AdminLogin: React.FC<AdminLoginProps> = ({ config, onLoginSuccess, 
       }
 
       if (isValid) {
-        sessionStorage.setItem('vazquez_admin_authenticated', 'true');
+        sessionStorage.setItem('moldmaq_admin_authenticated', 'true');
         onLoginSuccess();
       } else {
         setErrorMsg('Usuario o contraseña incorrectos. Verifique sus credenciales.');
@@ -70,14 +70,14 @@ export const AdminLogin: React.FC<AdminLoginProps> = ({ config, onLoginSuccess, 
   };
 
   return (
-    <div className="min-h-screen bg-slate-900 flex items-center justify-center p-4 relative overflow-hidden font-sans">
+    <div className="min-h-screen bg-slate-950 flex items-center justify-center p-4 relative overflow-hidden font-sans">
       {/* Background Decorative Element */}
-      <div className="absolute -top-40 -right-40 w-96 h-96 bg-[#0E5197]/20 rounded-full blur-3xl pointer-events-none" />
-      <div className="absolute -bottom-40 -left-40 w-96 h-96 bg-[#1D7946]/20 rounded-full blur-3xl pointer-events-none" />
+      <div className="absolute -top-40 -right-40 w-96 h-96 bg-[#0F3B68]/30 rounded-full blur-3xl pointer-events-none" />
+      <div className="absolute -bottom-40 -left-40 w-96 h-96 bg-[#D97706]/20 rounded-full blur-3xl pointer-events-none" />
 
       <div className="w-full max-w-md bg-white rounded-3xl shadow-2xl overflow-hidden border border-slate-200 relative z-10 animate-fade-in">
         {/* Header Banner */}
-        <div className="bg-gradient-to-r from-[#0E5197] to-[#1D7946] p-8 text-white text-center relative">
+        <div className="bg-gradient-to-r from-[#0F3B68] to-[#1E293B] p-8 text-white text-center relative">
           <button
             onClick={onBackToSite}
             className="absolute top-4 left-4 inline-flex items-center gap-1.5 bg-white/10 hover:bg-white/20 text-white text-xs font-bold px-3 py-1.5 rounded-full transition-colors backdrop-blur-xs cursor-pointer"
@@ -87,12 +87,12 @@ export const AdminLogin: React.FC<AdminLoginProps> = ({ config, onLoginSuccess, 
           </button>
 
           <div className="w-16 h-16 mx-auto bg-white/10 rounded-2xl flex items-center justify-center mb-3 backdrop-blur-md border border-white/20 shadow-inner">
-            <Lock className="w-8 h-8 text-white" />
+            <Lock className="w-8 h-8 text-amber-400" />
           </div>
 
           <h2 className="text-2xl font-extrabold tracking-tight">Acceso Administrador</h2>
           <p className="text-xs text-blue-100 mt-1 font-medium">
-            Vazquez Multitransport • Control Panel
+            Servicios Industriales Moldmaq S.A. • Panel de Control
           </p>
         </div>
 
@@ -119,7 +119,7 @@ export const AdminLogin: React.FC<AdminLoginProps> = ({ config, onLoginSuccess, 
                 value={username}
                 onChange={(e) => setUsername(e.target.value)}
                 placeholder="Ingresa tu usuario (ej: admin_1)"
-                className="w-full pl-10 pr-4 py-3 rounded-xl border border-gray-300 focus:ring-2 focus:ring-[#0E5197] focus:border-transparent text-sm font-medium transition-all outline-none"
+                className="w-full pl-10 pr-4 py-3 rounded-xl border border-gray-300 focus:ring-2 focus:ring-[#0F3B68] focus:border-transparent text-sm font-medium transition-all outline-none"
               />
             </div>
           </div>
@@ -138,7 +138,7 @@ export const AdminLogin: React.FC<AdminLoginProps> = ({ config, onLoginSuccess, 
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 placeholder="Ingresa tu contraseña"
-                className="w-full pl-10 pr-12 py-3 rounded-xl border border-gray-300 focus:ring-2 focus:ring-[#0E5197] focus:border-transparent text-sm font-medium transition-all outline-none"
+                className="w-full pl-10 pr-12 py-3 rounded-xl border border-gray-300 focus:ring-2 focus:ring-[#0F3B68] focus:border-transparent text-sm font-medium transition-all outline-none"
               />
               <button
                 type="button"
@@ -153,15 +153,15 @@ export const AdminLogin: React.FC<AdminLoginProps> = ({ config, onLoginSuccess, 
           <button
             type="submit"
             disabled={isLoading}
-            className="w-full py-3.5 px-4 bg-[#0E5197] hover:bg-blue-900 text-white font-extrabold text-sm rounded-xl shadow-lg hover:shadow-xl transition-all flex items-center justify-center gap-2 cursor-pointer disabled:opacity-50"
+            className="w-full py-3.5 px-4 bg-[#0F3B68] hover:bg-slate-900 text-white font-extrabold text-sm rounded-xl shadow-lg hover:shadow-xl transition-all flex items-center justify-center gap-2 cursor-pointer disabled:opacity-50"
           >
-            <ShieldCheck className="w-5 h-5" />
+            <ShieldCheck className="w-5 h-5 text-amber-400" />
             <span>{isLoading ? 'Verificando...' : 'Iniciar Sesión'}</span>
           </button>
 
           <div className="pt-2 text-center border-t border-gray-100">
             <p className="text-[11px] text-gray-400 font-medium">
-              Credenciales por defecto: <strong className="text-gray-600">admin_1</strong> / <strong className="text-gray-600">Admin_123</strong>
+              Credenciales de acceso: <strong className="text-gray-700">admin_1</strong> / <strong className="text-gray-700">Admin_123</strong>
             </p>
           </div>
         </form>

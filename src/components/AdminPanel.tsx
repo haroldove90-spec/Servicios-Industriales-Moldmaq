@@ -512,6 +512,51 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({
           {/* TAB 1: IDENTIDAD & COLORES */}
           {activeTab === 'general' && (
             <div className="space-y-6">
+              {/* Site Online / Offline Status */}
+              <div className="bg-white p-5 rounded-2xl border-2 border-emerald-500/40 shadow-xs space-y-3">
+                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+                  <div>
+                    <div className="flex items-center gap-2">
+                      <span className={`inline-block w-3 h-3 rounded-full ${formData.isSuspended ? 'bg-red-500 animate-ping' : 'bg-emerald-500 animate-pulse'}`} />
+                      <h3 className="font-extrabold text-base text-gray-900">
+                        Estado del Sitio Web: {formData.isSuspended ? (
+                          <span className="text-red-600">Página Desactivada (Suspendida)</span>
+                        ) : (
+                          <span className="text-emerald-600">Activo y Operativo (En Línea)</span>
+                        )}
+                      </h3>
+                    </div>
+                    <p className="text-xs text-gray-600 mt-1">
+                      {formData.isSuspended 
+                        ? 'La página muestra actualmente la pantalla de suspensión de servicio a los visitantes públicos.' 
+                        : 'El sitio web oficial completo está 100% activo, visible y recibiendo cotizaciones de clientes.'}
+                    </p>
+                  </div>
+
+                  <button
+                    type="button"
+                    onClick={() => setFormData({ ...formData, isSuspended: !formData.isSuspended })}
+                    className={`inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl font-bold text-xs transition-all cursor-pointer shadow-xs shrink-0 ${
+                      formData.isSuspended
+                        ? 'bg-emerald-600 hover:bg-emerald-700 text-white'
+                        : 'bg-red-50 hover:bg-red-100 text-red-700 border border-red-200'
+                    }`}
+                  >
+                    {formData.isSuspended ? (
+                      <>
+                        <CheckCircle className="w-4 h-4" />
+                        <span>Reactivar Sitio Web Oficial</span>
+                      </>
+                    ) : (
+                      <>
+                        <AlertCircle className="w-4 h-4" />
+                        <span>Desactivar / Suspender Sitio</span>
+                      </>
+                    )}
+                  </button>
+                </div>
+              </div>
+
               <div className="bg-gray-50 p-5 rounded-2xl border border-gray-200 space-y-4">
                 <h3 className="font-extrabold text-base text-gray-900">Configuración General de la Página</h3>
 

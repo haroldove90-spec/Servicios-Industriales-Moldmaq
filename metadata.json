@@ -1,6 +1,6 @@
 {
-  "name": "Servicios Industriales Moldmaq",
-  "description": "Sitio web oficial",
+  "name": "Servicios Industriales Moldmaq S.A.",
+  "description": "Sitio web oficial de Servicios Industriales Moldmaq S.A. - Soluciones integrales en maquinados CNC, diseño y fabricación de moldes y mantenimiento industrial.",
   "requestFramePermissions": [],
   "majorCapabilities": [
     "MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"

@@ -2,7 +2,7 @@ import { createClient, SupabaseClient } from '@supabase/supabase-js';
 import { SiteConfig } from '../types';
 import { DEFAULT_SITE_CONFIG } from './defaultData';
 
-const LOCAL_STORAGE_KEY = 'moldmaq_site_config_v2';
+const LOCAL_STORAGE_KEY = 'moldmaq_site_config_v3';
 
 let supabaseInstance: SupabaseClient | null = null;
 
@@ -24,13 +24,31 @@ export function getSupabaseClient(url?: string, key?: string): SupabaseClient | 
   return supabaseInstance;
 }
 
+// Check if a config object is stale / contains old Vazquez texts
+function isStaleVazquezConfig(cfg: any): boolean {
+  if (!cfg) return true;
+  const str = JSON.stringify(cfg).toLowerCase();
+  return str.includes('vazquez') || str.includes('multitransport');
+}
+
 // Load config from LocalStorage first, fallback to DEFAULT_SITE_CONFIG
 export function loadSiteConfig(): SiteConfig {
   try {
-    const saved = localStorage.getItem(LOCAL_STORAGE_KEY);
-    if (saved) {
-      const parsed = JSON.parse(saved);
-      return { ...DEFAULT_SITE_CONFIG, ...parsed };
+    // Clear old deprecated keys
+    if (typeof localStorage !== 'undefined') {
+      localStorage.removeItem('vazquez_multitransport_config_v1');
+      localStorage.removeItem('moldmaq_site_config_v1');
+      localStorage.removeItem('moldmaq_site_config_v2');
+      
+      const saved = localStorage.getItem(LOCAL_STORAGE_KEY);
+      if (saved) {
+        const parsed = JSON.parse(saved);
+        if (isStaleVazquezConfig(parsed)) {
+          localStorage.removeItem(LOCAL_STORAGE_KEY);
+          return DEFAULT_SITE_CONFIG;
+        }
+        return { ...DEFAULT_SITE_CONFIG, ...parsed };
+      }
     }
   } catch (e) {
     console.error('Error loading config from localStorage:', e);
@@ -52,6 +70,11 @@ export async function loadSiteConfigFromSupabase(config: SiteConfig): Promise<Si
       .maybeSingle();
 
     if (!error && data?.content) {
+      if (isStaleVazquezConfig(data.content)) {
+        console.info('Remote Supabase config was outdated. Migrating to Moldmaq S.A.');
+        await syncToSupabase(DEFAULT_SITE_CONFIG);
+        return DEFAULT_SITE_CONFIG;
+      }
       return { ...DEFAULT_SITE_CONFIG, ...data.content };
     }
   } catch (e) {
@@ -74,8 +97,8 @@ export function saveSiteConfig(config: SiteConfig): void {
 export function applyThemeColors(primary: string, secondary: string): void {
   if (typeof document !== 'undefined') {
     const root = document.documentElement;
-    root.style.setProperty('--primary-color', primary || '#0E5197');
-    root.style.setProperty('--secondary-color', secondary || '#1D7946');
+    root.style.setProperty('--primary-color', primary || '#0F3B68');
+    root.style.setProperty('--secondary-color', secondary || '#D97706');
   }
 }
 
@@ -102,7 +125,7 @@ export async function syncToSupabase(config: SiteConfig): Promise<{ success: boo
       return { success: false, message: `Error en Supabase: ${error.message}` };
     }
 
-    return { success: true, message: '¡Configuración e imágenes guardadas correctamente en Supabase!' };
+    return { success: true, message: '¡Configuración guardada correctamente en Supabase!' };
   } catch (err: any) {
     return { success: false, message: `Error de conexión con Supabase: ${err?.message || err}` };
   }
@@ -121,7 +144,7 @@ export async function uploadImageFile(
       const fileExt = file.name.split('.').pop() || 'png';
       const fileName = `img_${Date.now()}_${Math.random().toString(36).substring(2, 7)}.${fileExt}`;
       const filePath = `uploads/${fileName}`;
-      const bucketName = config.supabaseBucketName || 'vazquez-media';
+      const bucketName = config.supabaseBucketName || 'moldmaq-media';
 
       const { error: uploadError } = await client.storage
         .from(bucketName)

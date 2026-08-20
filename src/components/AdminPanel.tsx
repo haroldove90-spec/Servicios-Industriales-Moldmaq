@@ -58,18 +58,18 @@ alter table public.admin_users enable row level security;
 drop policy if exists "Acceso Lectura admin_users" on public.admin_users;
 create policy "Acceso Lectura admin_users" on public.admin_users for select using (true);
 
--- 4. Crear Bucket 'vazquez-media' para guardar imágenes
-insert into storage.buckets (id, name, public) values ('vazquez-media', 'vazquez-media', true) on conflict (id) do update set public = true;
+-- 4. Crear Bucket 'moldmaq-media' para guardar imágenes
+insert into storage.buckets (id, name, public) values ('moldmaq-media', 'moldmaq-media', true) on conflict (id) do update set public = true;
 
 -- 5. Habilitar politicas de acceso publico para el bucket
 drop policy if exists "Permitir ver imagenes publicas" on storage.objects;
-create policy "Permitir ver imagenes publicas" on storage.objects for select using (bucket_id = 'vazquez-media');
+create policy "Permitir ver imagenes publicas" on storage.objects for select using (bucket_id = 'moldmaq-media');
 
 drop policy if exists "Permitir subir imagenes publicas" on storage.objects;
-create policy "Permitir subir imagenes publicas" on storage.objects for insert with check (bucket_id = 'vazquez-media');
+create policy "Permitir subir imagenes publicas" on storage.objects for insert with check (bucket_id = 'moldmaq-media');
 
 drop policy if exists "Permitir actualizar imagenes publicas" on storage.objects;
-create policy "Permitir actualizar imagenes publicas" on storage.objects for update using (bucket_id = 'vazquez-media');`;
+create policy "Permitir actualizar imagenes publicas" on storage.objects for update using (bucket_id = 'moldmaq-media');`;
 
 export const AdminPanel: React.FC<AdminPanelProps> = ({
   isOpen,
@@ -1297,9 +1297,9 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({
                     onClick={() => {
                       const newServ: ServiceItem = {
                         id: `serv-${Date.now()}`,
-                        iconName: 'Truck',
-                        title: 'Nuevo Servicio',
-                        description: 'Descripción del nuevo servicio ofrecido por Vazquez Multitransport.',
+                        iconName: 'Wrench',
+                        title: 'Nuevo Servicio Industrial',
+                        description: 'Descripción del nuevo servicio ofrecido por Servicios Industriales Moldmaq S.A.',
                         badge: 'Disponible'
                       };
                       setFormData({ ...formData, servicesList: [...formData.servicesList, newServ] });
@@ -1508,7 +1508,7 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({
                     </label>
                     <input
                       type="text"
-                      placeholder="vazquez-media"
+                      placeholder="moldmaq-media"
                       value={formData.supabaseBucketName}
                       onChange={(e) => setFormData({ ...formData, supabaseBucketName: e.target.value })}
                       className="w-full px-4 py-2 rounded-lg border border-gray-300 text-xs font-mono"
@@ -1578,9 +1578,9 @@ create table if not exists public.site_config (
 alter table public.site_config enable row level security;
 create policy "Acceso Publico site_config" on public.site_config for all using (true) with check (true);
 
--- 3. Crear Bucket 'vazquez-media' en Supabase Storage
-insert into storage.buckets (id, name, public) values ('vazquez-media', 'vazquez-media', true) on conflict do nothing;
-create policy "Acceso Publico Storage Media" on storage.objects for all using (bucket_id = 'vazquez-media') with check (bucket_id = 'vazquez-media');`}
+-- 3. Crear Bucket 'moldmaq-media' en Supabase Storage
+insert into storage.buckets (id, name, public) values ('moldmaq-media', 'moldmaq-media', true) on conflict do nothing;
+create policy "Acceso Publico Storage Media" on storage.objects for all using (bucket_id = 'moldmaq-media') with check (bucket_id = 'moldmaq-media');`}
                   </pre>
                 </div>
 

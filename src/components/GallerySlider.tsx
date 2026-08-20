@@ -6,12 +6,14 @@ interface GallerySliderProps {
   title: string;
   subtitle: string;
   images: GalleryImage[];
+  galleryBgColor?: string;
 }
 
 export const GallerySlider: React.FC<GallerySliderProps> = ({
   title,
   subtitle,
   images,
+  galleryBgColor = "#ffffff"
 }) => {
   const [selectedImage, setSelectedImage] = useState<GalleryImage | null>(null);
   const scrollRef = useRef<HTMLDivElement>(null);
@@ -52,7 +54,7 @@ export const GallerySlider: React.FC<GallerySliderProps> = ({
   if (!images || images.length === 0) return null;
 
   return (
-    <section className="py-20 bg-white border-b border-gray-100 overflow-hidden">
+    <section style={{ backgroundColor: galleryBgColor }} className="py-20 border-b border-gray-100 overflow-hidden transition-colors">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Title and Controls */}
         <div className="flex flex-col md:flex-row md:items-end justify-between mb-12 gap-6">

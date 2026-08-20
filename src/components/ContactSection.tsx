@@ -10,6 +10,7 @@ interface ContactSectionProps {
   whatsappNumber: string;
   facebookPage: string;
   coverageAreas: string[];
+  contactBgColor?: string;
 }
 
 export const ContactSection: React.FC<ContactSectionProps> = ({
@@ -20,6 +21,7 @@ export const ContactSection: React.FC<ContactSectionProps> = ({
   whatsappNumber,
   facebookPage,
   coverageAreas,
+  contactBgColor = "#ffffff"
 }) => {
   const [companyName, setCompanyName] = useState('');
   const [location, setLocation] = useState('');
@@ -36,7 +38,7 @@ export const ContactSection: React.FC<ContactSectionProps> = ({
   };
 
   return (
-    <section id="contacto" className="py-20 bg-white border-b border-gray-100">
+    <section id="contacto" style={{ backgroundColor: contactBgColor }} className="py-20 border-b border-gray-100 transition-colors">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Section Header */}
         <div className="text-center max-w-3xl mx-auto mb-16 space-y-3">

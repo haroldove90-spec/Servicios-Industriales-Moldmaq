@@ -931,7 +931,7 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({
                 </div>
               </div>
 
-              {/* Dynamic Theme Colors */}
+              {/* Dynamic Theme Colors & Section Backgrounds */}
               <div className="bg-gray-50 p-5 rounded-2xl border border-gray-200 space-y-4">
                 <h3 className="font-extrabold text-base text-gray-900">6. Colores Institucionales de la Marca</h3>
 
@@ -972,6 +972,174 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({
                         value={formData.secondaryColor || '#D97706'}
                         onChange={(e) => setFormData({ ...formData, secondaryColor: e.target.value })}
                         className="w-32 px-3 py-2 rounded-xl border border-gray-300 text-sm font-mono uppercase"
+                      />
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              {/* Section Background Colors Customization */}
+              <div className="bg-gray-50 p-5 rounded-2xl border border-gray-200 space-y-4">
+                <div className="flex items-center justify-between">
+                  <h3 className="font-extrabold text-base text-gray-900">7. Colores de Fondo de Cada Sección</h3>
+                  <span className="text-xs font-semibold bg-emerald-100 text-emerald-800 px-2.5 py-0.5 rounded-full">Fondos de Secciones</span>
+                </div>
+                <p className="text-xs text-gray-600">Personalice el color de fondo para cada bloque del sitio web.</p>
+
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+                  {/* About Section Bg */}
+                  <div className="p-3 bg-white rounded-xl border border-gray-200 space-y-2">
+                    <label className="block text-xs font-bold text-gray-700 uppercase">Fondo Sección "Nosotros"</label>
+                    <div className="flex items-center gap-2">
+                      <input
+                        type="color"
+                        value={formData.aboutBgColor || '#ffffff'}
+                        onChange={(e) => setFormData({ ...formData, aboutBgColor: e.target.value })}
+                        className="w-9 h-9 rounded-lg cursor-pointer border border-gray-300"
+                      />
+                      <input
+                        type="text"
+                        value={formData.aboutBgColor || '#ffffff'}
+                        onChange={(e) => setFormData({ ...formData, aboutBgColor: e.target.value })}
+                        className="w-24 px-2 py-1 text-xs border border-gray-300 rounded font-mono uppercase"
+                      />
+                    </div>
+                  </div>
+
+                  {/* Services Section Bg */}
+                  <div className="p-3 bg-white rounded-xl border border-gray-200 space-y-2">
+                    <label className="block text-xs font-bold text-gray-700 uppercase">Fondo Sección "Servicios"</label>
+                    <div className="flex items-center gap-2">
+                      <input
+                        type="color"
+                        value={formData.servicesBgColor || '#f8fafc'}
+                        onChange={(e) => setFormData({ ...formData, servicesBgColor: e.target.value })}
+                        className="w-9 h-9 rounded-lg cursor-pointer border border-gray-300"
+                      />
+                      <input
+                        type="text"
+                        value={formData.servicesBgColor || '#f8fafc'}
+                        onChange={(e) => setFormData({ ...formData, servicesBgColor: e.target.value })}
+                        className="w-24 px-2 py-1 text-xs border border-gray-300 rounded font-mono uppercase"
+                      />
+                    </div>
+                  </div>
+
+                  {/* Gallery Section Bg */}
+                  <div className="p-3 bg-white rounded-xl border border-gray-200 space-y-2">
+                    <label className="block text-xs font-bold text-gray-700 uppercase">Fondo Sección "Galería"</label>
+                    <div className="flex items-center gap-2">
+                      <input
+                        type="color"
+                        value={formData.galleryBgColor || '#ffffff'}
+                        onChange={(e) => setFormData({ ...formData, galleryBgColor: e.target.value })}
+                        className="w-9 h-9 rounded-lg cursor-pointer border border-gray-300"
+                      />
+                      <input
+                        type="text"
+                        value={formData.galleryBgColor || '#ffffff'}
+                        onChange={(e) => setFormData({ ...formData, galleryBgColor: e.target.value })}
+                        className="w-24 px-2 py-1 text-xs border border-gray-300 rounded font-mono uppercase"
+                      />
+                    </div>
+                  </div>
+
+                  {/* Contact Section Bg */}
+                  <div className="p-3 bg-white rounded-xl border border-gray-200 space-y-2">
+                    <label className="block text-xs font-bold text-gray-700 uppercase">Fondo Sección "Contacto"</label>
+                    <div className="flex items-center gap-2">
+                      <input
+                        type="color"
+                        value={formData.contactBgColor || '#ffffff'}
+                        onChange={(e) => setFormData({ ...formData, contactBgColor: e.target.value })}
+                        className="w-9 h-9 rounded-lg cursor-pointer border border-gray-300"
+                      />
+                      <input
+                        type="text"
+                        value={formData.contactBgColor || '#ffffff'}
+                        onChange={(e) => setFormData({ ...formData, contactBgColor: e.target.value })}
+                        className="w-24 px-2 py-1 text-xs border border-gray-300 rounded font-mono uppercase"
+                      />
+                    </div>
+                  </div>
+
+                  {/* Footer Bg */}
+                  <div className="p-3 bg-white rounded-xl border border-gray-200 space-y-2">
+                    <label className="block text-xs font-bold text-gray-700 uppercase">Fondo del Pie de Página (Footer)</label>
+                    <div className="flex items-center gap-2">
+                      <input
+                        type="color"
+                        value={formData.footerBgColor || '#0f172a'}
+                        onChange={(e) => setFormData({ ...formData, footerBgColor: e.target.value })}
+                        className="w-9 h-9 rounded-lg cursor-pointer border border-gray-300"
+                      />
+                      <input
+                        type="text"
+                        value={formData.footerBgColor || '#0f172a'}
+                        onChange={(e) => setFormData({ ...formData, footerBgColor: e.target.value })}
+                        className="w-24 px-2 py-1 text-xs border border-gray-300 rounded font-mono uppercase"
+                      />
+                    </div>
+                  </div>
+
+                  {/* Footer Text Color */}
+                  <div className="p-3 bg-white rounded-xl border border-gray-200 space-y-2">
+                    <label className="block text-xs font-bold text-gray-700 uppercase">Color Texto Pie de Página (Footer)</label>
+                    <div className="flex items-center gap-2">
+                      <input
+                        type="color"
+                        value={formData.footerTextColor || '#94a3b8'}
+                        onChange={(e) => setFormData({ ...formData, footerTextColor: e.target.value })}
+                        className="w-9 h-9 rounded-lg cursor-pointer border border-gray-300"
+                      />
+                      <input
+                        type="text"
+                        value={formData.footerTextColor || '#94a3b8'}
+                        onChange={(e) => setFormData({ ...formData, footerTextColor: e.target.value })}
+                        className="w-24 px-2 py-1 text-xs border border-gray-300 rounded font-mono uppercase"
+                      />
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              {/* Floating WhatsApp Button Customization */}
+              <div className="bg-gray-50 p-5 rounded-2xl border border-gray-200 space-y-4">
+                <div className="flex items-center justify-between">
+                  <h3 className="font-extrabold text-base text-gray-900">8. Botón Flotante de WhatsApp</h3>
+                  <span className="text-xs font-semibold bg-emerald-100 text-emerald-800 px-2.5 py-0.5 rounded-full">Botón Flotante</span>
+                </div>
+
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                  <div>
+                    <label className="block text-xs font-bold text-gray-700 uppercase mb-1">
+                      Texto del Mensaje Flotante (Tooltip)
+                    </label>
+                    <input
+                      type="text"
+                      value={formData.floatingWaTooltipText ?? 'Cotizar por WhatsApp'}
+                      onChange={(e) => setFormData({ ...formData, floatingWaTooltipText: e.target.value })}
+                      placeholder="Cotizar por WhatsApp"
+                      className="w-full px-4 py-2 rounded-xl border border-gray-300 text-sm font-medium"
+                    />
+                  </div>
+
+                  <div>
+                    <label className="block text-xs font-bold text-gray-700 uppercase mb-1">
+                      Color de Fondo Botón Flotante
+                    </label>
+                    <div className="flex items-center gap-3">
+                      <input
+                        type="color"
+                        value={formData.floatingWaBgColor || '#25D366'}
+                        onChange={(e) => setFormData({ ...formData, floatingWaBgColor: e.target.value })}
+                        className="w-10 h-10 rounded-xl cursor-pointer border border-gray-300"
+                      />
+                      <input
+                        type="text"
+                        value={formData.floatingWaBgColor || '#25D366'}
+                        onChange={(e) => setFormData({ ...formData, floatingWaBgColor: e.target.value })}
+                        className="w-32 px-3 py-1.5 rounded-xl border border-gray-300 text-sm font-mono uppercase"
                       />
                     </div>
                   </div>

@@ -196,6 +196,18 @@ export const DEFAULT_SITE_CONFIG: SiteConfig = {
   contactSubtitle: "Atención técnica inmediata por WhatsApp, teléfono o visita a planta",
   contactMessage: "Estamos listos para evaluar sus requerimientos técnicos. Envíenos sus planos en formato PDF, DWG, STEP o solicite una visita de nuestros ingenieros a su planta para una asesoría sin compromiso.",
 
+  // Section & Widget Colors
+  aboutBgColor: "#ffffff",
+  welcomeBgColor: "#f1f5f9",
+  servicesBgColor: "#f8fafc",
+  galleryBgColor: "#ffffff",
+  contactBgColor: "#ffffff",
+  footerBgColor: "#0f172a",
+  footerTextColor: "#94a3b8",
+  floatingWaBgColor: "#25D366",
+  floatingWaTextColor: "#ffffff",
+  floatingWaTooltipText: "¿Cotizaciones o dudas? ¡Escríbenos!",
+
   isSuspended: false,
 
   supabaseUrl: "https://glqyclphjelrdminvetb.supabase.co",

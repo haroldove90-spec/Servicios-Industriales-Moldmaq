@@ -22,6 +22,7 @@ interface ServicesSectionProps {
   subtitle: string;
   services: ServiceItem[];
   whatsappNumber: string;
+  servicesBgColor?: string;
 }
 
 export const ServicesSection: React.FC<ServicesSectionProps> = ({
@@ -29,6 +30,7 @@ export const ServicesSection: React.FC<ServicesSectionProps> = ({
   subtitle,
   services,
   whatsappNumber,
+  servicesBgColor = "#f8fafc"
 }) => {
   const renderServiceIcon = (iconName: string, index: number) => {
     const isAmber = index % 2 === 1;
@@ -69,7 +71,7 @@ export const ServicesSection: React.FC<ServicesSectionProps> = ({
   };
 
   return (
-    <section id="servicios" className="py-20 bg-slate-50/70 border-b border-gray-100">
+    <section id="servicios" style={{ backgroundColor: servicesBgColor }} className="py-20 border-b border-gray-100 transition-colors">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Section Title */}
         <div className="text-center max-w-3xl mx-auto mb-16 space-y-3">

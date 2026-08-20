@@ -9,6 +9,8 @@ interface FooterProps {
   whatsappNumber: string;
   phones: string[];
   onOpenAdmin: () => void;
+  footerBgColor?: string;
+  footerTextColor?: string;
 }
 
 export const Footer: React.FC<FooterProps> = ({
@@ -17,6 +19,8 @@ export const Footer: React.FC<FooterProps> = ({
   whatsappNumber,
   phones,
   onOpenAdmin,
+  footerBgColor = "#0f172a",
+  footerTextColor = "#94a3b8"
 }) => {
   const cleanPhone = (p: string) => p.replace(/\D/g, '');
 
@@ -38,15 +42,15 @@ export const Footer: React.FC<FooterProps> = ({
   };
 
   return (
-    <footer className="bg-gray-900 text-white pt-16 pb-12 border-t border-gray-800">
+    <footer style={{ backgroundColor: footerBgColor, color: footerTextColor }} className="pt-16 pb-12 border-t border-black/20 transition-colors">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-12 gap-10 pb-12 border-b border-gray-800">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-12 gap-10 pb-12 border-b border-white/10">
           {/* Brand Info */}
           <div className="lg:col-span-5 space-y-4">
             <div className="bg-white p-3 rounded-xl inline-block shadow-md">
               <Logo logoUrl={logoUrl} subtext={logoSubtext} />
             </div>
-            <p className="text-gray-400 text-sm leading-relaxed max-w-sm">
+            <p className="text-sm leading-relaxed max-w-sm opacity-90">
               Servicios Industriales Moldmaq S.A. Especialistas en maquinados CNC de precisión, diseño y fabricación de moldes de inyección, pailería y mantenimiento industrial integral con cobertura nacional.
             </p>
           </div>
@@ -56,7 +60,7 @@ export const Footer: React.FC<FooterProps> = ({
             <h4 className="text-white font-extrabold text-sm uppercase tracking-wider border-l-2 border-[#D97706] pl-3">
               Navegación
             </h4>
-            <ul className="space-y-2 text-sm text-gray-300 font-medium">
+            <ul className="space-y-2 text-sm opacity-90 font-medium">
               <li>
                 <a
                   href="#inicio"

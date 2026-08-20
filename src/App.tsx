@@ -241,6 +241,7 @@ export default function App() {
           quoteBoxSubtitle={config.aboutQuoteBoxSubtitle}
           quoteBoxButtonText={config.aboutQuoteBoxButtonText}
           whatsappNumber={config.whatsappNumber}
+          aboutBgColor={config.aboutBgColor}
         />
 
         {/* 6. Services Section (#servicios) */}
@@ -249,6 +250,7 @@ export default function App() {
           subtitle={config.servicesSubtitle}
           services={config.servicesList}
           whatsappNumber={config.whatsappNumber}
+          servicesBgColor={config.servicesBgColor}
         />
 
         {/* 7. Horizontal Moving Business Gallery Slider */}
@@ -256,6 +258,7 @@ export default function App() {
           title={config.galleryTitle}
           subtitle={config.gallerySubtitle}
           images={config.galleryImages}
+          galleryBgColor={config.galleryBgColor}
         />
 
         {/* 8. Contact Section (#contacto) */}
@@ -267,6 +270,7 @@ export default function App() {
           whatsappNumber={config.whatsappNumber}
           facebookPage={config.facebookPage}
           coverageAreas={config.coverageAreas}
+          contactBgColor={config.contactBgColor}
         />
       </main>
 
@@ -277,6 +281,8 @@ export default function App() {
         whatsappNumber={config.whatsappNumber}
         phones={config.topPhones}
         onOpenAdmin={handleOpenAdmin}
+        footerBgColor={config.footerBgColor}
+        footerTextColor={config.footerTextColor}
       />
 
       {/* Floating WhatsApp Action Button */}
@@ -285,12 +291,16 @@ export default function App() {
           href={`https://wa.me/${config.whatsappNumber.replace(/\D/g, '') || '525558724410'}?text=${encodeURIComponent(config.whatsappMessage || 'Hola, quisiera cotizar un maquinado/proyecto con Servicios Industriales Moldmaq S.A.')}`}
           target="_blank"
           rel="noopener noreferrer"
-          className="fixed bottom-6 right-6 z-40 bg-[#D97706] hover:bg-amber-600 text-white p-3.5 sm:p-4 rounded-full shadow-2xl transition-all transform hover:scale-110 flex items-center justify-center border-2 border-white group"
+          style={{
+            backgroundColor: config.floatingWaBgColor || '#25D366',
+            color: config.floatingWaTextColor || '#ffffff'
+          }}
+          className="fixed bottom-6 right-6 z-40 p-3.5 sm:p-4 rounded-full shadow-2xl transition-all transform hover:scale-110 flex items-center justify-center border-2 border-white group cursor-pointer"
           aria-label="Contactar por WhatsApp"
         >
           <WhatsAppIcon className="w-7 h-7 text-white shrink-0" />
           <span className="max-w-0 overflow-hidden whitespace-nowrap group-hover:max-w-xs transition-all duration-300 ease-in-out font-bold text-xs pl-0 group-hover:pl-2.5">
-            Cotizar por WhatsApp
+            {config.floatingWaTooltipText || 'Cotizar por WhatsApp'}
           </span>
         </a>
       )}

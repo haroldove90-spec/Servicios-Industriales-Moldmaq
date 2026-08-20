@@ -89,6 +89,28 @@ export interface SiteConfig {
   servicesTitle: string;
   servicesSubtitle: string;
   servicesList: ServiceItem[];
+  servicesBgColor?: string;
+
+  // Nosotros / About Section Customization
+  aboutBgColor?: string;
+
+  // Welcome Banner Customization
+  welcomeBgColor?: string;
+
+  // Gallery Customization
+  galleryBgColor?: string;
+
+  // Contact Section Customization
+  contactBgColor?: string;
+
+  // Footer Customization
+  footerBgColor?: string;
+  footerTextColor?: string;
+
+  // Floating WhatsApp Button Customization
+  floatingWaBgColor?: string;
+  floatingWaTextColor?: string;
+  floatingWaTooltipText?: string;
 
   // Gallery
   galleryTitle: string;

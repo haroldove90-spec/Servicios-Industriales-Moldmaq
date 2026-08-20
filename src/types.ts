@@ -31,9 +31,14 @@ export interface SiteConfig {
   pageTitle: string;
   logoUrl: string;
   brandName?: string;
+  brandNameColor?: string;
   brandSuffix?: string;
+  brandSuffixColor?: string;
+  brandSuffixBgColor?: string;
   brandSubtitle?: string;
+  brandSubtitleColor?: string;
   logoSubtext: string;
+  logoSubtextColor?: string;
   showLogoText?: boolean;
   primaryColor: string;
   secondaryColor: string;
@@ -45,7 +50,15 @@ export interface SiteConfig {
   headerCtaBgColor?: string;
   headerCtaTextColor?: string;
 
+  // Mobile Menu Customization
+  mobileMenuBgColor?: string;
+  mobileMenuTextColor?: string;
+  mobileMenuActiveBgColor?: string;
+  mobileMenuActiveTextColor?: string;
+  mobileMenuBorderColor?: string;
+
   // Top Bar Customization
+  showTopBar?: boolean;
   topBarBgColor?: string;
   topBarTextColor?: string;
   topBarNoticeText?: string;

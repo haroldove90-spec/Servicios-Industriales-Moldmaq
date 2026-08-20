@@ -177,26 +177,33 @@ export default function App() {
         </div>
       )}
 
-      {/* 1. Top Bar */}
-      <TopBar
-        phones={config.topPhones}
-        whatsappNumber={config.whatsappNumber}
-        bgColor={config.topBarBgColor}
-        textColor={config.topBarTextColor}
-        noticeText={config.topBarNoticeText}
-        coverageText={config.topBarCoverageText}
-        buttonText={config.topBarButtonText}
-        buttonBgColor={config.topBarButtonBgColor}
-        buttonTextColor={config.topBarButtonTextColor}
-      />
+      {/* 1. Top Bar (Activar / Desactivar) */}
+      {(config.showTopBar ?? true) && (
+        <TopBar
+          phones={config.topPhones}
+          whatsappNumber={config.whatsappNumber}
+          bgColor={config.topBarBgColor}
+          textColor={config.topBarTextColor}
+          noticeText={config.topBarNoticeText}
+          coverageText={config.topBarCoverageText}
+          buttonText={config.topBarButtonText}
+          buttonBgColor={config.topBarButtonBgColor}
+          buttonTextColor={config.topBarButtonTextColor}
+        />
+      )}
 
       {/* 2. Header Navigation */}
       <Header
         logoUrl={config.logoUrl}
         brandName={config.brandName}
+        brandNameColor={config.brandNameColor}
         brandSuffix={config.brandSuffix}
+        brandSuffixColor={config.brandSuffixColor}
+        brandSuffixBgColor={config.brandSuffixBgColor}
         brandSubtitle={config.brandSubtitle}
+        brandSubtitleColor={config.brandSubtitleColor}
         logoSubtext={config.logoSubtext}
+        logoSubtextColor={config.logoSubtextColor}
         showLogoText={config.showLogoText}
         whatsappNumber={config.whatsappNumber}
         onOpenAdmin={handleOpenAdmin}
@@ -206,6 +213,11 @@ export default function App() {
         headerCtaBgColor={config.headerCtaBgColor}
         headerCtaTextColor={config.headerCtaTextColor}
         primaryColor={config.primaryColor}
+        mobileMenuBgColor={config.mobileMenuBgColor}
+        mobileMenuTextColor={config.mobileMenuTextColor}
+        mobileMenuActiveBgColor={config.mobileMenuActiveBgColor}
+        mobileMenuActiveTextColor={config.mobileMenuActiveTextColor}
+        mobileMenuBorderColor={config.mobileMenuBorderColor}
       />
 
       {/* Main Anchor Content Sections */}
@@ -282,9 +294,14 @@ export default function App() {
       <Footer
         logoUrl={config.logoUrl}
         brandName={config.brandName}
+        brandNameColor={config.brandNameColor}
         brandSuffix={config.brandSuffix}
+        brandSuffixColor={config.brandSuffixColor}
+        brandSuffixBgColor={config.brandSuffixBgColor}
         brandSubtitle={config.brandSubtitle}
+        brandSubtitleColor={config.brandSubtitleColor}
         logoSubtext={config.logoSubtext}
+        logoSubtextColor={config.logoSubtextColor}
         showLogoText={config.showLogoText}
         whatsappNumber={config.whatsappNumber}
         phones={config.topPhones}

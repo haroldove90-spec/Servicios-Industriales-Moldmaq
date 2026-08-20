@@ -561,13 +561,13 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({
               <div className="bg-gray-50 p-5 rounded-2xl border border-gray-200 space-y-4">
                 <div className="flex items-center justify-between">
                   <h3 className="font-extrabold text-base text-gray-900">1. Identidad de Marca, Textos del Logo & Títulos</h3>
-                  <span className="text-xs font-semibold bg-blue-100 text-[#0F3B68] px-2.5 py-0.5 rounded-full">Textos & Logo</span>
+                  <span className="text-xs font-semibold bg-blue-100 text-[#0F3B68] px-2.5 py-0.5 rounded-full">Textos & Colores del Logo</span>
                 </div>
                 <p className="text-xs text-gray-600">
-                  Modifique el nombre comercial, subtítulos, eslogan y título de pestaña del navegador. Si deja algún campo de botón o texto vacío, se ocultará automáticamente sin mostrar errores.
+                  Modifique el nombre comercial, subtítulos, eslogan, título de pestaña del navegador y personalice los <b>colores de cada texto</b> individualmente.
                 </p>
 
-                <div className="space-y-4">
+                <div className="space-y-5">
                   <div>
                     <label className="block text-xs font-bold text-gray-700 uppercase mb-1">
                       Título de la Página Web (Pestaña del Navegador y SEO)
@@ -581,62 +581,135 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({
                     />
                   </div>
 
-                  <div className="grid grid-cols-1 sm:grid-cols-12 gap-4">
-                    <div className="sm:col-span-8">
-                      <label className="block text-xs font-bold text-gray-700 uppercase mb-1">
-                        Nombre Principal de la Empresa (Línea 1 del Logo)
-                      </label>
-                      <input
-                        type="text"
-                        value={formData.brandName ?? 'MOLDMAQ'}
-                        onChange={(e) => setFormData({ ...formData, brandName: e.target.value })}
-                        placeholder="MOLDMAQ"
-                        className="w-full px-4 py-2.5 rounded-xl border border-gray-300 text-sm font-bold text-[#0F3B68] focus:ring-2 focus:ring-[#0F3B68]"
-                      />
-                    </div>
+                  {/* Line 1: Brand Name & Suffix with Colors */}
+                  <div className="p-4 bg-white rounded-xl border border-gray-200 space-y-3">
+                    <span className="text-xs font-bold text-gray-800 uppercase tracking-wide">
+                      Línea 1: Nombre de la Empresa y Distintivo
+                    </span>
 
-                    <div className="sm:col-span-4">
-                      <label className="block text-xs font-bold text-gray-700 uppercase mb-1">
-                        Sufijo / Distintivo (Ej. S.A.)
-                      </label>
-                      <input
-                        type="text"
-                        value={formData.brandSuffix ?? 'S.A.'}
-                        onChange={(e) => setFormData({ ...formData, brandSuffix: e.target.value })}
-                        placeholder="S.A. (dejar vacío si no aplica)"
-                        className="w-full px-4 py-2.5 rounded-xl border border-gray-300 text-sm font-bold text-[#D97706] focus:ring-2 focus:ring-[#0F3B68]"
-                      />
+                    <div className="grid grid-cols-1 sm:grid-cols-12 gap-4">
+                      {/* Brand Name */}
+                      <div className="sm:col-span-7 space-y-2">
+                        <label className="block text-[11px] font-bold text-gray-600 uppercase">
+                          Texto del Nombre (Ej: MOLDMAQ)
+                        </label>
+                        <input
+                          type="text"
+                          value={formData.brandName ?? 'MOLDMAQ'}
+                          onChange={(e) => setFormData({ ...formData, brandName: e.target.value })}
+                          placeholder="MOLDMAQ"
+                          className="w-full px-3 py-2 rounded-xl border border-gray-300 text-sm font-bold text-[#0F3B68] focus:ring-2 focus:ring-[#0F3B68]"
+                        />
+                        <div className="flex items-center gap-2">
+                          <label className="text-[10px] font-bold text-gray-500 uppercase">Color Texto:</label>
+                          <input
+                            type="color"
+                            value={formData.brandNameColor || '#0F3B68'}
+                            onChange={(e) => setFormData({ ...formData, brandNameColor: e.target.value })}
+                            className="w-7 h-7 rounded-lg cursor-pointer border border-gray-300"
+                          />
+                          <input
+                            type="text"
+                            value={formData.brandNameColor || '#0F3B68'}
+                            onChange={(e) => setFormData({ ...formData, brandNameColor: e.target.value })}
+                            className="w-24 px-2 py-0.5 text-xs border border-gray-300 rounded font-mono uppercase"
+                          />
+                        </div>
+                      </div>
+
+                      {/* Brand Suffix */}
+                      <div className="sm:col-span-5 space-y-2">
+                        <label className="block text-[11px] font-bold text-gray-600 uppercase">
+                          Sufijo (Ej: S.A.)
+                        </label>
+                        <input
+                          type="text"
+                          value={formData.brandSuffix ?? 'S.A.'}
+                          onChange={(e) => setFormData({ ...formData, brandSuffix: e.target.value })}
+                          placeholder="S.A."
+                          className="w-full px-3 py-2 rounded-xl border border-gray-300 text-sm font-bold text-[#D97706] focus:ring-2 focus:ring-[#0F3B68]"
+                        />
+                        <div className="flex items-center gap-2">
+                          <label className="text-[10px] font-bold text-gray-500 uppercase">Color Letra:</label>
+                          <input
+                            type="color"
+                            value={formData.brandSuffixColor || '#D97706'}
+                            onChange={(e) => setFormData({ ...formData, brandSuffixColor: e.target.value })}
+                            className="w-7 h-7 rounded-lg cursor-pointer border border-gray-300"
+                          />
+                          <input
+                            type="text"
+                            value={formData.brandSuffixColor || '#D97706'}
+                            onChange={(e) => setFormData({ ...formData, brandSuffixColor: e.target.value })}
+                            className="w-24 px-2 py-0.5 text-xs border border-gray-300 rounded font-mono uppercase"
+                          />
+                        </div>
+                      </div>
                     </div>
                   </div>
 
+                  {/* Line 2: Brand Subtitle & Line 3: Eslogan */}
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                    <div>
-                      <label className="block text-xs font-bold text-gray-700 uppercase mb-1">
-                        Subtítulo del Logo (Línea 2 - Ej: SERVICIOS INDUSTRIALES)
+                    {/* Subtitle */}
+                    <div className="p-4 bg-white rounded-xl border border-gray-200 space-y-2">
+                      <label className="block text-xs font-bold text-gray-700 uppercase">
+                        Subtítulo del Logo (Línea 2)
                       </label>
                       <input
                         type="text"
                         value={formData.brandSubtitle ?? 'Servicios Industriales'}
                         onChange={(e) => setFormData({ ...formData, brandSubtitle: e.target.value })}
                         placeholder="SERVICIOS INDUSTRIALES (dejar vacío para ocultar)"
-                        className="w-full px-4 py-2.5 rounded-xl border border-gray-300 text-sm font-medium focus:ring-2 focus:ring-[#0F3B68]"
+                        className="w-full px-3 py-2 rounded-xl border border-gray-300 text-sm font-medium focus:ring-2 focus:ring-[#0F3B68]"
                       />
+                      <div className="flex items-center gap-2 pt-1">
+                        <label className="text-[10px] font-bold text-gray-500 uppercase">Color:</label>
+                        <input
+                          type="color"
+                          value={formData.brandSubtitleColor || '#475569'}
+                          onChange={(e) => setFormData({ ...formData, brandSubtitleColor: e.target.value })}
+                          className="w-7 h-7 rounded-lg cursor-pointer border border-gray-300"
+                        />
+                        <input
+                          type="text"
+                          value={formData.brandSubtitleColor || '#475569'}
+                          onChange={(e) => setFormData({ ...formData, brandSubtitleColor: e.target.value })}
+                          className="w-24 px-2 py-0.5 text-xs border border-gray-300 rounded font-mono uppercase"
+                        />
+                      </div>
                     </div>
 
-                    <div>
-                      <label className="block text-xs font-bold text-gray-700 uppercase mb-1">
-                        Eslogan / Línea 3 (Ej: MAQUINADOS CNC • MOLDES • MANTENIMIENTO)
+                    {/* Eslogan / Line 3 */}
+                    <div className="p-4 bg-white rounded-xl border border-gray-200 space-y-2">
+                      <label className="block text-xs font-bold text-gray-700 uppercase">
+                        Eslogan / Línea 3 (Detalle)
                       </label>
                       <input
                         type="text"
                         value={formData.logoSubtext ?? 'Maquinados CNC • Moldes • Mantenimiento Industrial'}
                         onChange={(e) => setFormData({ ...formData, logoSubtext: e.target.value })}
-                        placeholder="MAQUINADOS CNC • MOLDES • MANTENIMIENTO INDUSTRIAL (dejar vacío para ocultar)"
-                        className="w-full px-4 py-2.5 rounded-xl border border-gray-300 text-sm font-medium focus:ring-2 focus:ring-[#0F3B68]"
+                        placeholder="MAQUINADOS CNC • MOLDES • MANTENIMIENTO INDUSTRIAL"
+                        className="w-full px-3 py-2 rounded-xl border border-gray-300 text-sm font-medium focus:ring-2 focus:ring-[#0F3B68]"
                       />
+                      <div className="flex items-center gap-2 pt-1">
+                        <label className="text-[10px] font-bold text-gray-500 uppercase">Color:</label>
+                        <input
+                          type="color"
+                          value={formData.logoSubtextColor || '#94a3b8'}
+                          onChange={(e) => setFormData({ ...formData, logoSubtextColor: e.target.value })}
+                          className="w-7 h-7 rounded-lg cursor-pointer border border-gray-300"
+                        />
+                        <input
+                          type="text"
+                          value={formData.logoSubtextColor || '#94a3b8'}
+                          onChange={(e) => setFormData({ ...formData, logoSubtextColor: e.target.value })}
+                          className="w-24 px-2 py-0.5 text-xs border border-gray-300 rounded font-mono uppercase"
+                        />
+                      </div>
                     </div>
                   </div>
 
+                  {/* Toggle show logo text */}
                   <div className="pt-1">
                     <label className="flex items-center gap-3 p-3 bg-white rounded-xl border border-gray-200 cursor-pointer hover:bg-slate-50 transition-colors">
                       <input
@@ -655,118 +728,152 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({
 
               {/* Top Bar Customization */}
               <div className="bg-gray-50 p-5 rounded-2xl border border-gray-200 space-y-4">
-                <div className="flex items-center justify-between">
-                  <h3 className="font-extrabold text-base text-gray-900">2. Barra Superior (Top Bar)</h3>
+                <div className="flex flex-wrap items-center justify-between gap-2">
+                  <div className="flex items-center gap-2">
+                    <h3 className="font-extrabold text-base text-gray-900">2. Barra Superior (Top Bar)</h3>
+                    <span className={`text-xs font-semibold px-2.5 py-0.5 rounded-full ${
+                      formData.showTopBar !== false ? 'bg-emerald-100 text-emerald-800' : 'bg-rose-100 text-rose-800'
+                    }`}>
+                      {formData.showTopBar !== false ? '● Visible en Sitio' : '○ Desactivada'}
+                    </span>
+                  </div>
                   <span className="text-xs font-semibold bg-blue-100 text-[#0F3B68] px-2.5 py-0.5 rounded-full">Colores & Textos</span>
                 </div>
-                <p className="text-xs text-gray-600">Personalice el color de fondo, color de texto, anuncios y botón de la barra superior.</p>
+                <p className="text-xs text-gray-600">
+                  Active o desactive la barra superior que aparece encima del menú de navegación, y configure sus colores y textos.
+                </p>
 
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                  {/* Top Bar Background Color */}
+                {/* Master Toggle for Top Bar */}
+                <div className="p-4 bg-white rounded-xl border border-gray-200 shadow-xs flex items-center justify-between gap-4">
                   <div>
-                    <label className="block text-xs font-bold text-gray-700 uppercase mb-2">
-                      Color de Fondo Barra Superior
-                    </label>
-                    <div className="flex items-center gap-3">
-                      <input
-                        type="color"
-                        value={formData.topBarBgColor || '#020617'}
-                        onChange={(e) => setFormData({ ...formData, topBarBgColor: e.target.value })}
-                        className="w-11 h-11 rounded-xl cursor-pointer border border-gray-300"
-                      />
-                      <input
-                        type="text"
-                        value={formData.topBarBgColor || '#020617'}
-                        onChange={(e) => setFormData({ ...formData, topBarBgColor: e.target.value })}
-                        className="w-32 px-3 py-2 rounded-xl border border-gray-300 text-sm font-mono uppercase"
-                      />
-                    </div>
+                    <span className="text-sm font-bold text-gray-900 block">
+                      Mostrar Barra Superior en el Sitio Web
+                    </span>
+                    <span className="text-xs text-gray-500 block mt-0.5">
+                      Si se desactiva, la barra con teléfonos, horario y botón superior quedará completamente oculta.
+                    </span>
                   </div>
-
-                  {/* Top Bar Text Color */}
-                  <div>
-                    <label className="block text-xs font-bold text-gray-700 uppercase mb-2">
-                      Color de Texto Barra Superior
-                    </label>
-                    <div className="flex items-center gap-3">
-                      <input
-                        type="color"
-                        value={formData.topBarTextColor || '#cbd5e1'}
-                        onChange={(e) => setFormData({ ...formData, topBarTextColor: e.target.value })}
-                        className="w-11 h-11 rounded-xl cursor-pointer border border-gray-300"
-                      />
-                      <input
-                        type="text"
-                        value={formData.topBarTextColor || '#cbd5e1'}
-                        onChange={(e) => setFormData({ ...formData, topBarTextColor: e.target.value })}
-                        className="w-32 px-3 py-2 rounded-xl border border-gray-300 text-sm font-mono uppercase"
-                      />
-                    </div>
-                  </div>
+                  <label className="relative inline-flex items-center cursor-pointer shrink-0">
+                    <input
+                      type="checkbox"
+                      checked={formData.showTopBar !== false}
+                      onChange={(e) => setFormData({ ...formData, showTopBar: e.target.checked })}
+                      className="sr-only peer"
+                    />
+                    <div className="w-12 h-6 bg-gray-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-emerald-600"></div>
+                  </label>
                 </div>
 
-                <div className="space-y-3 pt-2">
-                  <div>
-                    <label className="block text-xs font-bold text-gray-700 uppercase mb-1">
-                      Texto de Atención / Horario (Izquierda)
-                    </label>
-                    <input
-                      type="text"
-                      value={formData.topBarNoticeText ?? 'Atención a Plantas Industriales y Maquinados Urgentes'}
-                      onChange={(e) => setFormData({ ...formData, topBarNoticeText: e.target.value })}
-                      placeholder="Atención a Plantas Industriales y Maquinados Urgentes"
-                      className="w-full px-4 py-2 rounded-xl border border-gray-300 text-sm font-medium"
-                    />
-                  </div>
+                {formData.showTopBar !== false && (
+                  <div className="space-y-4 pt-2 animate-fadeIn">
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                      {/* Top Bar Background Color */}
+                      <div>
+                        <label className="block text-xs font-bold text-gray-700 uppercase mb-2">
+                          Color de Fondo Barra Superior
+                        </label>
+                        <div className="flex items-center gap-3">
+                          <input
+                            type="color"
+                            value={formData.topBarBgColor || '#020617'}
+                            onChange={(e) => setFormData({ ...formData, topBarBgColor: e.target.value })}
+                            className="w-11 h-11 rounded-xl cursor-pointer border border-gray-300"
+                          />
+                          <input
+                            type="text"
+                            value={formData.topBarBgColor || '#020617'}
+                            onChange={(e) => setFormData({ ...formData, topBarBgColor: e.target.value })}
+                            className="w-32 px-3 py-2 rounded-xl border border-gray-300 text-sm font-mono uppercase"
+                          />
+                        </div>
+                      </div>
 
-                  <div>
-                    <label className="block text-xs font-bold text-gray-700 uppercase mb-1">
-                      Texto de Cobertura Geográfica (Centro)
-                    </label>
-                    <input
-                      type="text"
-                      value={formData.topBarCoverageText ?? 'Zona Metropolitana, CDMX, Edo. Mex, Querétaro y Bajío'}
-                      onChange={(e) => setFormData({ ...formData, topBarCoverageText: e.target.value })}
-                      placeholder="Zona Metropolitana, CDMX, Edo. Mex, Querétaro y Bajío"
-                      className="w-full px-4 py-2 rounded-xl border border-gray-300 text-sm font-medium"
-                    />
-                  </div>
-
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-1">
-                    <div>
-                      <label className="block text-xs font-bold text-gray-700 uppercase mb-1">
-                        Texto del Botón en Barra Superior <span className="text-[10px] text-gray-500 font-normal lowercase">(dejar vacío para ocultar)</span>
-                      </label>
-                      <input
-                        type="text"
-                        value={formData.topBarButtonText ?? ''}
-                        onChange={(e) => setFormData({ ...formData, topBarButtonText: e.target.value })}
-                        placeholder="Ej: Cotizar Maquinado (o dejar en blanco para ocultar)"
-                        className="w-full px-4 py-2 rounded-xl border border-gray-300 text-sm font-medium"
-                      />
+                      {/* Top Bar Text Color */}
+                      <div>
+                        <label className="block text-xs font-bold text-gray-700 uppercase mb-2">
+                          Color de Texto Barra Superior
+                        </label>
+                        <div className="flex items-center gap-3">
+                          <input
+                            type="color"
+                            value={formData.topBarTextColor || '#cbd5e1'}
+                            onChange={(e) => setFormData({ ...formData, topBarTextColor: e.target.value })}
+                            className="w-11 h-11 rounded-xl cursor-pointer border border-gray-300"
+                          />
+                          <input
+                            type="text"
+                            value={formData.topBarTextColor || '#cbd5e1'}
+                            onChange={(e) => setFormData({ ...formData, topBarTextColor: e.target.value })}
+                            className="w-32 px-3 py-2 rounded-xl border border-gray-300 text-sm font-mono uppercase"
+                          />
+                        </div>
+                      </div>
                     </div>
 
-                    <div>
-                      <label className="block text-xs font-bold text-gray-700 uppercase mb-1">
-                        Color del Botón Barra Superior
-                      </label>
-                      <div className="flex items-center gap-3">
-                        <input
-                          type="color"
-                          value={formData.topBarButtonBgColor || '#D97706'}
-                          onChange={(e) => setFormData({ ...formData, topBarButtonBgColor: e.target.value })}
-                          className="w-10 h-10 rounded-xl cursor-pointer border border-gray-300"
-                        />
+                    <div className="space-y-3 pt-2">
+                      <div>
+                        <label className="block text-xs font-bold text-gray-700 uppercase mb-1">
+                          Texto de Atención / Horario (Izquierda)
+                        </label>
                         <input
                           type="text"
-                          value={formData.topBarButtonBgColor || '#D97706'}
-                          onChange={(e) => setFormData({ ...formData, topBarButtonBgColor: e.target.value })}
-                          className="w-32 px-3 py-1.5 rounded-xl border border-gray-300 text-sm font-mono uppercase"
+                          value={formData.topBarNoticeText ?? 'Atención a Plantas Industriales y Maquinados Urgentes'}
+                          onChange={(e) => setFormData({ ...formData, topBarNoticeText: e.target.value })}
+                          placeholder="Atención a Plantas Industriales y Maquinados Urgentes"
+                          className="w-full px-4 py-2 rounded-xl border border-gray-300 text-sm font-medium"
                         />
+                      </div>
+
+                      <div>
+                        <label className="block text-xs font-bold text-gray-700 uppercase mb-1">
+                          Texto de Cobertura Geográfica (Centro)
+                        </label>
+                        <input
+                          type="text"
+                          value={formData.topBarCoverageText ?? 'Zona Metropolitana, CDMX, Edo. Mex, Querétaro y Bajío'}
+                          onChange={(e) => setFormData({ ...formData, topBarCoverageText: e.target.value })}
+                          placeholder="Zona Metropolitana, CDMX, Edo. Mex, Querétaro y Bajío"
+                          className="w-full px-4 py-2 rounded-xl border border-gray-300 text-sm font-medium"
+                        />
+                      </div>
+
+                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-1">
+                        <div>
+                          <label className="block text-xs font-bold text-gray-700 uppercase mb-1">
+                            Texto del Botón en Barra Superior <span className="text-[10px] text-gray-500 font-normal lowercase">(dejar vacío para ocultar)</span>
+                          </label>
+                          <input
+                            type="text"
+                            value={formData.topBarButtonText ?? ''}
+                            onChange={(e) => setFormData({ ...formData, topBarButtonText: e.target.value })}
+                            placeholder="Ej: Cotizar Maquinado (o dejar en blanco para ocultar)"
+                            className="w-full px-4 py-2 rounded-xl border border-gray-300 text-sm font-medium"
+                          />
+                        </div>
+
+                        <div>
+                          <label className="block text-xs font-bold text-gray-700 uppercase mb-1">
+                            Color del Botón Barra Superior
+                          </label>
+                          <div className="flex items-center gap-3">
+                            <input
+                              type="color"
+                              value={formData.topBarButtonBgColor || '#D97706'}
+                              onChange={(e) => setFormData({ ...formData, topBarButtonBgColor: e.target.value })}
+                              className="w-11 h-11 rounded-xl cursor-pointer border border-gray-300"
+                            />
+                            <input
+                              type="text"
+                              value={formData.topBarButtonBgColor || '#D97706'}
+                              onChange={(e) => setFormData({ ...formData, topBarButtonBgColor: e.target.value })}
+                              className="w-32 px-3 py-2 rounded-xl border border-gray-300 text-sm font-mono uppercase"
+                            />
+                          </div>
+                        </div>
                       </div>
                     </div>
                   </div>
-                </div>
+                )}
               </div>
 
               {/* Header Navigation Customization */}
@@ -880,9 +987,153 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({
                 </div>
               </div>
 
+              {/* Mobile Menu Customization Section */}
+              <div className="bg-gray-50 p-5 rounded-2xl border border-gray-200 space-y-4">
+                <div className="flex items-center justify-between">
+                  <h3 className="font-extrabold text-base text-gray-900">4. Menú de Navegación Móvil (Celulares y Tablets)</h3>
+                  <span className="text-xs font-semibold bg-indigo-100 text-indigo-800 px-2.5 py-0.5 rounded-full">Menú Móvil</span>
+                </div>
+                <p className="text-xs text-gray-600">
+                  Personalice el aspecto completo del desplegable que ven los usuarios al abrir el menú en dispositivos móviles.
+                </p>
+
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+                  {/* Mobile Menu Background */}
+                  <div className="p-3 bg-white rounded-xl border border-gray-200 space-y-2">
+                    <label className="block text-xs font-bold text-gray-700 uppercase">
+                      Color de Fondo del Menú Móvil
+                    </label>
+                    <div className="flex items-center gap-2">
+                      <input
+                        type="color"
+                        value={formData.mobileMenuBgColor || '#0f172a'}
+                        onChange={(e) => setFormData({ ...formData, mobileMenuBgColor: e.target.value })}
+                        className="w-9 h-9 rounded-lg cursor-pointer border border-gray-300"
+                      />
+                      <input
+                        type="text"
+                        value={formData.mobileMenuBgColor || '#0f172a'}
+                        onChange={(e) => setFormData({ ...formData, mobileMenuBgColor: e.target.value })}
+                        className="w-24 px-2 py-1 text-xs border border-gray-300 rounded font-mono uppercase"
+                      />
+                    </div>
+                  </div>
+
+                  {/* Mobile Menu Text Color (Normal) */}
+                  <div className="p-3 bg-white rounded-xl border border-gray-200 space-y-2">
+                    <label className="block text-xs font-bold text-gray-700 uppercase">
+                      Color de Texto (Enlaces)
+                    </label>
+                    <div className="flex items-center gap-2">
+                      <input
+                        type="color"
+                        value={formData.mobileMenuTextColor || '#cbd5e1'}
+                        onChange={(e) => setFormData({ ...formData, mobileMenuTextColor: e.target.value })}
+                        className="w-9 h-9 rounded-lg cursor-pointer border border-gray-300"
+                      />
+                      <input
+                        type="text"
+                        value={formData.mobileMenuTextColor || '#cbd5e1'}
+                        onChange={(e) => setFormData({ ...formData, mobileMenuTextColor: e.target.value })}
+                        className="w-24 px-2 py-1 text-xs border border-gray-300 rounded font-mono uppercase"
+                      />
+                    </div>
+                  </div>
+
+                  {/* Mobile Menu Active / Hover Background */}
+                  <div className="p-3 bg-white rounded-xl border border-gray-200 space-y-2">
+                    <label className="block text-xs font-bold text-gray-700 uppercase">
+                      Fondo al Pasar Mouse / Activo
+                    </label>
+                    <div className="flex items-center gap-2">
+                      <input
+                        type="color"
+                        value={formData.mobileMenuActiveBgColor || '#D97706'}
+                        onChange={(e) => setFormData({ ...formData, mobileMenuActiveBgColor: e.target.value })}
+                        className="w-9 h-9 rounded-lg cursor-pointer border border-gray-300"
+                      />
+                      <input
+                        type="text"
+                        value={formData.mobileMenuActiveBgColor || '#D97706'}
+                        onChange={(e) => setFormData({ ...formData, mobileMenuActiveBgColor: e.target.value })}
+                        className="w-24 px-2 py-1 text-xs border border-gray-300 rounded font-mono uppercase"
+                      />
+                    </div>
+                  </div>
+
+                  {/* Mobile Menu Active / Hover Text Color */}
+                  <div className="p-3 bg-white rounded-xl border border-gray-200 space-y-2">
+                    <label className="block text-xs font-bold text-gray-700 uppercase">
+                      Texto al Pasar Mouse / Activo
+                    </label>
+                    <div className="flex items-center gap-2">
+                      <input
+                        type="color"
+                        value={formData.mobileMenuActiveTextColor || '#ffffff'}
+                        onChange={(e) => setFormData({ ...formData, mobileMenuActiveTextColor: e.target.value })}
+                        className="w-9 h-9 rounded-lg cursor-pointer border border-gray-300"
+                      />
+                      <input
+                        type="text"
+                        value={formData.mobileMenuActiveTextColor || '#ffffff'}
+                        onChange={(e) => setFormData({ ...formData, mobileMenuActiveTextColor: e.target.value })}
+                        className="w-24 px-2 py-1 text-xs border border-gray-300 rounded font-mono uppercase"
+                      />
+                    </div>
+                  </div>
+
+                  {/* Mobile Menu Border / Divider Color */}
+                  <div className="p-3 bg-white rounded-xl border border-gray-200 space-y-2">
+                    <label className="block text-xs font-bold text-gray-700 uppercase">
+                      Borde Inferior del Menú
+                    </label>
+                    <div className="flex items-center gap-2">
+                      <input
+                        type="color"
+                        value={formData.mobileMenuBorderColor || '#1e293b'}
+                        onChange={(e) => setFormData({ ...formData, mobileMenuBorderColor: e.target.value })}
+                        className="w-9 h-9 rounded-lg cursor-pointer border border-gray-300"
+                      />
+                      <input
+                        type="text"
+                        value={formData.mobileMenuBorderColor || '#1e293b'}
+                        onChange={(e) => setFormData({ ...formData, mobileMenuBorderColor: e.target.value })}
+                        className="w-24 px-2 py-1 text-xs border border-gray-300 rounded font-mono uppercase"
+                      />
+                    </div>
+                  </div>
+                </div>
+
+                {/* Live Preview Box of Mobile Menu Item */}
+                <div className="p-4 rounded-xl border border-gray-300 space-y-2" style={{ backgroundColor: formData.mobileMenuBgColor || '#0f172a' }}>
+                  <div className="text-[10px] font-bold uppercase tracking-wider text-gray-400">
+                    Vista previa de elementos en Menú Móvil:
+                  </div>
+                  <div className="flex flex-col sm:flex-row gap-3">
+                    <div 
+                      className="px-4 py-2.5 rounded-xl font-bold text-sm"
+                      style={{ 
+                        backgroundColor: formData.mobileMenuActiveBgColor || '#D97706',
+                        color: formData.mobileMenuActiveTextColor || '#ffffff'
+                      }}
+                    >
+                      ✓ Enlace Activo / Con Mouse Encima (Ej: Inicio)
+                    </div>
+                    <div 
+                      className="px-4 py-2.5 rounded-xl font-bold text-sm"
+                      style={{ 
+                        color: formData.mobileMenuTextColor || '#cbd5e1'
+                      }}
+                    >
+                      Enlace Normal (Ej: Nosotros)
+                    </div>
+                  </div>
+                </div>
+              </div>
+
               {/* Logo Upload Section */}
               <div className="bg-gray-50 p-5 rounded-2xl border border-gray-200 space-y-4">
-                <h3 className="font-extrabold text-base text-gray-900">4. Subir o Reemplazar Logo Oficial</h3>
+                <h3 className="font-extrabold text-base text-gray-900">5. Subir o Reemplazar Logo Oficial</h3>
                 <p className="text-xs text-gray-600">Puede subir una imagen de su logotipo (PNG, JPG, SVG) o ingresar la URL directa.</p>
 
                 <div className="flex flex-col sm:flex-row items-center gap-4">
@@ -936,7 +1187,7 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({
               {/* Favicon Upload Section */}
               <div className="bg-gray-50 p-5 rounded-2xl border border-gray-200 space-y-4">
                 <div className="flex items-center justify-between">
-                  <h3 className="font-extrabold text-base text-gray-900">5. Favicon del Sitio (Ícono de Pestaña)</h3>
+                  <h3 className="font-extrabold text-base text-gray-900">6. Favicon del Sitio (Ícono de Pestaña)</h3>
                   <span className="text-xs font-semibold bg-amber-100 text-amber-800 px-2.5 py-0.5 rounded-full">Icono Pestaña</span>
                 </div>
                 <p className="text-xs text-gray-600">
@@ -996,7 +1247,7 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({
 
               {/* Dynamic Theme Colors & Section Backgrounds */}
               <div className="bg-gray-50 p-5 rounded-2xl border border-gray-200 space-y-4">
-                <h3 className="font-extrabold text-base text-gray-900">6. Colores Institucionales de la Marca</h3>
+                <h3 className="font-extrabold text-base text-gray-900">7. Colores Institucionales de la Marca</h3>
 
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
                   <div>
@@ -1044,7 +1295,7 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({
               {/* Section Background Colors Customization */}
               <div className="bg-gray-50 p-5 rounded-2xl border border-gray-200 space-y-4">
                 <div className="flex items-center justify-between">
-                  <h3 className="font-extrabold text-base text-gray-900">7. Colores de Fondo de Cada Sección</h3>
+                  <h3 className="font-extrabold text-base text-gray-900">8. Colores de Fondo de Cada Sección</h3>
                   <span className="text-xs font-semibold bg-emerald-100 text-emerald-800 px-2.5 py-0.5 rounded-full">Fondos de Secciones</span>
                 </div>
                 <p className="text-xs text-gray-600">Personalice el color de fondo para cada bloque del sitio web.</p>
@@ -1169,7 +1420,7 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({
               {/* Floating WhatsApp Button Customization */}
               <div className="bg-gray-50 p-5 rounded-2xl border border-gray-200 space-y-4">
                 <div className="flex items-center justify-between">
-                  <h3 className="font-extrabold text-base text-gray-900">8. Botón Flotante de WhatsApp</h3>
+                  <h3 className="font-extrabold text-base text-gray-900">9. Botón Flotante de WhatsApp</h3>
                   <span className="text-xs font-semibold bg-emerald-100 text-emerald-800 px-2.5 py-0.5 rounded-full">Botón Flotante</span>
                 </div>
 

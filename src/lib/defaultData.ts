@@ -4,9 +4,14 @@ export const DEFAULT_SITE_CONFIG: SiteConfig = {
   pageTitle: "Servicios Industriales Moldmaq S.A. | Maquinados CNC, Moldes y Mantenimiento Industrial",
   logoUrl: "https://glqyclphjelrdminvetb.supabase.co/storage/v1/object/public/logo/moldmaqlogo.png",
   brandName: "MOLDMAQ",
+  brandNameColor: "#0F3B68",
   brandSuffix: "S.A.",
+  brandSuffixColor: "#D97706",
+  brandSuffixBgColor: "rgba(217, 119, 6, 0.1)",
   brandSubtitle: "Servicios Industriales",
+  brandSubtitleColor: "#475569",
   logoSubtext: "Maquinados CNC • Moldes • Mantenimiento Industrial",
+  logoSubtextColor: "#94a3b8",
   showLogoText: true,
   faviconUrl: "",
   primaryColor: "#0F3B68",
@@ -19,7 +24,15 @@ export const DEFAULT_SITE_CONFIG: SiteConfig = {
   headerCtaBgColor: "#D97706",
   headerCtaTextColor: "#ffffff",
 
+  // Mobile Menu Defaults
+  mobileMenuBgColor: "#0f172a",
+  mobileMenuTextColor: "#e2e8f0",
+  mobileMenuActiveBgColor: "#D97706",
+  mobileMenuActiveTextColor: "#ffffff",
+  mobileMenuBorderColor: "#1e293b",
+
   // Top Bar Defaults
+  showTopBar: true,
   topBarBgColor: "#020617",
   topBarTextColor: "#cbd5e1",
   topBarNoticeText: "Atención a Plantas Industriales y Maquinados Urgentes",

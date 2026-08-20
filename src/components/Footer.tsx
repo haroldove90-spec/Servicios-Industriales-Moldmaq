@@ -6,9 +6,14 @@ import { WhatsAppIcon } from './WhatsAppIcon';
 interface FooterProps {
   logoUrl?: string;
   brandName?: string;
+  brandNameColor?: string;
   brandSuffix?: string;
+  brandSuffixColor?: string;
+  brandSuffixBgColor?: string;
   brandSubtitle?: string;
+  brandSubtitleColor?: string;
   logoSubtext?: string;
+  logoSubtextColor?: string;
   showLogoText?: boolean;
   whatsappNumber: string;
   phones: string[];
@@ -20,9 +25,14 @@ interface FooterProps {
 export const Footer: React.FC<FooterProps> = ({
   logoUrl,
   brandName,
+  brandNameColor,
   brandSuffix,
+  brandSuffixColor,
+  brandSuffixBgColor,
   brandSubtitle,
+  brandSubtitleColor,
   logoSubtext,
+  logoSubtextColor,
   showLogoText,
   whatsappNumber,
   phones,
@@ -59,9 +69,14 @@ export const Footer: React.FC<FooterProps> = ({
               <Logo 
                 logoUrl={logoUrl} 
                 brandName={brandName}
+                brandNameColor={brandNameColor}
                 brandSuffix={brandSuffix}
+                brandSuffixColor={brandSuffixColor}
+                brandSuffixBgColor={brandSuffixBgColor}
                 brandSubtitle={brandSubtitle}
+                brandSubtitleColor={brandSubtitleColor}
                 subtext={logoSubtext} 
+                logoSubtextColor={logoSubtextColor}
                 showLogoText={showLogoText}
                 isDarkHeader={false}
               />

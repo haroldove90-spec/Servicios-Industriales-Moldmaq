@@ -7,9 +7,14 @@ import { WhatsAppIcon } from './WhatsAppIcon';
 interface HeaderProps {
   logoUrl?: string;
   brandName?: string;
+  brandNameColor?: string;
   brandSuffix?: string;
+  brandSuffixColor?: string;
+  brandSuffixBgColor?: string;
   brandSubtitle?: string;
+  brandSubtitleColor?: string;
   logoSubtext?: string;
+  logoSubtextColor?: string;
   showLogoText?: boolean;
   whatsappNumber: string;
   onOpenAdmin: () => void;
@@ -19,14 +24,24 @@ interface HeaderProps {
   headerCtaBgColor?: string;
   headerCtaTextColor?: string;
   primaryColor?: string;
+  mobileMenuBgColor?: string;
+  mobileMenuTextColor?: string;
+  mobileMenuActiveBgColor?: string;
+  mobileMenuActiveTextColor?: string;
+  mobileMenuBorderColor?: string;
 }
 
 export const Header: React.FC<HeaderProps> = ({
   logoUrl,
   brandName,
+  brandNameColor,
   brandSuffix,
+  brandSuffixColor,
+  brandSuffixBgColor,
   brandSubtitle,
+  brandSubtitleColor,
   logoSubtext,
+  logoSubtextColor,
   showLogoText,
   whatsappNumber,
   onOpenAdmin,
@@ -35,11 +50,17 @@ export const Header: React.FC<HeaderProps> = ({
   headerCtaText = 'Cotizar Proyecto',
   headerCtaBgColor = '#D97706',
   headerCtaTextColor = '#ffffff',
-  primaryColor = '#0F3B68'
+  primaryColor = '#0F3B68',
+  mobileMenuBgColor,
+  mobileMenuTextColor,
+  mobileMenuActiveBgColor,
+  mobileMenuActiveTextColor,
+  mobileMenuBorderColor
 }) => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [activeSection, setActiveSection] = useState('inicio');
   const [isScrolled, setIsScrolled] = useState(false);
+  const [hoveredMobileLink, setHoveredMobileLink] = useState<string | null>(null);
 
   // Determine if header has dark background to adjust defaults
   const isDarkHeader = (() => {
@@ -128,9 +149,14 @@ export const Header: React.FC<HeaderProps> = ({
           <Logo 
             logoUrl={logoUrl} 
             brandName={brandName}
+            brandNameColor={brandNameColor}
             brandSuffix={brandSuffix}
+            brandSuffixColor={brandSuffixColor}
+            brandSuffixBgColor={brandSuffixBgColor}
             brandSubtitle={brandSubtitle}
+            brandSubtitleColor={brandSubtitleColor}
             subtext={logoSubtext} 
+            logoSubtextColor={logoSubtextColor}
             showLogoText={showLogoText}
             isDarkHeader={isDarkHeader}
           />
@@ -223,22 +249,34 @@ export const Header: React.FC<HeaderProps> = ({
             animate={{ opacity: 1, height: 'auto' }}
             exit={{ opacity: 0, height: 0 }}
             transition={{ duration: 0.25, ease: 'easeInOut' }}
-            style={{ backgroundColor: isDarkHeader ? '#0f172a' : '#ffffff' }}
-            className="md:hidden border-b border-black/10 overflow-hidden shadow-xl"
+            style={{ 
+              backgroundColor: mobileMenuBgColor || (isDarkHeader ? '#0f172a' : '#ffffff'),
+              borderColor: mobileMenuBorderColor || 'rgba(0,0,0,0.1)'
+            }}
+            className="md:hidden border-b overflow-hidden shadow-2xl transition-colors"
           >
             <div className="px-4 pt-3 pb-6 space-y-2">
               {navLinks.map((link) => {
                 const isActive = activeSection === link.href.replace('#', '');
+                const isHovered = hoveredMobileLink === link.name;
+                const highlight = isActive || isHovered;
+
+                const activeBg = mobileMenuActiveBgColor || '#D97706';
+                const activeText = mobileMenuActiveTextColor || '#ffffff';
+                const normalText = mobileMenuTextColor || (isDarkHeader ? '#cbd5e1' : '#334155');
+
                 return (
                   <a
                     key={link.name}
                     href={link.href}
                     onClick={(e) => handleNavClick(e, link.href)}
+                    onMouseEnter={() => setHoveredMobileLink(link.name)}
+                    onMouseLeave={() => setHoveredMobileLink(null)}
                     style={{
-                      color: isActive ? '#ffffff' : (isDarkHeader ? '#cbd5e1' : '#334155'),
-                      backgroundColor: isActive ? primaryColor : 'transparent'
+                      color: highlight ? activeText : normalText,
+                      backgroundColor: highlight ? activeBg : 'transparent'
                     }}
-                    className="block px-4 py-3 rounded-xl font-bold text-base transition-colors"
+                    className="block px-4 py-3 rounded-xl font-bold text-base transition-all cursor-pointer"
                   >
                     {link.name}
                   </a>
@@ -252,7 +290,7 @@ export const Header: React.FC<HeaderProps> = ({
                     target="_blank"
                     rel="noopener noreferrer"
                     style={{ backgroundColor: headerCtaBgColor, color: headerCtaTextColor }}
-                    className="flex items-center justify-center gap-2.5 font-bold px-4 py-3 rounded-xl w-full text-center shadow-xs"
+                    className="flex items-center justify-center gap-2.5 font-bold px-4 py-3 rounded-xl w-full text-center shadow-md transition-transform active:scale-95"
                   >
                     <WhatsAppIcon className="w-5 h-5 text-white shrink-0" />
                     <span>{headerCtaText}</span>

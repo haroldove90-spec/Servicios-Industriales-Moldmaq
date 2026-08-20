@@ -34,6 +34,22 @@ export interface SiteConfig {
   primaryColor: string;
   secondaryColor: string;
   
+  // Header Customization
+  headerBgColor?: string;
+  headerTextColor?: string;
+  headerCtaText?: string;
+  headerCtaBgColor?: string;
+  headerCtaTextColor?: string;
+
+  // Top Bar Customization
+  topBarBgColor?: string;
+  topBarTextColor?: string;
+  topBarNoticeText?: string;
+  topBarCoverageText?: string;
+  topBarButtonText?: string;
+  topBarButtonBgColor?: string;
+  topBarButtonTextColor?: string;
+
   // Contact & Top Bar
   faviconUrl?: string;
   topPhones: string[];

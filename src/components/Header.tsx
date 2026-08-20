@@ -9,17 +9,42 @@ interface HeaderProps {
   logoSubtext?: string;
   whatsappNumber: string;
   onOpenAdmin: () => void;
+  headerBgColor?: string;
+  headerTextColor?: string;
+  headerCtaText?: string;
+  headerCtaBgColor?: string;
+  headerCtaTextColor?: string;
+  primaryColor?: string;
 }
 
 export const Header: React.FC<HeaderProps> = ({
   logoUrl,
   logoSubtext,
   whatsappNumber,
-  onOpenAdmin
+  onOpenAdmin,
+  headerBgColor = '#ffffff',
+  headerTextColor = '#1e293b',
+  headerCtaText = 'Cotizar Proyecto',
+  headerCtaBgColor = '#D97706',
+  headerCtaTextColor = '#ffffff',
+  primaryColor = '#0F3B68'
 }) => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [activeSection, setActiveSection] = useState('inicio');
   const [isScrolled, setIsScrolled] = useState(false);
+
+  // Determine if header has dark background to adjust defaults
+  const isDarkHeader = (() => {
+    if (!headerBgColor) return false;
+    const hex = headerBgColor.replace('#', '');
+    if (hex.length === 6) {
+      const r = parseInt(hex.substring(0, 2), 16);
+      const g = parseInt(hex.substring(2, 4), 16);
+      const b = parseInt(hex.substring(4, 6), 16);
+      return (r * 0.299 + g * 0.587 + b * 0.114) < 140;
+    }
+    return false;
+  })();
 
   useEffect(() => {
     const handleScroll = () => {
@@ -81,9 +106,14 @@ export const Header: React.FC<HeaderProps> = ({
   };
 
   return (
-    <header className={`sticky top-0 z-40 bg-white transition-all duration-200 border-b border-gray-200/80 ${
-      isScrolled ? 'shadow-md py-1.5 sm:py-2' : 'py-2 sm:py-3.5'
-    }`}>
+    <header 
+      style={{ backgroundColor: headerBgColor }}
+      className={`sticky top-0 z-40 transition-all duration-200 border-b ${
+        isDarkHeader ? 'border-white/10' : 'border-gray-200/80'
+      } ${
+        isScrolled ? 'shadow-md py-1.5 sm:py-2' : 'py-2 sm:py-3.5'
+      }`}
+    >
       <div className="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8 flex items-center justify-between gap-2">
         {/* Brand Logo */}
         <a href="#inicio" onClick={(e) => handleNavClick(e, '#inicio')} className="focus:outline-hidden shrink-0">
@@ -99,15 +129,18 @@ export const Header: React.FC<HeaderProps> = ({
                 key={link.name}
                 href={link.href}
                 onClick={(e) => handleNavClick(e, link.href)}
-                className={`text-xs sm:text-sm font-semibold transition-all relative py-1 tracking-tight ${
-                  isActive ? 'text-[#0E5197] font-bold' : 'text-gray-600 hover:text-[#0E5197]'
-                }`}
+                style={{
+                  color: isActive ? (isDarkHeader ? '#ffffff' : primaryColor) : headerTextColor,
+                  opacity: isActive ? 1 : 0.85
+                }}
+                className="text-xs sm:text-sm font-semibold transition-all relative py-1 tracking-tight hover:opacity-100"
               >
                 {link.name}
                 {isActive && (
                   <motion.div
                     layoutId="activeNavIndicator"
-                    className="absolute bottom-0 left-0 right-0 h-0.5 bg-[#0E5197] rounded-full"
+                    style={{ backgroundColor: isDarkHeader ? '#fbbf24' : primaryColor }}
+                    className="absolute bottom-0 left-0 right-0 h-0.5 rounded-full"
                     transition={{ type: 'spring', stiffness: 380, damping: 30 }}
                   />
                 )}
@@ -122,16 +155,21 @@ export const Header: React.FC<HeaderProps> = ({
             href={`https://wa.me/${whatsappNumber.replace(/\D/g, '') || '525558724410'}`}
             target="_blank"
             rel="noopener noreferrer"
-            className="inline-flex items-center gap-2 bg-[#D97706] hover:bg-amber-600 text-white font-bold text-xs px-4 py-2.5 rounded-md transition-all shadow-md hover:shadow-lg transform hover:-translate-y-0.5"
+            style={{ backgroundColor: headerCtaBgColor, color: headerCtaTextColor }}
+            className="inline-flex items-center gap-2 font-bold text-xs px-4 py-2.5 rounded-md transition-all shadow-md hover:shadow-lg transform hover:-translate-y-0.5 hover:opacity-90 cursor-pointer"
           >
             <WhatsAppIcon className="w-4 h-4 text-white shrink-0" />
-            <span>Cotizar Proyecto</span>
+            <span>{headerCtaText}</span>
           </a>
 
           <button
             onClick={onOpenAdmin}
             title="Panel de Administración"
-            className="p-2 text-gray-500 hover:text-[#0F3B68] hover:bg-gray-100 rounded-md transition-colors border border-gray-200"
+            style={{
+              color: isDarkHeader ? '#ffffff' : '#475569',
+              borderColor: isDarkHeader ? 'rgba(255,255,255,0.2)' : '#e2e8f0'
+            }}
+            className="p-2 hover:opacity-80 rounded-md transition-colors border cursor-pointer"
           >
             <Settings className="w-4 h-4" />
           </button>
@@ -142,17 +180,19 @@ export const Header: React.FC<HeaderProps> = ({
           <button
             onClick={onOpenAdmin}
             title="Panel de Administración"
-            className="p-2 text-gray-500 hover:text-[#0E5197] rounded-lg"
+            style={{ color: isDarkHeader ? '#ffffff' : headerTextColor }}
+            className="p-2 rounded-lg"
           >
             <Settings className="w-5 h-5" />
           </button>
 
           <button
             onClick={() => setIsMenuOpen(!isMenuOpen)}
-            className="p-2.5 text-gray-800 hover:text-[#0E5197] hover:bg-gray-100 rounded-lg focus:outline-hidden transition-colors"
+            style={{ color: isDarkHeader ? '#ffffff' : headerTextColor }}
+            className="p-2.5 rounded-lg focus:outline-hidden transition-colors"
             aria-label="Abrir Menú"
           >
-            {isMenuOpen ? <X className="w-6 h-6 text-[#0E5197]" /> : <Menu className="w-6 h-6 text-gray-800" />}
+            {isMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
           </button>
         </div>
       </div>
@@ -165,7 +205,8 @@ export const Header: React.FC<HeaderProps> = ({
             animate={{ opacity: 1, height: 'auto' }}
             exit={{ opacity: 0, height: 0 }}
             transition={{ duration: 0.25, ease: 'easeInOut' }}
-            className="md:hidden bg-white border-b border-gray-200 overflow-hidden shadow-xl"
+            style={{ backgroundColor: isDarkHeader ? '#0f172a' : '#ffffff' }}
+            className="md:hidden border-b border-black/10 overflow-hidden shadow-xl"
           >
             <div className="px-4 pt-3 pb-6 space-y-2">
               {navLinks.map((link) => {
@@ -175,11 +216,11 @@ export const Header: React.FC<HeaderProps> = ({
                     key={link.name}
                     href={link.href}
                     onClick={(e) => handleNavClick(e, link.href)}
-                    className={`block px-4 py-3 rounded-xl font-bold text-base transition-colors ${
-                      isActive
-                        ? 'bg-blue-50 text-[#0E5197]'
-                        : 'text-gray-700 hover:bg-gray-50 hover:text-[#0E5197]'
-                    }`}
+                    style={{
+                      color: isActive ? '#ffffff' : (isDarkHeader ? '#cbd5e1' : '#334155'),
+                      backgroundColor: isActive ? primaryColor : 'transparent'
+                    }}
+                    className="block px-4 py-3 rounded-xl font-bold text-base transition-colors"
                   >
                     {link.name}
                   </a>
@@ -191,10 +232,11 @@ export const Header: React.FC<HeaderProps> = ({
                   href={`https://wa.me/${whatsappNumber.replace(/\D/g, '') || '525558724410'}`}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="flex items-center justify-center gap-2.5 bg-[#D97706] hover:bg-amber-600 text-white font-bold px-4 py-3 rounded-xl w-full text-center shadow-xs"
+                  style={{ backgroundColor: headerCtaBgColor, color: headerCtaTextColor }}
+                  className="flex items-center justify-center gap-2.5 font-bold px-4 py-3 rounded-xl w-full text-center shadow-xs"
                 >
                   <WhatsAppIcon className="w-5 h-5 text-white shrink-0" />
-                  <span>Cotizar Proyecto por WhatsApp</span>
+                  <span>{headerCtaText}</span>
                 </a>
               </div>
             </div>

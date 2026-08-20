@@ -181,6 +181,13 @@ export default function App() {
       <TopBar
         phones={config.topPhones}
         whatsappNumber={config.whatsappNumber}
+        bgColor={config.topBarBgColor}
+        textColor={config.topBarTextColor}
+        noticeText={config.topBarNoticeText}
+        coverageText={config.topBarCoverageText}
+        buttonText={config.topBarButtonText}
+        buttonBgColor={config.topBarButtonBgColor}
+        buttonTextColor={config.topBarButtonTextColor}
       />
 
       {/* 2. Header Navigation */}
@@ -189,6 +196,12 @@ export default function App() {
         logoSubtext={config.logoSubtext}
         whatsappNumber={config.whatsappNumber}
         onOpenAdmin={handleOpenAdmin}
+        headerBgColor={config.headerBgColor}
+        headerTextColor={config.headerTextColor}
+        headerCtaText={config.headerCtaText}
+        headerCtaBgColor={config.headerCtaBgColor}
+        headerCtaTextColor={config.headerCtaTextColor}
+        primaryColor={config.primaryColor}
       />
 
       {/* Main Anchor Content Sections */}

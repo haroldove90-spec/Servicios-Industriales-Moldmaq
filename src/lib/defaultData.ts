@@ -8,6 +8,22 @@ export const DEFAULT_SITE_CONFIG: SiteConfig = {
   primaryColor: "#0F3B68",
   secondaryColor: "#D97706",
 
+  // Header Defaults
+  headerBgColor: "#ffffff",
+  headerTextColor: "#1e293b",
+  headerCtaText: "Cotizar Proyecto",
+  headerCtaBgColor: "#D97706",
+  headerCtaTextColor: "#ffffff",
+
+  // Top Bar Defaults
+  topBarBgColor: "#020617",
+  topBarTextColor: "#cbd5e1",
+  topBarNoticeText: "Atención a Plantas Industriales y Maquinados Urgentes",
+  topBarCoverageText: "Zona Metropolitana, CDMX, Edo. Mex, Querétaro y Bajío",
+  topBarButtonText: "Cotizar Maquinado",
+  topBarButtonBgColor: "#D97706",
+  topBarButtonTextColor: "#ffffff",
+
   topPhones: [
     "+52 55 5872 4410",
     "+52 55 5872 9934",

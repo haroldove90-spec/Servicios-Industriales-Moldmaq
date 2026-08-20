@@ -412,7 +412,7 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({
                 }`}
               >
                 <Palette className="w-4 h-4 shrink-0" />
-                <span>Identidad & Colores</span>
+                <span>Identidad, Header & Colores</span>
               </button>
 
               <button
@@ -509,7 +509,7 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({
             </div>
           )}
 
-          {/* TAB 1: IDENTIDAD & COLORES */}
+          {/* TAB 1: IDENTIDAD, BARRA SUPERIOR, HEADER & COLORES */}
           {activeTab === 'general' && (
             <div className="space-y-6">
               {/* Site Online / Offline Status */}
@@ -557,38 +557,270 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({
                 </div>
               </div>
 
+              {/* General Page Information */}
               <div className="bg-gray-50 p-5 rounded-2xl border border-gray-200 space-y-4">
-                <h3 className="font-extrabold text-base text-gray-900">Configuración General de la Página</h3>
+                <h3 className="font-extrabold text-base text-gray-900">1. Título & Subtítulo de la Página</h3>
 
-                <div>
-                  <label className="block text-xs font-bold text-gray-700 uppercase mb-1">
-                    Título Principal del Sitio
-                  </label>
-                  <input
-                    type="text"
-                    value={formData.pageTitle}
-                    onChange={(e) => setFormData({ ...formData, pageTitle: e.target.value })}
-                    className="w-full px-4 py-2.5 rounded-xl border border-gray-300 text-sm font-medium focus:ring-2 focus:ring-[#0E5197]"
-                  />
+                <div className="space-y-3">
+                  <div>
+                    <label className="block text-xs font-bold text-gray-700 uppercase mb-1">
+                      Título de la Página (Pestaña del Navegador y Encabezado SEO)
+                    </label>
+                    <input
+                      type="text"
+                      value={formData.pageTitle || ''}
+                      onChange={(e) => setFormData({ ...formData, pageTitle: e.target.value })}
+                      placeholder="Servicios Industriales Moldmaq S.A. | Maquinados CNC..."
+                      className="w-full px-4 py-2.5 rounded-xl border border-gray-300 text-sm font-medium focus:ring-2 focus:ring-[#0F3B68]"
+                    />
+                  </div>
+
+                  <div>
+                    <label className="block text-xs font-bold text-gray-700 uppercase mb-1">
+                      Subtexto / Eslogan debajo del Logotipo
+                    </label>
+                    <input
+                      type="text"
+                      value={formData.logoSubtext || ''}
+                      onChange={(e) => setFormData({ ...formData, logoSubtext: e.target.value })}
+                      placeholder="Maquinados CNC • Moldes • Mantenimiento Industrial"
+                      className="w-full px-4 py-2.5 rounded-xl border border-gray-300 text-sm font-medium focus:ring-2 focus:ring-[#0F3B68]"
+                    />
+                  </div>
+                </div>
+              </div>
+
+              {/* Top Bar Customization */}
+              <div className="bg-gray-50 p-5 rounded-2xl border border-gray-200 space-y-4">
+                <div className="flex items-center justify-between">
+                  <h3 className="font-extrabold text-base text-gray-900">2. Barra Superior (Top Bar)</h3>
+                  <span className="text-xs font-semibold bg-blue-100 text-[#0F3B68] px-2.5 py-0.5 rounded-full">Colores & Textos</span>
+                </div>
+                <p className="text-xs text-gray-600">Personalice el color de fondo, color de texto, anuncios y botón de la barra superior.</p>
+
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                  {/* Top Bar Background Color */}
+                  <div>
+                    <label className="block text-xs font-bold text-gray-700 uppercase mb-2">
+                      Color de Fondo Barra Superior
+                    </label>
+                    <div className="flex items-center gap-3">
+                      <input
+                        type="color"
+                        value={formData.topBarBgColor || '#020617'}
+                        onChange={(e) => setFormData({ ...formData, topBarBgColor: e.target.value })}
+                        className="w-11 h-11 rounded-xl cursor-pointer border border-gray-300"
+                      />
+                      <input
+                        type="text"
+                        value={formData.topBarBgColor || '#020617'}
+                        onChange={(e) => setFormData({ ...formData, topBarBgColor: e.target.value })}
+                        className="w-32 px-3 py-2 rounded-xl border border-gray-300 text-sm font-mono uppercase"
+                      />
+                    </div>
+                  </div>
+
+                  {/* Top Bar Text Color */}
+                  <div>
+                    <label className="block text-xs font-bold text-gray-700 uppercase mb-2">
+                      Color de Texto Barra Superior
+                    </label>
+                    <div className="flex items-center gap-3">
+                      <input
+                        type="color"
+                        value={formData.topBarTextColor || '#cbd5e1'}
+                        onChange={(e) => setFormData({ ...formData, topBarTextColor: e.target.value })}
+                        className="w-11 h-11 rounded-xl cursor-pointer border border-gray-300"
+                      />
+                      <input
+                        type="text"
+                        value={formData.topBarTextColor || '#cbd5e1'}
+                        onChange={(e) => setFormData({ ...formData, topBarTextColor: e.target.value })}
+                        className="w-32 px-3 py-2 rounded-xl border border-gray-300 text-sm font-mono uppercase"
+                      />
+                    </div>
+                  </div>
                 </div>
 
-                <div>
-                  <label className="block text-xs font-bold text-gray-700 uppercase mb-1">
-                    Subtexto / Eslogan del Logo
-                  </label>
-                  <input
-                    type="text"
-                    value={formData.logoSubtext}
-                    onChange={(e) => setFormData({ ...formData, logoSubtext: e.target.value })}
-                    className="w-full px-4 py-2.5 rounded-xl border border-gray-300 text-sm font-medium focus:ring-2 focus:ring-[#0E5197]"
-                  />
+                <div className="space-y-3 pt-2">
+                  <div>
+                    <label className="block text-xs font-bold text-gray-700 uppercase mb-1">
+                      Texto de Atención / Horario (Izquierda)
+                    </label>
+                    <input
+                      type="text"
+                      value={formData.topBarNoticeText ?? 'Atención a Plantas Industriales y Maquinados Urgentes'}
+                      onChange={(e) => setFormData({ ...formData, topBarNoticeText: e.target.value })}
+                      placeholder="Atención a Plantas Industriales y Maquinados Urgentes"
+                      className="w-full px-4 py-2 rounded-xl border border-gray-300 text-sm font-medium"
+                    />
+                  </div>
+
+                  <div>
+                    <label className="block text-xs font-bold text-gray-700 uppercase mb-1">
+                      Texto de Cobertura Geográfica (Centro)
+                    </label>
+                    <input
+                      type="text"
+                      value={formData.topBarCoverageText ?? 'Zona Metropolitana, CDMX, Edo. Mex, Querétaro y Bajío'}
+                      onChange={(e) => setFormData({ ...formData, topBarCoverageText: e.target.value })}
+                      placeholder="Zona Metropolitana, CDMX, Edo. Mex, Querétaro y Bajío"
+                      className="w-full px-4 py-2 rounded-xl border border-gray-300 text-sm font-medium"
+                    />
+                  </div>
+
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-1">
+                    <div>
+                      <label className="block text-xs font-bold text-gray-700 uppercase mb-1">
+                        Texto del Botón en Barra Superior
+                      </label>
+                      <input
+                        type="text"
+                        value={formData.topBarButtonText ?? 'Cotizar Maquinado'}
+                        onChange={(e) => setFormData({ ...formData, topBarButtonText: e.target.value })}
+                        placeholder="Cotizar Maquinado"
+                        className="w-full px-4 py-2 rounded-xl border border-gray-300 text-sm font-medium"
+                      />
+                    </div>
+
+                    <div>
+                      <label className="block text-xs font-bold text-gray-700 uppercase mb-1">
+                        Color del Botón Barra Superior
+                      </label>
+                      <div className="flex items-center gap-3">
+                        <input
+                          type="color"
+                          value={formData.topBarButtonBgColor || '#D97706'}
+                          onChange={(e) => setFormData({ ...formData, topBarButtonBgColor: e.target.value })}
+                          className="w-10 h-10 rounded-xl cursor-pointer border border-gray-300"
+                        />
+                        <input
+                          type="text"
+                          value={formData.topBarButtonBgColor || '#D97706'}
+                          onChange={(e) => setFormData({ ...formData, topBarButtonBgColor: e.target.value })}
+                          className="w-32 px-3 py-1.5 rounded-xl border border-gray-300 text-sm font-mono uppercase"
+                        />
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              {/* Header Navigation Customization */}
+              <div className="bg-gray-50 p-5 rounded-2xl border border-gray-200 space-y-4">
+                <div className="flex items-center justify-between">
+                  <h3 className="font-extrabold text-base text-gray-900">3. Cabecera Principal (Header & Navegación)</h3>
+                  <span className="text-xs font-semibold bg-blue-100 text-[#0F3B68] px-2.5 py-0.5 rounded-full">Colores & CTA</span>
+                </div>
+                <p className="text-xs text-gray-600">Configure el fondo de la barra de navegación, el color del texto y el botón de llamada a la acción.</p>
+
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                  {/* Header Background Color */}
+                  <div>
+                    <label className="block text-xs font-bold text-gray-700 uppercase mb-2">
+                      Color de Fondo del Header
+                    </label>
+                    <div className="flex items-center gap-3">
+                      <input
+                        type="color"
+                        value={formData.headerBgColor || '#ffffff'}
+                        onChange={(e) => setFormData({ ...formData, headerBgColor: e.target.value })}
+                        className="w-11 h-11 rounded-xl cursor-pointer border border-gray-300"
+                      />
+                      <input
+                        type="text"
+                        value={formData.headerBgColor || '#ffffff'}
+                        onChange={(e) => setFormData({ ...formData, headerBgColor: e.target.value })}
+                        className="w-32 px-3 py-2 rounded-xl border border-gray-300 text-sm font-mono uppercase"
+                      />
+                    </div>
+                    <div className="flex gap-1.5 mt-2">
+                      <button
+                        type="button"
+                        onClick={() => setFormData({ ...formData, headerBgColor: '#ffffff', headerTextColor: '#1e293b' })}
+                        className="text-[10px] bg-white border border-gray-300 px-2 py-0.5 rounded font-semibold text-gray-800 hover:bg-gray-100"
+                      >
+                        Blanco
+                      </button>
+                      <button
+                        type="button"
+                        onClick={() => setFormData({ ...formData, headerBgColor: '#0F3B68', headerTextColor: '#ffffff' })}
+                        className="text-[10px] bg-[#0F3B68] text-white px-2 py-0.5 rounded font-semibold hover:opacity-90"
+                      >
+                        Azul Moldmaq
+                      </button>
+                      <button
+                        type="button"
+                        onClick={() => setFormData({ ...formData, headerBgColor: '#0f172a', headerTextColor: '#f8fafc' })}
+                        className="text-[10px] bg-[#0f172a] text-white px-2 py-0.5 rounded font-semibold hover:opacity-90"
+                      >
+                        Slate Oscuro
+                      </button>
+                    </div>
+                  </div>
+
+                  {/* Header Nav Links Text Color */}
+                  <div>
+                    <label className="block text-xs font-bold text-gray-700 uppercase mb-2">
+                      Color de Texto de los Enlaces (Menú)
+                    </label>
+                    <div className="flex items-center gap-3">
+                      <input
+                        type="color"
+                        value={formData.headerTextColor || '#1e293b'}
+                        onChange={(e) => setFormData({ ...formData, headerTextColor: e.target.value })}
+                        className="w-11 h-11 rounded-xl cursor-pointer border border-gray-300"
+                      />
+                      <input
+                        type="text"
+                        value={formData.headerTextColor || '#1e293b'}
+                        onChange={(e) => setFormData({ ...formData, headerTextColor: e.target.value })}
+                        className="w-32 px-3 py-2 rounded-xl border border-gray-300 text-sm font-mono uppercase"
+                      />
+                    </div>
+                  </div>
+                </div>
+
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-2">
+                  <div>
+                    <label className="block text-xs font-bold text-gray-700 uppercase mb-1">
+                      Texto del Botón Principal (CTA Header)
+                    </label>
+                    <input
+                      type="text"
+                      value={formData.headerCtaText ?? 'Cotizar Proyecto'}
+                      onChange={(e) => setFormData({ ...formData, headerCtaText: e.target.value })}
+                      placeholder="Cotizar Proyecto"
+                      className="w-full px-4 py-2 rounded-xl border border-gray-300 text-sm font-medium"
+                    />
+                  </div>
+
+                  <div>
+                    <label className="block text-xs font-bold text-gray-700 uppercase mb-1">
+                      Color del Botón Principal (CTA Header)
+                    </label>
+                    <div className="flex items-center gap-3">
+                      <input
+                        type="color"
+                        value={formData.headerCtaBgColor || '#D97706'}
+                        onChange={(e) => setFormData({ ...formData, headerCtaBgColor: e.target.value })}
+                        className="w-10 h-10 rounded-xl cursor-pointer border border-gray-300"
+                      />
+                      <input
+                        type="text"
+                        value={formData.headerCtaBgColor || '#D97706'}
+                        onChange={(e) => setFormData({ ...formData, headerCtaBgColor: e.target.value })}
+                        className="w-32 px-3 py-1.5 rounded-xl border border-gray-300 text-sm font-mono uppercase"
+                      />
+                    </div>
+                  </div>
                 </div>
               </div>
 
               {/* Logo Upload Section */}
               <div className="bg-gray-50 p-5 rounded-2xl border border-gray-200 space-y-4">
-                <h3 className="font-extrabold text-base text-gray-900">Subir Logo Oficial</h3>
-                <p className="text-xs text-gray-600">Puede subir una imagen de su logotipo (PNG, JPG, SVG) o utilizar el diseño vectorial predeterminado.</p>
+                <h3 className="font-extrabold text-base text-gray-900">4. Subir o Reemplazar Logo Oficial</h3>
+                <p className="text-xs text-gray-600">Puede subir una imagen de su logotipo (PNG, JPG, SVG) o ingresar la URL directa.</p>
 
                 <div className="flex flex-col sm:flex-row items-center gap-4">
                   <input
@@ -603,7 +835,7 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({
                     type="button"
                     onClick={() => logoFileInputRef.current?.click()}
                     disabled={isUploading}
-                    className="inline-flex items-center gap-2 bg-[#0E5197] text-white font-bold text-xs px-4 py-2.5 rounded-xl hover:bg-blue-900 transition-colors shadow-xs cursor-pointer disabled:opacity-50"
+                    className="inline-flex items-center gap-2 bg-[#0F3B68] text-white font-bold text-xs px-4 py-2.5 rounded-xl hover:bg-slate-900 transition-colors shadow-xs cursor-pointer disabled:opacity-50"
                   >
                     <Upload className="w-4 h-4" />
                     <span>{isUploading ? 'Subiendo imagen...' : 'Subir Imagen de Logo'}</span>
@@ -620,9 +852,20 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({
                   )}
                 </div>
 
+                <div className="w-full">
+                  <label className="block text-[10px] font-bold text-gray-600 uppercase mb-1">URL Directa del Logo</label>
+                  <input
+                    type="text"
+                    placeholder="https://..."
+                    value={formData.logoUrl || ''}
+                    onChange={(e) => setFormData({ ...formData, logoUrl: e.target.value })}
+                    className="w-full px-3 py-1.5 rounded-lg border border-gray-300 text-xs font-mono"
+                  />
+                </div>
+
                 {formData.logoUrl && (
-                  <div className="p-3 bg-white rounded-xl border border-gray-200 inline-block">
-                    <img src={formData.logoUrl} alt="Logo Preview" className="h-16 w-auto object-contain" />
+                  <div className="p-3 bg-white rounded-xl border border-gray-200 inline-block shadow-xs">
+                    <img src={formData.logoUrl} alt="Logo Preview" className="h-14 w-auto object-contain" />
                   </div>
                 )}
               </div>
@@ -630,8 +873,8 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({
               {/* Favicon Upload Section */}
               <div className="bg-gray-50 p-5 rounded-2xl border border-gray-200 space-y-4">
                 <div className="flex items-center justify-between">
-                  <h3 className="font-extrabold text-base text-gray-900">Favicon del Sitio (Ícono de Pestaña del Navegador)</h3>
-                  <span className="text-xs font-semibold bg-emerald-100 text-[#1D7946] px-2.5 py-0.5 rounded-full">Personalizable</span>
+                  <h3 className="font-extrabold text-base text-gray-900">5. Favicon del Sitio (Ícono de Pestaña)</h3>
+                  <span className="text-xs font-semibold bg-amber-100 text-amber-800 px-2.5 py-0.5 rounded-full">Icono Pestaña</span>
                 </div>
                 <p className="text-xs text-gray-600">
                   Suba la imagen que se mostrará en la pestaña del navegador (recomendado: imagen cuadrada .ico, .png, .svg de 32x32 o 64x64 píxeles).
@@ -650,7 +893,7 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({
                     type="button"
                     onClick={() => faviconFileInputRef.current?.click()}
                     disabled={isUploading}
-                    className="inline-flex items-center gap-2 bg-[#1D7946] hover:bg-emerald-800 text-white font-bold text-xs px-4 py-2.5 rounded-xl transition-colors shadow-xs cursor-pointer disabled:opacity-50"
+                    className="inline-flex items-center gap-2 bg-[#D97706] hover:bg-amber-600 text-white font-bold text-xs px-4 py-2.5 rounded-xl transition-colors shadow-xs cursor-pointer disabled:opacity-50"
                   >
                     <Upload className="w-4 h-4" />
                     <span>{isUploading ? 'Subiendo favicon...' : 'Subir o Reemplazar Favicon'}</span>
@@ -690,23 +933,23 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({
 
               {/* Dynamic Theme Colors */}
               <div className="bg-gray-50 p-5 rounded-2xl border border-gray-200 space-y-4">
-                <h3 className="font-extrabold text-base text-gray-900">Ajuste de Colores de la Marca</h3>
+                <h3 className="font-extrabold text-base text-gray-900">6. Colores Institucionales de la Marca</h3>
 
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
                   <div>
                     <label className="block text-xs font-bold text-gray-700 uppercase mb-2">
-                      Color Principal (Header, Títulos, Alas)
+                      Color Primario (Títulos, Secciones y Destacados)
                     </label>
                     <div className="flex items-center gap-3">
                       <input
                         type="color"
-                        value={formData.primaryColor || '#0E5197'}
+                        value={formData.primaryColor || '#0F3B68'}
                         onChange={(e) => setFormData({ ...formData, primaryColor: e.target.value })}
                         className="w-12 h-12 rounded-xl cursor-pointer border border-gray-300"
                       />
                       <input
                         type="text"
-                        value={formData.primaryColor || '#0E5197'}
+                        value={formData.primaryColor || '#0F3B68'}
                         onChange={(e) => setFormData({ ...formData, primaryColor: e.target.value })}
                         className="w-32 px-3 py-2 rounded-xl border border-gray-300 text-sm font-mono uppercase"
                       />
@@ -715,18 +958,18 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({
 
                   <div>
                     <label className="block text-xs font-bold text-gray-700 uppercase mb-2">
-                      Color Secundario (Botones WhatsApp, Mapa, Acentos)
+                      Color Secundario (Botones WhatsApp, Acentos Industriales)
                     </label>
                     <div className="flex items-center gap-3">
                       <input
                         type="color"
-                        value={formData.secondaryColor || '#1D7946'}
+                        value={formData.secondaryColor || '#D97706'}
                         onChange={(e) => setFormData({ ...formData, secondaryColor: e.target.value })}
                         className="w-12 h-12 rounded-xl cursor-pointer border border-gray-300"
                       />
                       <input
                         type="text"
-                        value={formData.secondaryColor || '#1D7946'}
+                        value={formData.secondaryColor || '#D97706'}
                         onChange={(e) => setFormData({ ...formData, secondaryColor: e.target.value })}
                         className="w-32 px-3 py-2 rounded-xl border border-gray-300 text-sm font-mono uppercase"
                       />

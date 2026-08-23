@@ -81,7 +81,7 @@ export const ServicesSection: React.FC<ServicesSectionProps> = ({
           <h2 className="text-3xl sm:text-4xl font-extrabold text-gray-900 tracking-tight">
             {title}
           </h2>
-          <p className="text-lg text-gray-600 font-medium">
+          <p className="text-base sm:text-lg font-semibold text-[#D97706]">
             {subtitle}
           </p>
         </div>
@@ -96,7 +96,7 @@ export const ServicesSection: React.FC<ServicesSectionProps> = ({
               <div>
                 {/* Badge if present */}
                 {service.badge && (
-                  <span className="inline-block bg-amber-50 text-[#D97706] text-[10px] font-extrabold uppercase tracking-wider px-2.5 py-1 rounded-md mb-4 border border-amber-200">
+                  <span className="inline-block bg-amber-50 text-[#D97706] text-xs font-extrabold uppercase tracking-wider px-2.5 py-1 rounded-md mb-4 border border-amber-200">
                     {service.badge}
                   </span>
                 )}
@@ -109,7 +109,7 @@ export const ServicesSection: React.FC<ServicesSectionProps> = ({
                   {service.title}
                 </h3>
 
-                <p className="text-xs text-gray-600 leading-relaxed mb-6 font-normal">
+                <p className="text-sm text-gray-600 leading-relaxed mb-6 font-normal">
                   {service.description}
                 </p>
               </div>

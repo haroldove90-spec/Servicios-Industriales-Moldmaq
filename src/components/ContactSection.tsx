@@ -42,13 +42,13 @@ export const ContactSection: React.FC<ContactSectionProps> = ({
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Section Header */}
         <div className="text-center max-w-3xl mx-auto mb-16 space-y-3">
-          <div className="inline-block bg-[#D97706]/10 text-[#D97706] font-extrabold text-xs uppercase tracking-widest px-3 py-1 rounded-full">
+          <div className="inline-block bg-[#D97706]/10 text-[#D97706] font-extrabold text-xs uppercase tracking-widest px-3.5 py-1 rounded-full">
             Contacto & Cotizaciones Técnicas
           </div>
           <h2 className="text-3xl sm:text-4xl font-extrabold text-gray-900 tracking-tight">
             {title}
           </h2>
-          <p className="text-lg font-semibold text-[#D97706]">
+          <p className="text-base sm:text-lg font-semibold text-[#D97706]">
             {subtitle}
           </p>
           <p className="text-base text-gray-700 leading-relaxed max-w-2xl mx-auto">
@@ -67,7 +67,7 @@ export const ContactSection: React.FC<ContactSectionProps> = ({
                 </div>
                 <div>
                   <h3 className="font-extrabold text-xl text-gray-900">WhatsApp Técnico</h3>
-                  <p className="text-xs text-amber-800 font-semibold">Respuesta inmediata de ingenieros de proyecto</p>
+                  <p className="text-sm text-amber-800 font-semibold">Respuesta inmediata de ingenieros de proyecto</p>
                 </div>
               </div>
 
@@ -75,7 +75,7 @@ export const ContactSection: React.FC<ContactSectionProps> = ({
                 href={`https://wa.me/${whatsappNumber.replace(/\D/g, '') || '525558724410'}?text=${encodeURIComponent('Hola, deseo solicitar una cotización técnica con Servicios Industriales Moldmaq S.A.')}`}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="flex items-center justify-center gap-2.5 bg-[#D97706] hover:bg-amber-600 text-white font-extrabold px-6 py-3.5 rounded-xl w-full text-center transition-all shadow-md transform hover:-translate-y-0.5"
+                className="flex items-center justify-center gap-2.5 bg-[#D97706] hover:bg-amber-600 text-white font-extrabold text-sm sm:text-base px-6 py-3.5 rounded-xl w-full text-center transition-all shadow-md transform hover:-translate-y-0.5"
               >
                 <WhatsAppIcon className="w-5 h-5 text-white shrink-0" />
                 <span>Enviar WhatsApp: {whatsappNumber}</span>
@@ -108,8 +108,8 @@ export const ContactSection: React.FC<ContactSectionProps> = ({
               <div className="flex items-center gap-3">
                 <Facebook className="w-6 h-6 text-blue-600" />
                 <div>
-                  <h4 className="font-bold text-sm text-gray-900">Página Oficial de Facebook</h4>
-                  <p className="text-xs text-gray-600">Siga nuestros proyectos y casos de éxito</p>
+                  <h4 className="font-bold text-base text-gray-900">Página Oficial de Facebook</h4>
+                  <p className="text-sm text-gray-600">Siga nuestros proyectos y casos de éxito</p>
                 </div>
               </div>
 
@@ -127,7 +127,7 @@ export const ContactSection: React.FC<ContactSectionProps> = ({
                   <MapPin className="w-4 h-4 text-[#D97706]" />
                   <span>Cobertura y Atención en Sitio:</span>
                 </div>
-                <p className="text-xs text-gray-600 leading-relaxed font-medium">
+                <p className="text-sm text-gray-600 leading-relaxed font-medium">
                   {coverageAreas ? coverageAreas.join(', ') : 'Zona Metropolitana, CDMX, Estado de México, Querétaro y Bajío.'}
                 </p>
               </div>
@@ -140,7 +140,7 @@ export const ContactSection: React.FC<ContactSectionProps> = ({
               <span className="text-xs font-extrabold uppercase tracking-wider text-[#0F3B68] bg-blue-50 px-3 py-1 rounded-full border border-blue-100">
                 Cotización en Línea
               </span>
-              <h3 className="text-2xl font-extrabold text-gray-900 mt-2">
+              <h3 className="text-xl sm:text-2xl font-extrabold text-gray-900 mt-2">
                 Solicitar Cotización de Maquinados o Moldes
               </h3>
               <p className="text-sm text-gray-600 mt-1">

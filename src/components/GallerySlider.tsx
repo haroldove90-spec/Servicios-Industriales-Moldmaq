@@ -59,14 +59,14 @@ export const GallerySlider: React.FC<GallerySliderProps> = ({
         {/* Title and Controls */}
         <div className="flex flex-col md:flex-row md:items-end justify-between mb-12 gap-6">
           <div>
-            <div className="inline-flex items-center gap-1.5 bg-[#0F3B68]/10 text-[#0F3B68] font-extrabold text-xs uppercase tracking-widest px-3 py-1 rounded-full mb-3">
+            <div className="inline-flex items-center gap-1.5 bg-[#0F3B68]/10 text-[#0F3B68] font-extrabold text-xs uppercase tracking-widest px-3.5 py-1 rounded-full mb-3">
               <Factory className="w-3.5 h-3.5 text-[#D97706]" />
               <span>Instalaciones y Proyectos</span>
             </div>
             <h2 className="text-3xl sm:text-4xl font-extrabold text-gray-900 tracking-tight">
               {title}
             </h2>
-            <p className="text-base text-gray-600 font-medium mt-1">
+            <p className="text-base sm:text-lg font-semibold text-[#D97706] mt-1">
               {subtitle}
             </p>
           </div>

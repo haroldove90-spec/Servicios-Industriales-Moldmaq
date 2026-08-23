@@ -37,26 +37,26 @@ export const WelcomeBanner: React.FC<WelcomeBannerProps> = ({
 
           <div className="p-8 sm:p-12 bg-white relative">
             <div className="relative z-10 max-w-4xl mx-auto text-center space-y-4">
-              <div className="inline-flex items-center gap-2 bg-blue-50 text-[#0F3B68] text-xs font-bold uppercase tracking-widest px-3.5 py-1 rounded-full border border-blue-100">
+              <div className="inline-flex items-center gap-2 bg-blue-50 text-[#0F3B68] text-xs font-extrabold uppercase tracking-widest px-3.5 py-1 rounded-full border border-blue-100">
                 <Sparkles className="w-3.5 h-3.5 text-[#D97706]" />
                 <span>Servicios Industriales Moldmaq S.A.</span>
               </div>
 
-              <h2 className="text-2xl sm:text-4xl font-extrabold text-[#0F3B68] tracking-tight leading-snug">
+              <h2 className="text-3xl sm:text-4xl font-extrabold text-[#0F3B68] tracking-tight leading-tight">
                 {title}
               </h2>
 
-              <p className="text-base sm:text-lg font-bold text-[#D97706]">
+              <p className="text-base sm:text-lg font-semibold text-[#D97706]">
                 {subtitle}
               </p>
 
-              <p className="text-xs sm:text-sm text-gray-600 leading-relaxed font-normal max-w-3xl mx-auto pt-1">
+              <p className="text-base text-gray-700 leading-relaxed font-normal max-w-3xl mx-auto pt-1">
                 {body}
               </p>
 
               {/* Coverage Badges */}
               <div className="pt-6">
-                <p className="text-[10px] font-bold uppercase tracking-widest text-gray-400 mb-3">
+                <p className="text-xs font-bold uppercase tracking-wider text-gray-500 mb-3">
                   Zonas de Atención Industrial y Cobertura:
                 </p>
                 <div className="flex flex-wrap items-center justify-center gap-2">

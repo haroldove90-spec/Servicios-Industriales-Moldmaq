@@ -73,13 +73,13 @@ export const AboutSection: React.FC<AboutSectionProps> = ({
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Section Header */}
         <div className="text-center max-w-3xl mx-auto mb-16 space-y-3">
-          <div className="inline-block bg-[#0F3B68]/10 text-[#0F3B68] font-extrabold text-xs uppercase tracking-widest px-3 py-1 rounded-full">
+          <div className="inline-block bg-[#0F3B68]/10 text-[#0F3B68] font-extrabold text-xs uppercase tracking-widest px-3.5 py-1 rounded-full">
             Nuestra Empresa
           </div>
           <h2 className="text-3xl sm:text-4xl font-extrabold text-gray-900 tracking-tight">
             {title}
           </h2>
-          <p className="text-lg font-semibold text-[#D97706]">
+          <p className="text-base sm:text-lg font-semibold text-[#D97706]">
             {subtitle}
           </p>
         </div>
@@ -87,28 +87,28 @@ export const AboutSection: React.FC<AboutSectionProps> = ({
         {/* Business Description & Visual Box */}
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center mb-16">
           <div className="lg:col-span-7 space-y-6">
-            <h3 className="text-2xl font-bold text-gray-900 leading-snug">
+            <h3 className="text-xl sm:text-2xl font-bold text-gray-900 leading-snug">
               Líderes en Maquinados CNC, Fabricación de Moldes y Soluciones Industriales
             </h3>
 
-            <p className="text-gray-700 text-base leading-relaxed whitespace-pre-line">
+            <p className="text-base text-gray-700 leading-relaxed whitespace-pre-line">
               {description}
             </p>
 
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-2">
-              <div className="flex items-start gap-3 p-3.5 rounded-xl bg-slate-50 border border-gray-200 shadow-2xs">
+              <div className="flex items-start gap-3 p-4 rounded-xl bg-slate-50 border border-gray-200 shadow-2xs">
                 <CheckCircle2 className="w-5 h-5 text-[#D97706] shrink-0 mt-0.5" />
                 <div>
-                  <h4 className="font-bold text-sm text-gray-900">{feature1Title}</h4>
-                  <p className="text-xs text-gray-600">{feature1Desc}</p>
+                  <h4 className="font-bold text-base text-gray-900">{feature1Title}</h4>
+                  <p className="text-sm text-gray-600 leading-relaxed mt-0.5">{feature1Desc}</p>
                 </div>
               </div>
 
-              <div className="flex items-start gap-3 p-3.5 rounded-xl bg-slate-50 border border-gray-200 shadow-2xs">
+              <div className="flex items-start gap-3 p-4 rounded-xl bg-slate-50 border border-gray-200 shadow-2xs">
                 <CheckCircle2 className="w-5 h-5 text-[#D97706] shrink-0 mt-0.5" />
                 <div>
-                  <h4 className="font-bold text-sm text-gray-900">{feature2Title}</h4>
-                  <p className="text-xs text-gray-600">{feature2Desc}</p>
+                  <h4 className="font-bold text-base text-gray-900">{feature2Title}</h4>
+                  <p className="text-sm text-gray-600 leading-relaxed mt-0.5">{feature2Desc}</p>
                 </div>
               </div>
             </div>
@@ -132,7 +132,7 @@ export const AboutSection: React.FC<AboutSectionProps> = ({
                   <p className="font-extrabold text-xl pt-1 leading-snug">{imageTitle}</p>
                 )}
                 {imageSubtitle && (
-                  <p className="text-xs text-gray-200 font-medium leading-relaxed">{imageSubtitle}</p>
+                  <p className="text-sm text-gray-200 font-medium leading-relaxed">{imageSubtitle}</p>
                 )}
               </div>
             </div>
@@ -142,40 +142,40 @@ export const AboutSection: React.FC<AboutSectionProps> = ({
         {/* 3 Value Added Points */}
         <div className="pt-8 border-t border-gray-100">
           <div className="text-center mb-10">
-            <h3 className="text-2xl font-extrabold text-[#0F3B68]">
+            <h3 className="text-2xl sm:text-3xl font-extrabold text-[#0F3B68]">
               Valores Agregados de Nuestro Servicio Industrial
             </h3>
-            <p className="text-xs text-gray-500 mt-1">Precisión, confiabilidad y cumplimiento estricto de tolerancias</p>
+            <p className="text-sm text-gray-600 mt-1.5">Precisión, confiabilidad y cumplimiento estricto de tolerancias</p>
           </div>
 
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 bg-white">
             {/* Left Welcome Text */}
             <div className="space-y-4 p-6 bg-slate-50/80 rounded-xl border border-gray-200 flex flex-col justify-between">
               <div>
-                <h3 className="text-xl font-bold text-[#0F3B68] mb-2">{welcomeTitle}</h3>
-                <p className="text-xs text-gray-600 leading-relaxed font-normal">
+                <h3 className="text-lg sm:text-xl font-bold text-[#0F3B68] mb-2">{welcomeTitle}</h3>
+                <p className="text-sm text-gray-600 leading-relaxed font-normal">
                   {welcomeText}
                 </p>
               </div>
-              <a href="#contacto" className="pt-4 flex items-center gap-2 text-[#D97706] text-[10px] font-bold uppercase tracking-wider hover:underline">
+              <a href="#contacto" className="pt-4 flex items-center gap-2 text-[#D97706] text-xs font-bold uppercase tracking-wider hover:underline">
                 <div className="w-6 h-[1px] bg-[#D97706]"></div> Conoce nuestras capacidades
               </a>
             </div>
 
             {/* Middle Values List */}
             <div className="space-y-4 p-6 bg-white rounded-xl border border-gray-200 shadow-2xs">
-              <h3 className="text-xs font-bold text-gray-400 uppercase tracking-widest">Nuestros Pilares Técnicos</h3>
+              <h3 className="text-xs font-bold text-gray-500 uppercase tracking-wider">Nuestros Pilares Técnicos</h3>
               <ul className="space-y-3.5">
                 {values && values.map((val, index) => (
                   <li key={val.id || index} className="flex items-start gap-3">
-                    <div className={`w-5 h-5 rounded-full flex items-center justify-center text-[10px] font-bold shrink-0 ${
+                    <div className={`w-6 h-6 rounded-full flex items-center justify-center text-xs font-bold shrink-0 ${
                       index % 2 === 0 ? 'bg-blue-50 text-[#0F3B68]' : 'bg-amber-50 text-[#D97706]'
                     }`}>
                       {index + 1}
                     </div>
                     <div>
-                      <p className="text-[11px] font-bold text-gray-900">{val.title}</p>
-                      <p className="text-[10px] text-gray-500 leading-tight">{val.description}</p>
+                      <p className="text-sm font-bold text-gray-900">{val.title}</p>
+                      <p className="text-xs text-gray-600 leading-relaxed">{val.description}</p>
                     </div>
                   </li>
                 ))}
@@ -189,17 +189,17 @@ export const AboutSection: React.FC<AboutSectionProps> = ({
                   <WhatsAppIcon className="w-6 h-6 text-white shrink-0" />
                 </div>
                 {quoteBoxTitle && quoteBoxTitle.trim() !== '' && (
-                  <h4 className="text-sm font-bold text-gray-800 mb-1">{quoteBoxTitle}</h4>
+                  <h4 className="text-base font-bold text-gray-900 mb-1">{quoteBoxTitle}</h4>
                 )}
                 {quoteBoxSubtitle && quoteBoxSubtitle.trim() !== '' && (
-                  <p className="text-[10px] text-gray-500 mb-4">{quoteBoxSubtitle}</p>
+                  <p className="text-xs text-gray-600 mb-4 leading-relaxed">{quoteBoxSubtitle}</p>
                 )}
                 {quoteBoxButtonText && quoteBoxButtonText.trim() !== '' && (
                   <a
                     href={getWaUrl()}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="w-full py-3 bg-[#D97706] hover:bg-amber-600 text-white rounded-xl text-xs font-bold text-center transition-all shadow-md flex items-center justify-center gap-2 cursor-pointer"
+                    className="w-full py-3 bg-[#D97706] hover:bg-amber-600 text-white rounded-xl text-sm font-bold text-center transition-all shadow-md flex items-center justify-center gap-2 cursor-pointer"
                   >
                     <WhatsAppIcon className="w-4 h-4 text-white shrink-0" />
                     <span>{quoteBoxButtonText}</span>

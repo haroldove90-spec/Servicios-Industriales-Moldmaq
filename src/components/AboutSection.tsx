@@ -6,6 +6,7 @@ import { WhatsAppIcon } from './WhatsAppIcon';
 interface AboutSectionProps {
   title: string;
   subtitle: string;
+  aboutHeadline?: string;
   description: string;
   values: ValueAddedItem[];
   imageUrl?: string;
@@ -28,6 +29,7 @@ interface AboutSectionProps {
 export const AboutSection: React.FC<AboutSectionProps> = ({
   title,
   subtitle,
+  aboutHeadline = "Líderes en Maquinados CNC, Fabricación de Moldes y Soluciones Industriales",
   description,
   values,
   imageUrl = "https://images.unsplash.com/photo-1581092160607-ee22621dd758?auto=format&fit=crop&w=800&q=80",
@@ -88,7 +90,7 @@ export const AboutSection: React.FC<AboutSectionProps> = ({
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center mb-16">
           <div className="lg:col-span-7 space-y-6">
             <h3 className="text-xl sm:text-2xl font-bold text-gray-900 leading-snug">
-              Líderes en Maquinados CNC, Fabricación de Moldes y Soluciones Industriales
+              {aboutHeadline}
             </h3>
 
             <p className="text-base text-gray-700 leading-relaxed whitespace-pre-line">

@@ -1,5 +1,5 @@
 import React, { useState, useRef } from 'react';
-import { SiteConfig, HeroSlide, ValueAddedItem, ServiceItem, GalleryImage } from '../types';
+import { SiteConfig, HeroSlide, ValueAddedItem, ServiceItem, GalleryImage, CoverageLocationItem } from '../types';
 import { uploadImageFile, syncToSupabase, saveSiteConfig } from '../lib/supabaseClient';
 import {
   X,
@@ -18,7 +18,10 @@ import {
   RefreshCw,
   Sparkles,
   Lock,
-  Copy
+  Copy,
+  MapPin,
+  Navigation,
+  ExternalLink
 } from 'lucide-react';
 
 interface AdminPanelProps {
@@ -83,6 +86,13 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({
   const [isUploading, setIsUploading] = useState(false);
   const [saveStatus, setSaveStatus] = useState<{ type: 'success' | 'error' | null; message: string }>({ type: null, message: '' });
   const [copiedSql, setCopiedSql] = useState(false);
+
+  // Sync formData whenever config is reloaded or modal is opened
+  React.useEffect(() => {
+    if (isOpen) {
+      setFormData(config);
+    }
+  }, [config, isOpen]);
 
   const logoFileInputRef = useRef<HTMLInputElement>(null);
   const faviconFileInputRef = useRef<HTMLInputElement>(null);
@@ -400,91 +410,122 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({
         )}
 
         <div className="bg-white rounded-xl shadow-lg border border-gray-200 flex-1 flex flex-col overflow-hidden">
-          {/* Tab Navigation with responsive horizontal scrolling */}
-          <div className="w-full bg-slate-900 border-b border-slate-800 p-2 overflow-x-auto scrollbar-thin scrollbar-thumb-blue-600">
-            <div className="flex items-center min-w-max gap-2 px-1">
+          {/* Quick Jump Shortcuts */}
+          <div className="bg-slate-900 px-3.5 py-2 border-b border-slate-800 flex flex-wrap items-center justify-between gap-2 text-xs">
+            <div className="flex flex-wrap items-center gap-2">
+              <span className="text-slate-400 font-bold uppercase tracking-wider text-[11px]">Accesos Rápidos:</span>
               <button
-                onClick={() => setActiveTab('general')}
-                className={`flex items-center gap-2 px-3.5 py-2.5 rounded-lg font-bold text-xs uppercase tracking-wider whitespace-nowrap shrink-0 transition-all cursor-pointer ${
-                  activeTab === 'general'
-                    ? 'bg-blue-600 text-white shadow-sm'
-                    : 'text-slate-300 hover:text-white hover:bg-slate-800'
-                }`}
-              >
-                <Palette className="w-4 h-4 shrink-0" />
-                <span>Identidad, Header & Colores</span>
-              </button>
-
-              <button
+                type="button"
                 onClick={() => setActiveTab('contacts')}
-                className={`flex items-center gap-2 px-3.5 py-2.5 rounded-lg font-bold text-xs uppercase tracking-wider whitespace-nowrap shrink-0 transition-all cursor-pointer ${
-                  activeTab === 'contacts'
-                    ? 'bg-blue-600 text-white shadow-sm'
-                    : 'text-slate-300 hover:text-white hover:bg-slate-800'
-                }`}
+                className="inline-flex items-center gap-1 bg-amber-500/20 hover:bg-amber-500/30 text-amber-300 px-2.5 py-1 rounded-md font-bold text-[11px] border border-amber-500/40 transition-colors cursor-pointer"
               >
-                <Phone className="w-4 h-4 shrink-0" />
-                <span>Teléfonos & WhatsApp</span>
+                <MapPin className="w-3 h-3 text-amber-400" />
+                <span>📍 Ir a Contacto, Mapa Google & Teléfonos</span>
               </button>
-
               <button
-                onClick={() => setActiveTab('slider')}
-                className={`flex items-center gap-2 px-3.5 py-2.5 rounded-lg font-bold text-xs uppercase tracking-wider whitespace-nowrap shrink-0 transition-all cursor-pointer ${
-                  activeTab === 'slider'
-                    ? 'bg-blue-600 text-white shadow-sm'
-                    : 'text-slate-300 hover:text-white hover:bg-slate-800'
-                }`}
-              >
-                <ImageIcon className="w-4 h-4 shrink-0" />
-                <span>Slider Principal ({formData.heroSlides.length})</span>
-              </button>
-
-              <button
+                type="button"
                 onClick={() => setActiveTab('content')}
-                className={`flex items-center gap-2 px-3.5 py-2.5 rounded-lg font-bold text-xs uppercase tracking-wider whitespace-nowrap shrink-0 transition-all cursor-pointer ${
+                className="inline-flex items-center gap-1 bg-blue-500/20 hover:bg-blue-500/30 text-blue-300 px-2.5 py-1 rounded-md font-bold text-[11px] border border-blue-500/40 transition-colors cursor-pointer"
+              >
+                <Sparkles className="w-3 h-3 text-blue-400" />
+                <span>⭐ Ir a Editar Título "Líderes en Maquinados..."</span>
+              </button>
+            </div>
+            <span className="text-[11px] text-slate-400 font-medium hidden sm:inline">Haga clic en cualquier pestaña para editar</span>
+          </div>
+
+          {/* Tab Navigation with fully responsive wrapping - NO HIDDEN TABS */}
+          <div className="w-full bg-slate-950 border-b border-slate-800 p-2.5">
+            <div className="flex flex-wrap items-center gap-1.5 sm:gap-2">
+              <button
+                type="button"
+                onClick={() => setActiveTab('general')}
+                className={`flex items-center gap-1.5 sm:gap-2 px-3 py-2 sm:px-3.5 sm:py-2.5 rounded-lg font-bold text-xs uppercase tracking-wider transition-all cursor-pointer ${
+                  activeTab === 'general'
+                    ? 'bg-blue-600 text-white shadow-md ring-2 ring-blue-400'
+                    : 'text-slate-300 hover:text-white hover:bg-slate-800 bg-slate-900 border border-slate-800'
+                }`}
+              >
+                <Palette className="w-3.5 h-3.5 sm:w-4 sm:h-4 shrink-0 text-blue-400" />
+                <span>1. Identidad & Colores</span>
+              </button>
+
+              <button
+                type="button"
+                onClick={() => setActiveTab('contacts')}
+                className={`flex items-center gap-1.5 sm:gap-2 px-3 py-2 sm:px-3.5 sm:py-2.5 rounded-lg font-bold text-xs uppercase tracking-wider transition-all cursor-pointer ${
+                  activeTab === 'contacts'
+                    ? 'bg-amber-600 text-white shadow-md ring-2 ring-amber-400'
+                    : 'text-amber-300 hover:text-white hover:bg-amber-950/60 bg-slate-900 border border-amber-500/40'
+                }`}
+              >
+                <MapPin className="w-3.5 h-3.5 sm:w-4 sm:h-4 shrink-0 text-amber-400" />
+                <span className="font-extrabold">2. 📍 Contacto, Mapa Google & Teléfonos</span>
+              </button>
+
+              <button
+                type="button"
+                onClick={() => setActiveTab('slider')}
+                className={`flex items-center gap-1.5 sm:gap-2 px-3 py-2 sm:px-3.5 sm:py-2.5 rounded-lg font-bold text-xs uppercase tracking-wider transition-all cursor-pointer ${
+                  activeTab === 'slider'
+                    ? 'bg-blue-600 text-white shadow-md ring-2 ring-blue-400'
+                    : 'text-slate-300 hover:text-white hover:bg-slate-800 bg-slate-900 border border-slate-800'
+                }`}
+              >
+                <ImageIcon className="w-3.5 h-3.5 sm:w-4 sm:h-4 shrink-0 text-blue-400" />
+                <span>3. Slider Principal ({formData.heroSlides.length})</span>
+              </button>
+
+              <button
+                type="button"
+                onClick={() => setActiveTab('content')}
+                className={`flex items-center gap-1.5 sm:gap-2 px-3 py-2 sm:px-3.5 sm:py-2.5 rounded-lg font-bold text-xs uppercase tracking-wider transition-all cursor-pointer ${
                   activeTab === 'content'
-                    ? 'bg-blue-600 text-white shadow-sm'
-                    : 'text-slate-300 hover:text-white hover:bg-slate-800'
+                    ? 'bg-blue-600 text-white shadow-md ring-2 ring-blue-400'
+                    : 'text-slate-300 hover:text-white hover:bg-slate-800 bg-slate-900 border border-slate-800'
                 }`}
               >
-                <FileText className="w-4 h-4 shrink-0" />
-                <span>Bienvenida & Empresa</span>
+                <FileText className="w-3.5 h-3.5 sm:w-4 sm:h-4 shrink-0 text-blue-400" />
+                <span className="font-extrabold">4. ⭐ Bienvenida & Nosotros ("Líderes...")</span>
               </button>
 
               <button
+                type="button"
                 onClick={() => setActiveTab('services')}
-                className={`flex items-center gap-2 px-3.5 py-2.5 rounded-lg font-bold text-xs uppercase tracking-wider whitespace-nowrap shrink-0 transition-all cursor-pointer ${
+                className={`flex items-center gap-1.5 sm:gap-2 px-3 py-2 sm:px-3.5 sm:py-2.5 rounded-lg font-bold text-xs uppercase tracking-wider transition-all cursor-pointer ${
                   activeTab === 'services'
-                    ? 'bg-blue-600 text-white shadow-sm'
-                    : 'text-slate-300 hover:text-white hover:bg-slate-800'
+                    ? 'bg-blue-600 text-white shadow-md ring-2 ring-blue-400'
+                    : 'text-slate-300 hover:text-white hover:bg-slate-800 bg-slate-900 border border-slate-800'
                 }`}
               >
-                <Sparkles className="w-4 h-4 shrink-0" />
-                <span>Servicios</span>
+                <Sparkles className="w-3.5 h-3.5 sm:w-4 sm:h-4 shrink-0 text-blue-400" />
+                <span>5. Servicios</span>
               </button>
 
               <button
+                type="button"
                 onClick={() => setActiveTab('gallery')}
-                className={`flex items-center gap-2 px-3.5 py-2.5 rounded-lg font-bold text-xs uppercase tracking-wider whitespace-nowrap shrink-0 transition-all cursor-pointer ${
+                className={`flex items-center gap-1.5 sm:gap-2 px-3 py-2 sm:px-3.5 sm:py-2.5 rounded-lg font-bold text-xs uppercase tracking-wider transition-all cursor-pointer ${
                   activeTab === 'gallery'
-                    ? 'bg-blue-600 text-white shadow-sm'
-                    : 'text-slate-300 hover:text-white hover:bg-slate-800'
+                    ? 'bg-blue-600 text-white shadow-md ring-2 ring-blue-400'
+                    : 'text-slate-300 hover:text-white hover:bg-slate-800 bg-slate-900 border border-slate-800'
                 }`}
               >
-                <ImageIcon className="w-4 h-4 shrink-0" />
-                <span>Galería de Flota ({formData.galleryImages.length})</span>
+                <ImageIcon className="w-3.5 h-3.5 sm:w-4 sm:h-4 shrink-0 text-blue-400" />
+                <span>6. Galería ({formData.galleryImages.length})</span>
               </button>
 
               <button
+                type="button"
                 onClick={() => setActiveTab('supabase')}
-                className={`flex items-center gap-2 px-3.5 py-2.5 rounded-lg font-bold text-xs uppercase tracking-wider whitespace-nowrap shrink-0 transition-all cursor-pointer ${
+                className={`flex items-center gap-1.5 sm:gap-2 px-3 py-2 sm:px-3.5 sm:py-2.5 rounded-lg font-bold text-xs uppercase tracking-wider transition-all cursor-pointer ${
                   activeTab === 'supabase'
-                    ? 'bg-emerald-600 text-white shadow-sm'
-                    : 'text-emerald-400 hover:text-white hover:bg-slate-800'
+                    ? 'bg-emerald-600 text-white shadow-md ring-2 ring-emerald-400'
+                    : 'text-emerald-400 hover:text-white hover:bg-slate-800 bg-slate-900 border border-emerald-600/40'
                 }`}
               >
-                <Database className="w-4 h-4 shrink-0" />
-                <span className="font-extrabold text-white">Base de Datos Supabase</span>
+                <Database className="w-3.5 h-3.5 sm:w-4 sm:h-4 shrink-0" />
+                <span className="font-extrabold text-white">7. Supabase DB</span>
               </button>
             </div>
           </div>
@@ -1462,89 +1503,535 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({
             </div>
           )}
 
-          {/* TAB 2: TELÉFONOS & WHATSAPP */}
+          {/* TAB 2: CONTACTO, TELÉFONOS, MAPA DE GOOGLE & COBERTURA */}
           {activeTab === 'contacts' && (
             <div className="space-y-6">
+              {/* 1. Textos Generales de la Sección Contacto */}
               <div className="bg-gray-50 p-5 rounded-2xl border border-gray-200 space-y-4">
-                <h3 className="font-extrabold text-base text-gray-900">Barra Superior de Teléfonos (Top Bar Header)</h3>
-                <p className="text-xs text-gray-600">Agregue o modifique los números telefónicos que se muestran en la barra superior del header.</p>
+                <div className="flex items-center justify-between">
+                  <h3 className="font-extrabold text-base text-gray-900">1. Textos Principales de la Sección Contacto</h3>
+                  <span className="text-xs font-semibold bg-blue-100 text-[#0F3B68] px-2.5 py-0.5 rounded-full">Sección #contacto</span>
+                </div>
+                <p className="text-xs text-gray-600">
+                  Edite el título principal, subtítulo y mensaje introductorio de la sección de contacto en la página web.
+                </p>
 
-                <div className="space-y-3">
-                  {formData.topPhones.map((phone, idx) => (
-                    <div key={idx} className="flex items-center gap-2">
-                      <input
-                        type="text"
-                        value={phone}
-                        onChange={(e) => {
-                          const newPhones = [...formData.topPhones];
-                          newPhones[idx] = e.target.value;
-                          setFormData({ ...formData, topPhones: newPhones });
-                        }}
-                        className="flex-1 px-4 py-2 rounded-xl border border-gray-300 text-sm font-bold"
-                      />
-                      <button
-                        type="button"
-                        onClick={() => {
-                          const newPhones = formData.topPhones.filter((_, i) => i !== idx);
-                          setFormData({ ...formData, topPhones: newPhones });
-                        }}
-                        className="p-2 text-red-600 hover:bg-red-50 rounded-lg"
-                      >
-                        <Trash2 className="w-4 h-4" />
-                      </button>
-                    </div>
-                  ))}
+                <div className="space-y-4">
+                  <div>
+                    <label className="block text-xs font-bold text-gray-700 uppercase mb-1">
+                      Título Principal de Contacto
+                    </label>
+                    <input
+                      type="text"
+                      value={formData.contactTitle || ''}
+                      onChange={(e) => setFormData({ ...formData, contactTitle: e.target.value })}
+                      placeholder="Contáctenos para Cotizar su Proyecto"
+                      className="w-full px-4 py-2.5 rounded-xl border border-gray-300 text-sm font-bold focus:ring-2 focus:ring-[#0F3B68]"
+                    />
+                  </div>
 
-                  <button
-                    type="button"
-                    onClick={() => setFormData({ ...formData, topPhones: [...formData.topPhones, '55-0000-0000'] })}
-                    className="inline-flex items-center gap-1.5 text-xs font-bold text-[#0E5197] hover:underline pt-1"
-                  >
-                    <Plus className="w-4 h-4" />
-                    <span>Agregar otro teléfono</span>
-                  </button>
+                  <div>
+                    <label className="block text-xs font-bold text-gray-700 uppercase mb-1">
+                      Subtítulo Destacado
+                    </label>
+                    <input
+                      type="text"
+                      value={formData.contactSubtitle || ''}
+                      onChange={(e) => setFormData({ ...formData, contactSubtitle: e.target.value })}
+                      placeholder="Atención técnica inmediata por WhatsApp, teléfono o visita a planta"
+                      className="w-full px-4 py-2.5 rounded-xl border border-gray-300 text-sm font-semibold text-[#D97706] focus:ring-2 focus:ring-[#0F3B68]"
+                    />
+                  </div>
+
+                  <div>
+                    <label className="block text-xs font-bold text-gray-700 uppercase mb-1">
+                      Descripción / Mensaje Explicativo
+                    </label>
+                    <textarea
+                      rows={3}
+                      value={formData.contactMessage || ''}
+                      onChange={(e) => setFormData({ ...formData, contactMessage: e.target.value })}
+                      placeholder="Estamos listos para evaluar sus requerimientos técnicos..."
+                      className="w-full px-4 py-2.5 rounded-xl border border-gray-300 text-sm font-normal focus:ring-2 focus:ring-[#0F3B68]"
+                    />
+                  </div>
                 </div>
               </div>
 
+              {/* 2. Mapa de Ubicación de Google Maps */}
+              <div className="bg-gray-50 p-5 rounded-2xl border-2 border-amber-500/40 space-y-4">
+                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+                  <div className="flex items-center gap-2">
+                    <MapPin className="w-5 h-5 text-[#D97706]" />
+                    <h3 className="font-extrabold text-base text-gray-900">2. Mapa de Ubicación de Google Maps</h3>
+                  </div>
+                  <label className="inline-flex items-center gap-2 cursor-pointer bg-white px-3 py-1.5 rounded-lg border border-gray-300 shadow-2xs">
+                    <input
+                      type="checkbox"
+                      checked={formData.showContactMap ?? true}
+                      onChange={(e) => setFormData({ ...formData, showContactMap: e.target.checked })}
+                      className="w-4 h-4 text-[#0F3B68] rounded border-gray-300 focus:ring-[#0F3B68]"
+                    />
+                    <span className="text-xs font-bold text-gray-800">Mostrar Mapa en Sección Contacto</span>
+                  </label>
+                </div>
+
+                <div className="p-3 bg-amber-50 rounded-xl border border-amber-200 text-xs text-amber-900 leading-relaxed space-y-1">
+                  <p className="font-bold">📍 ¿Cómo enlazar la ubicación de su empresa con Google Maps?</p>
+                  <p>
+                    Puede pegar directamente un <b>enlace corto de Google Maps</b> (ejemplo: <code className="bg-amber-100 px-1 py-0.5 rounded text-amber-950 font-mono font-bold">https://maps.app.goo.gl/LQcL7r4fDj9WjZZp8</code>), la URL completa de Google Maps, el código iframe o la dirección física. El sistema detecta y embebe automáticamente el mapa en tiempo real.
+                  </p>
+                </div>
+
+                <div className="space-y-4">
+                  <div>
+                    <label className="block text-xs font-bold text-gray-700 uppercase mb-1">
+                      Link / Enlace de Google Maps del Negocio
+                    </label>
+                    <div className="flex flex-col sm:flex-row items-center gap-2">
+                      <input
+                        type="text"
+                        value={formData.contactMapUrl ?? 'https://maps.app.goo.gl/LQcL7r4fDj9WjZZp8'}
+                        onChange={(e) => setFormData({ ...formData, contactMapUrl: e.target.value })}
+                        placeholder="https://maps.app.goo.gl/LQcL7r4fDj9WjZZp8 o dirección"
+                        className="w-full px-4 py-2.5 rounded-xl border border-gray-300 text-sm font-mono text-blue-900 focus:ring-2 focus:ring-[#0F3B68]"
+                      />
+                      {formData.contactMapUrl && (
+                        <a
+                          href={formData.contactMapUrl}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="w-full sm:w-auto inline-flex items-center justify-center gap-1.5 bg-[#0F3B68] hover:bg-slate-900 text-white font-bold text-xs px-4 py-2.5 rounded-xl transition-all shadow-xs shrink-0 cursor-pointer"
+                        >
+                          <Navigation className="w-4 h-4 text-[#D97706]" />
+                          <span>Probar Link ↗</span>
+                        </a>
+                      )}
+                    </div>
+                  </div>
+
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div>
+                      <label className="block text-xs font-bold text-gray-700 uppercase mb-1">
+                        Título del Bloque del Mapa
+                      </label>
+                      <input
+                        type="text"
+                        value={formData.contactMapTitle ?? 'Ubicación de Planta y Talleres Industriales'}
+                        onChange={(e) => setFormData({ ...formData, contactMapTitle: e.target.value })}
+                        placeholder="Ubicación de Planta y Talleres Industriales"
+                        className="w-full px-3 py-2 rounded-xl border border-gray-300 text-sm font-bold focus:ring-2 focus:ring-[#0F3B68]"
+                      />
+                    </div>
+
+                    <div>
+                      <label className="block text-xs font-bold text-gray-700 uppercase mb-1">
+                        Subtítulo del Bloque del Mapa
+                      </label>
+                      <input
+                        type="text"
+                        value={formData.contactMapSubtitle ?? 'Visítenos en nuestras instalaciones o solicite una visita técnica presencial'}
+                        onChange={(e) => setFormData({ ...formData, contactMapSubtitle: e.target.value })}
+                        placeholder="Visítenos en nuestras instalaciones..."
+                        className="w-full px-3 py-2 rounded-xl border border-gray-300 text-sm font-medium focus:ring-2 focus:ring-[#0F3B68]"
+                      />
+                    </div>
+                  </div>
+
+                  <div>
+                    <label className="block text-xs font-bold text-gray-700 uppercase mb-1">
+                      Dirección Física o Referencia Visible
+                    </label>
+                    <input
+                      type="text"
+                      value={formData.contactMapAddress ?? 'Servicios Industriales Moldmaq S.A. de C.V. - Estado de México, CDMX y Bajío'}
+                      onChange={(e) => setFormData({ ...formData, contactMapAddress: e.target.value })}
+                      placeholder="Ej. Tlalnepantla / Cuautitlán Izcalli, Estado de México"
+                      className="w-full px-3 py-2 rounded-xl border border-gray-300 text-sm focus:ring-2 focus:ring-[#0F3B68]"
+                    />
+                  </div>
+
+                  {/* Live Embedded Map Preview in Admin */}
+                  {formData.contactMapUrl && (
+                    <div className="p-3 bg-white rounded-xl border border-gray-200 space-y-2">
+                      <div className="flex items-center justify-between text-xs font-bold text-gray-600 uppercase">
+                        <span>Vista Previa en Vivo del Mapa Embebido:</span>
+                        <span className="text-[11px] text-emerald-600 font-semibold">✓ Conectado</span>
+                      </div>
+                      <div className="h-56 rounded-lg overflow-hidden border border-gray-200">
+                        <iframe
+                          title="Vista Previa Mapa Admin"
+                          src={`https://maps.google.com/maps?q=${encodeURIComponent(formData.contactMapUrl.trim())}&t=&z=14&ie=UTF8&iwloc=&output=embed`}
+                          width="100%"
+                          height="100%"
+                          style={{ border: 0 }}
+                          allowFullScreen={false}
+                          loading="lazy"
+                        />
+                      </div>
+                    </div>
+                  )}
+                </div>
+              </div>
+
+              {/* 3. Zonas de Cobertura con Enlaces de Google Maps Individuales */}
               <div className="bg-gray-50 p-5 rounded-2xl border border-gray-200 space-y-4">
-                <h3 className="font-extrabold text-base text-gray-900">WhatsApp Directo y Redes Sociales</h3>
-
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
                   <div>
-                    <label className="block text-xs font-bold text-gray-700 uppercase mb-1">
-                      Número de WhatsApp (con código de país ej. 525563477853)
-                    </label>
-                    <input
-                      type="text"
-                      value={formData.whatsappNumber}
-                      onChange={(e) => setFormData({ ...formData, whatsappNumber: e.target.value })}
-                      className="w-full px-4 py-2.5 rounded-xl border border-gray-300 text-sm font-bold"
-                    />
+                    <h3 className="font-extrabold text-base text-gray-900">3. Zonas de Cobertura y Ciudades de Atención</h3>
+                    <p className="text-xs text-gray-600 mt-0.5">
+                      Agregue desde 1 hasta múltiples ubicaciones. Cada zona tiene su propio <b>link de Google Maps</b> para que cuando el usuario haga clic desde su celular o computadora, se abra directamente la app de Google Maps con la ubicación.
+                    </p>
                   </div>
-
-                  <div>
-                    <label className="block text-xs font-bold text-gray-700 uppercase mb-1">
-                      Página de Facebook
-                    </label>
-                    <input
-                      type="text"
-                      value={formData.facebookPage}
-                      onChange={(e) => setFormData({ ...formData, facebookPage: e.target.value })}
-                      className="w-full px-4 py-2.5 rounded-xl border border-gray-300 text-sm font-bold"
-                    />
-                  </div>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      const currentLocs = formData.coverageLocations || (formData.coverageAreas || []).map((name, i) => ({
+                        id: `cov-${Date.now()}-${i}`,
+                        name,
+                        mapUrl: `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(name)}`
+                      }));
+                      const newLoc: CoverageLocationItem = {
+                        id: `cov-${Date.now()}`,
+                        name: 'Nueva Zona / Ciudad',
+                        mapUrl: 'https://www.google.com/maps/search/?api=1&query=Mexico'
+                      };
+                      const updated = [...currentLocs, newLoc];
+                      setFormData({
+                        ...formData,
+                        coverageLocations: updated,
+                        coverageAreas: updated.map(l => l.name)
+                      });
+                    }}
+                    className="inline-flex items-center gap-1.5 bg-[#0F3B68] hover:bg-slate-900 text-white font-bold text-xs px-3.5 py-2 rounded-xl transition-all shadow-xs shrink-0 cursor-pointer"
+                  >
+                    <Plus className="w-4 h-4" />
+                    <span>+ Agregar Zona de Cobertura</span>
+                  </button>
                 </div>
 
                 <div>
                   <label className="block text-xs font-bold text-gray-700 uppercase mb-1">
-                    Mensaje Inicial Predeterminado de WhatsApp
+                    Título del Apartado de Cobertura
                   </label>
-                  <textarea
-                    rows={2}
-                    value={formData.whatsappMessage}
-                    onChange={(e) => setFormData({ ...formData, whatsappMessage: e.target.value })}
-                    className="w-full px-4 py-2.5 rounded-xl border border-gray-300 text-sm font-medium"
+                  <input
+                    type="text"
+                    value={formData.contactCoverageTitle ?? 'Cobertura y Atención en Sitio:'}
+                    onChange={(e) => setFormData({ ...formData, contactCoverageTitle: e.target.value })}
+                    placeholder="Cobertura y Atención en Sitio:"
+                    className="w-full px-3 py-2 rounded-xl border border-gray-300 text-sm font-bold focus:ring-2 focus:ring-[#0F3B68]"
                   />
+                </div>
+
+                {/* Locations List */}
+                <div className="space-y-3">
+                  {((formData.coverageLocations && formData.coverageLocations.length > 0)
+                    ? formData.coverageLocations
+                    : (formData.coverageAreas || ['CDMX', 'Estado de México', 'Querétaro', 'Toluca', 'Bajío', 'Toda la República']).map((name, i) => ({
+                        id: `cov-default-${i}`,
+                        name,
+                        mapUrl: `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(name)}`
+                      }))
+                  ).map((loc, idx) => (
+                    <div key={loc.id || idx} className="p-4 bg-white rounded-xl border border-gray-200 shadow-2xs space-y-3">
+                      <div className="flex items-center justify-between">
+                        <div className="flex items-center gap-2">
+                          <span className="w-6 h-6 rounded-full bg-amber-100 text-[#D97706] flex items-center justify-center text-xs font-extrabold">
+                            {idx + 1}
+                          </span>
+                          <span className="text-xs font-bold text-gray-800 uppercase tracking-wide">
+                            Ubicación #{idx + 1}
+                          </span>
+                        </div>
+                        <button
+                          type="button"
+                          onClick={() => {
+                            const current = formData.coverageLocations || (formData.coverageAreas || []).map((name, i) => ({
+                              id: `cov-${Date.now()}-${i}`,
+                              name,
+                              mapUrl: `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(name)}`
+                            }));
+                            const filtered = current.filter((_, i) => i !== idx);
+                            setFormData({
+                              ...formData,
+                              coverageLocations: filtered,
+                              coverageAreas: filtered.map(l => l.name)
+                            });
+                          }}
+                          className="inline-flex items-center gap-1 text-xs text-red-600 hover:text-red-800 font-bold hover:underline cursor-pointer"
+                        >
+                          <Trash2 className="w-3.5 h-3.5" />
+                          <span>Eliminar</span>
+                        </button>
+                      </div>
+
+                      <div className="grid grid-cols-1 sm:grid-cols-12 gap-3">
+                        <div className="sm:col-span-4">
+                          <label className="block text-[11px] font-bold text-gray-600 uppercase mb-1">
+                            Nombre de la Zona / Ciudad
+                          </label>
+                          <input
+                            type="text"
+                            value={loc.name}
+                            onChange={(e) => {
+                              const current = formData.coverageLocations || (formData.coverageAreas || []).map((name, i) => ({
+                                id: `cov-${Date.now()}-${i}`,
+                                name,
+                                mapUrl: `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(name)}`
+                              }));
+                              const updated = [...current];
+                              updated[idx] = { ...updated[idx], name: e.target.value };
+                              setFormData({
+                                ...formData,
+                                coverageLocations: updated,
+                                coverageAreas: updated.map(l => l.name)
+                              });
+                            }}
+                            placeholder="Ej. CDMX, Querétaro, etc."
+                            className="w-full px-3 py-2 rounded-lg border border-gray-300 text-sm font-bold text-gray-900 focus:ring-2 focus:ring-[#0F3B68]"
+                          />
+                        </div>
+
+                        <div className="sm:col-span-8">
+                          <label className="block text-[11px] font-bold text-gray-600 uppercase mb-1">
+                            Link de Google Maps para {loc.name || 'esta zona'}
+                          </label>
+                          <div className="flex items-center gap-2">
+                            <input
+                              type="text"
+                              value={loc.mapUrl || ''}
+                              onChange={(e) => {
+                                const current = formData.coverageLocations || (formData.coverageAreas || []).map((name, i) => ({
+                                  id: `cov-${Date.now()}-${i}`,
+                                  name,
+                                  mapUrl: `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(name)}`
+                                }));
+                                const updated = [...current];
+                                updated[idx] = { ...updated[idx], mapUrl: e.target.value };
+                                setFormData({
+                                  ...formData,
+                                  coverageLocations: updated,
+                                  coverageAreas: updated.map(l => l.name)
+                                });
+                              }}
+                              placeholder={`https://maps.app.goo.gl/... o https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(loc.name || 'Mexico')}`}
+                              className="w-full px-3 py-2 rounded-lg border border-gray-300 text-xs font-mono text-blue-900 focus:ring-2 focus:ring-[#0F3B68]"
+                            />
+                            {loc.mapUrl && (
+                              <a
+                                href={loc.mapUrl}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                title="Probar apertura de mapa"
+                                className="inline-flex items-center gap-1 bg-gray-100 hover:bg-amber-100 text-gray-800 hover:text-amber-900 p-2 rounded-lg border border-gray-300 text-xs font-bold shrink-0 transition-colors"
+                              >
+                                <ExternalLink className="w-3.5 h-3.5" />
+                              </a>
+                            )}
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              {/* 4. Teléfonos, WhatsApp y Redes Sociales */}
+              <div className="bg-gray-50 p-5 rounded-2xl border border-gray-200 space-y-4">
+                <h3 className="font-extrabold text-base text-gray-900">4. Líneas Telefónicas & WhatsApp Directo</h3>
+
+                {/* WhatsApp Technical Card Texts */}
+                <div className="p-4 bg-white rounded-xl border border-gray-200 space-y-3">
+                  <span className="text-xs font-bold text-gray-800 uppercase tracking-wide">
+                    Tarjeta de WhatsApp Técnico
+                  </span>
+
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div>
+                      <label className="block text-xs font-bold text-gray-700 uppercase mb-1">
+                        Título de la Tarjeta WhatsApp
+                      </label>
+                      <input
+                        type="text"
+                        value={formData.contactWaCardTitle ?? 'WhatsApp Técnico Directo'}
+                        onChange={(e) => setFormData({ ...formData, contactWaCardTitle: e.target.value })}
+                        placeholder="WhatsApp Técnico Directo"
+                        className="w-full px-3 py-2 rounded-xl border border-gray-300 text-sm font-bold focus:ring-2 focus:ring-[#0F3B68]"
+                      />
+                    </div>
+
+                    <div>
+                      <label className="block text-xs font-bold text-gray-700 uppercase mb-1">
+                        Subtítulo / Tiempo de Respuesta
+                      </label>
+                      <input
+                        type="text"
+                        value={formData.contactWaCardSubtitle ?? 'Respuesta inmediata de ingenieros de proyecto'}
+                        onChange={(e) => setFormData({ ...formData, contactWaCardSubtitle: e.target.value })}
+                        placeholder="Respuesta inmediata de ingenieros..."
+                        className="w-full px-3 py-2 rounded-xl border border-gray-300 text-sm font-medium focus:ring-2 focus:ring-[#0F3B68]"
+                      />
+                    </div>
+                  </div>
+
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div>
+                      <label className="block text-xs font-bold text-gray-700 uppercase mb-1">
+                        Número de WhatsApp (con lada ej. 525558724410)
+                      </label>
+                      <input
+                        type="text"
+                        value={formData.whatsappNumber}
+                        onChange={(e) => setFormData({ ...formData, whatsappNumber: e.target.value })}
+                        className="w-full px-3 py-2 rounded-xl border border-gray-300 text-sm font-bold text-emerald-800 focus:ring-2 focus:ring-[#0F3B68]"
+                      />
+                    </div>
+
+                    <div>
+                      <label className="block text-xs font-bold text-gray-700 uppercase mb-1">
+                        Texto del Botón de WhatsApp
+                      </label>
+                      <input
+                        type="text"
+                        value={formData.contactWaButtonText ?? 'Enviar WhatsApp'}
+                        onChange={(e) => setFormData({ ...formData, contactWaButtonText: e.target.value })}
+                        placeholder="Enviar WhatsApp"
+                        className="w-full px-3 py-2 rounded-xl border border-gray-300 text-sm font-bold focus:ring-2 focus:ring-[#0F3B68]"
+                      />
+                    </div>
+                  </div>
+
+                  <div>
+                    <label className="block text-xs font-bold text-gray-700 uppercase mb-1">
+                      Mensaje Inicial de WhatsApp
+                    </label>
+                    <textarea
+                      rows={2}
+                      value={formData.whatsappMessage}
+                      onChange={(e) => setFormData({ ...formData, whatsappMessage: e.target.value })}
+                      className="w-full px-3 py-2 rounded-xl border border-gray-300 text-sm font-medium focus:ring-2 focus:ring-[#0F3B68]"
+                    />
+                  </div>
+                </div>
+
+                {/* Direct Phone Lines */}
+                <div className="p-4 bg-white rounded-xl border border-gray-200 space-y-3">
+                  <div className="flex items-center justify-between">
+                    <span className="text-xs font-bold text-gray-800 uppercase tracking-wide">
+                      Teléfonos de Atención a Planta
+                    </span>
+                    <button
+                      type="button"
+                      onClick={() => setFormData({ ...formData, topPhones: [...formData.topPhones, '+52 55 0000 0000'] })}
+                      className="inline-flex items-center gap-1 text-xs font-bold text-[#0F3B68] hover:underline"
+                    >
+                      <Plus className="w-3.5 h-3.5" />
+                      <span>+ Agregar Teléfono</span>
+                    </button>
+                  </div>
+
+                  <div>
+                    <label className="block text-xs font-bold text-gray-700 uppercase mb-1">
+                      Título de la Sección de Teléfonos
+                    </label>
+                    <input
+                      type="text"
+                      value={formData.contactPhonesTitle ?? 'Líneas de Atención a Planta'}
+                      onChange={(e) => setFormData({ ...formData, contactPhonesTitle: e.target.value })}
+                      placeholder="Líneas de Atención a Planta"
+                      className="w-full px-3 py-2 rounded-xl border border-gray-300 text-sm font-bold focus:ring-2 focus:ring-[#0F3B68]"
+                    />
+                  </div>
+
+                  <div className="space-y-2 pt-1">
+                    {formData.topPhones.map((phone, idx) => (
+                      <div key={idx} className="flex items-center gap-2">
+                        <input
+                          type="text"
+                          value={phone}
+                          onChange={(e) => {
+                            const newPhones = [...formData.topPhones];
+                            newPhones[idx] = e.target.value;
+                            setFormData({ ...formData, topPhones: newPhones });
+                          }}
+                          className="flex-1 px-3 py-2 rounded-xl border border-gray-300 text-sm font-bold focus:ring-2 focus:ring-[#0F3B68]"
+                        />
+                        <button
+                          type="button"
+                          onClick={() => {
+                            const newPhones = formData.topPhones.filter((_, i) => i !== idx);
+                            setFormData({ ...formData, topPhones: newPhones });
+                          }}
+                          className="p-2 text-red-600 hover:bg-red-50 rounded-lg cursor-pointer"
+                        >
+                          <Trash2 className="w-4 h-4" />
+                        </button>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+
+                {/* Facebook and Form Customization */}
+                <div className="p-4 bg-white rounded-xl border border-gray-200 space-y-3">
+                  <span className="text-xs font-bold text-gray-800 uppercase tracking-wide">
+                    Página de Facebook & Formulario de Cotización
+                  </span>
+
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div>
+                      <label className="block text-xs font-bold text-gray-700 uppercase mb-1">
+                        Página de Facebook (usuario o enlace)
+                      </label>
+                      <input
+                        type="text"
+                        value={formData.facebookPage}
+                        onChange={(e) => setFormData({ ...formData, facebookPage: e.target.value })}
+                        placeholder="moldmaqindustriales"
+                        className="w-full px-3 py-2 rounded-xl border border-gray-300 text-sm font-bold focus:ring-2 focus:ring-[#0F3B68]"
+                      />
+                    </div>
+
+                    <div>
+                      <label className="block text-xs font-bold text-gray-700 uppercase mb-1">
+                        Botón del Formulario de Cotización
+                      </label>
+                      <input
+                        type="text"
+                        value={formData.contactFormButtonText ?? 'Enviar Cotización Técnica por WhatsApp'}
+                        onChange={(e) => setFormData({ ...formData, contactFormButtonText: e.target.value })}
+                        placeholder="Enviar Cotización Técnica por WhatsApp"
+                        className="w-full px-3 py-2 rounded-xl border border-gray-300 text-sm font-bold focus:ring-2 focus:ring-[#0F3B68]"
+                      />
+                    </div>
+                  </div>
+
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div>
+                      <label className="block text-xs font-bold text-gray-700 uppercase mb-1">
+                        Título del Formulario de Cotización
+                      </label>
+                      <input
+                        type="text"
+                        value={formData.contactFormTitle ?? 'Solicitar Cotización de Maquinados o Moldes'}
+                        onChange={(e) => setFormData({ ...formData, contactFormTitle: e.target.value })}
+                        placeholder="Solicitar Cotización de Maquinados o Moldes"
+                        className="w-full px-3 py-2 rounded-xl border border-gray-300 text-sm font-bold focus:ring-2 focus:ring-[#0F3B68]"
+                      />
+                    </div>
+
+                    <div>
+                      <label className="block text-xs font-bold text-gray-700 uppercase mb-1">
+                        Subtítulo del Formulario
+                      </label>
+                      <input
+                        type="text"
+                        value={formData.contactFormSubtitle ?? 'Llene el formulario con los datos de su proyecto para canalizarlo con el ingeniero especialista.'}
+                        onChange={(e) => setFormData({ ...formData, contactFormSubtitle: e.target.value })}
+                        placeholder="Llene el formulario con los datos..."
+                        className="w-full px-3 py-2 rounded-xl border border-gray-300 text-sm font-medium focus:ring-2 focus:ring-[#0F3B68]"
+                      />
+                    </div>
+                  </div>
                 </div>
               </div>
             </div>
@@ -1877,6 +2364,29 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({
                     onChange={(e) => setFormData({ ...formData, aboutSubtitle: e.target.value })}
                     className="w-full px-4 py-2.5 rounded-xl border border-gray-300 text-sm font-semibold text-[#1D7946]"
                   />
+                </div>
+
+                {/* TÍTULO DESTACADO "LÍDERES EN MAQUINADOS CNC..." */}
+                <div className="p-4 bg-amber-50 rounded-2xl border-2 border-amber-400/80 shadow-xs space-y-2">
+                  <div className="flex items-center justify-between">
+                    <label className="text-xs font-black text-amber-950 uppercase tracking-wide flex items-center gap-1.5">
+                      <Sparkles className="w-4 h-4 text-amber-600" />
+                      <span>Título / Encabezado Destacado ("Líderes en Maquinados...")</span>
+                    </label>
+                    <span className="text-[10px] font-extrabold bg-amber-200 text-amber-900 px-2 py-0.5 rounded-md uppercase">
+                      Texto Principal de Nosotros
+                    </span>
+                  </div>
+                  <input
+                    type="text"
+                    value={formData.aboutHeadline ?? 'Líderes en Maquinados CNC, Fabricación de Moldes y Soluciones Industriales'}
+                    onChange={(e) => setFormData({ ...formData, aboutHeadline: e.target.value })}
+                    placeholder="Líderes en Maquinados CNC, Fabricación de Moldes y Soluciones Industriales"
+                    className="w-full px-4 py-3 rounded-xl border-2 border-amber-300 bg-white text-base font-extrabold text-gray-900 focus:ring-2 focus:ring-amber-500 focus:border-amber-500 shadow-2xs"
+                  />
+                  <p className="text-xs text-amber-800 font-medium leading-relaxed">
+                    💡 <b>Edite aquí directamente</b> el texto que aparece en letras grandes arriba de la descripción en la sección Nosotros: <i>"Líderes en Maquinados CNC, Fabricación de Moldes y Soluciones Industriales"</i>.
+                  </p>
                 </div>
 
                 <div>

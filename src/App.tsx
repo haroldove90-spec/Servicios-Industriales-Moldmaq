@@ -241,6 +241,7 @@ export default function App() {
         <AboutSection
           title={config.aboutTitle}
           subtitle={config.aboutSubtitle}
+          aboutHeadline={config.aboutHeadline}
           description={config.aboutDescription}
           values={config.aboutValues}
           imageUrl={config.aboutImageUrl}
@@ -284,9 +285,26 @@ export default function App() {
           message={config.contactMessage}
           phones={config.topPhones}
           whatsappNumber={config.whatsappNumber}
+          whatsappMessage={config.whatsappMessage}
           facebookPage={config.facebookPage}
           coverageAreas={config.coverageAreas}
+          coverageLocations={config.coverageLocations}
           contactBgColor={config.contactBgColor}
+          contactWaCardTitle={config.contactWaCardTitle}
+          contactWaCardSubtitle={config.contactWaCardSubtitle}
+          contactWaButtonText={config.contactWaButtonText}
+          contactPhonesTitle={config.contactPhonesTitle}
+          contactFacebookTitle={config.contactFacebookTitle}
+          contactFacebookSubtitle={config.contactFacebookSubtitle}
+          contactCoverageTitle={config.contactCoverageTitle}
+          contactFormTitle={config.contactFormTitle}
+          contactFormSubtitle={config.contactFormSubtitle}
+          contactFormButtonText={config.contactFormButtonText}
+          showContactMap={config.showContactMap}
+          contactMapUrl={config.contactMapUrl}
+          contactMapTitle={config.contactMapTitle}
+          contactMapSubtitle={config.contactMapSubtitle}
+          contactMapAddress={config.contactMapAddress}
         />
       </main>
 

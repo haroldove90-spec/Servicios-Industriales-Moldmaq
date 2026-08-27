@@ -27,6 +27,12 @@ export interface GalleryImage {
   title: string;
 }
 
+export interface CoverageLocationItem {
+  id: string;
+  name: string;
+  mapUrl?: string;
+}
+
 export interface SiteConfig {
   pageTitle: string;
   logoUrl: string;
@@ -86,6 +92,7 @@ export interface SiteConfig {
   // Nosotros / About Us
   aboutTitle: string;
   aboutSubtitle: string;
+  aboutHeadline?: string;
   aboutDescription: string;
   aboutImageUrl: string;
   aboutImageBadge: string;
@@ -134,10 +141,26 @@ export interface SiteConfig {
   gallerySubtitle: string;
   galleryImages: GalleryImage[];
 
-  // Contact Section
+  // Contact Section & Google Maps
   contactTitle: string;
   contactSubtitle: string;
   contactMessage: string;
+  contactWaCardTitle?: string;
+  contactWaCardSubtitle?: string;
+  contactWaButtonText?: string;
+  contactPhonesTitle?: string;
+  contactFacebookTitle?: string;
+  contactFacebookSubtitle?: string;
+  contactCoverageTitle?: string;
+  contactFormTitle?: string;
+  contactFormSubtitle?: string;
+  contactFormButtonText?: string;
+  showContactMap?: boolean;
+  contactMapUrl?: string;
+  contactMapTitle?: string;
+  contactMapSubtitle?: string;
+  contactMapAddress?: string;
+  coverageLocations?: CoverageLocationItem[];
   
   // Site Status
   isSuspended?: boolean;

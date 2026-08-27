@@ -82,6 +82,7 @@ export const DEFAULT_SITE_CONFIG: SiteConfig = {
 
   aboutTitle: "Sobre Nuestra Empresa",
   aboutSubtitle: "Precisión, Calidad Certificada y Compromiso en Cada Proyecto Industrial",
+  aboutHeadline: "Líderes en Maquinados CNC, Fabricación de Moldes y Soluciones Industriales",
   aboutDescription: "En Servicios Industriales Moldmaq S.A. entendemos la importancia crítica de la precisión y los tiempos de entrega en el entorno productivo actual. Diseñamos, fabricamos y reparamos moldes de inyección, troqueles, refacciones industriales y piezas únicas bajo especificaciones milimétricas.\n\nContamos con un equipo interdisciplinario de ingenieros mecánicos, matriceros expertos y operadores CNC altamente calificados, respaldados por maquinaria de última generación y estrictos protocolos de control de calidad para garantizar la total satisfacción de cada cliente.",
   aboutImageUrl: "https://images.unsplash.com/photo-1581092160607-ee22621dd758?auto=format&fit=crop&w=800&q=80",
   aboutImageBadge: "Calidad de Exportación",
@@ -212,6 +213,29 @@ export const DEFAULT_SITE_CONFIG: SiteConfig = {
   contactTitle: "Contáctenos para Cotizar su Proyecto",
   contactSubtitle: "Atención técnica inmediata por WhatsApp, teléfono o visita a planta",
   contactMessage: "Estamos listos para evaluar sus requerimientos técnicos. Envíenos sus planos en formato PDF, DWG, STEP o solicite una visita de nuestros ingenieros a su planta para una asesoría sin compromiso.",
+  contactWaCardTitle: "WhatsApp Técnico Directo",
+  contactWaCardSubtitle: "Respuesta inmediata de ingenieros de proyecto",
+  contactWaButtonText: "Enviar WhatsApp",
+  contactPhonesTitle: "Líneas de Atención a Planta",
+  contactFacebookTitle: "Página Oficial de Facebook",
+  contactFacebookSubtitle: "Siga nuestros proyectos y casos de éxito",
+  contactCoverageTitle: "Cobertura y Atención en Sitio:",
+  contactFormTitle: "Solicitar Cotización de Maquinados o Moldes",
+  contactFormSubtitle: "Llene el formulario con los datos de su proyecto para canalizarlo con el ingeniero especialista.",
+  contactFormButtonText: "Enviar Cotización Técnica por WhatsApp",
+  showContactMap: true,
+  contactMapUrl: "https://maps.app.goo.gl/LQcL7r4fDj9WjZZp8",
+  contactMapTitle: "Ubicación de Planta y Talleres Industriales",
+  contactMapSubtitle: "Visítenos en nuestras instalaciones o solicite una visita técnica presencial",
+  contactMapAddress: "Servicios Industriales Moldmaq S.A. de C.V. - Estado de México, CDMX y Bajío",
+  coverageLocations: [
+    { id: "cov-1", name: "CDMX", mapUrl: "https://www.google.com/maps/search/CDMX+Mexico" },
+    { id: "cov-2", name: "Estado de México", mapUrl: "https://www.google.com/maps/search/Estado+de+Mexico" },
+    { id: "cov-3", name: "Querétaro", mapUrl: "https://www.google.com/maps/search/Queretaro+Mexico" },
+    { id: "cov-4", name: "Toluca", mapUrl: "https://www.google.com/maps/search/Toluca+Mexico" },
+    { id: "cov-5", name: "Bajío", mapUrl: "https://www.google.com/maps/search/Bajio+Mexico" },
+    { id: "cov-6", name: "Toda la República", mapUrl: "https://www.google.com/maps/search/Republica+Mexicana" }
+  ],
 
   // Section & Widget Colors
   aboutBgColor: "#ffffff",

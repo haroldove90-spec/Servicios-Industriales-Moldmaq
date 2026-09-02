@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { SiteConfig } from './types';
-import { loadSiteConfig, loadSiteConfigFromSupabase, applyThemeColors } from './lib/supabaseClient';
+import { loadSiteConfig, loadSiteConfigFromSupabase, saveSiteConfig, applyThemeColors } from './lib/supabaseClient';
 import { TopBar } from './components/TopBar';
 import { Header } from './components/Header';
 import { HeroSlider } from './components/HeroSlider';
@@ -58,6 +58,7 @@ export default function App() {
       const remoteConfig = await loadSiteConfigFromSupabase(config);
       if (remoteConfig) {
         setConfig(remoteConfig);
+        saveSiteConfig(remoteConfig);
         applyThemeColors(remoteConfig.primaryColor, remoteConfig.secondaryColor);
         if (window.location.hash !== '#admin' && window.location.hash !== '#preview' && window.location.hash !== '#sitio') {
           setCurrentView(remoteConfig.isSuspended ? 'suspended' : 'landing');

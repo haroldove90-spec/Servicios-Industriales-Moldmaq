@@ -115,19 +115,31 @@ export async function syncToSupabase(config: SiteConfig): Promise<{ success: boo
     const client = createClient(sanitizedUrl, config.supabaseAnonKey);
     const { error } = await client
       .from('site_config')
-      .upsert({ id: 'main_config', content: config, updated_at: new Date().toISOString() });
+      .upsert(
+        { id: 'main_config', content: config, updated_at: new Date().toISOString() },
+        { onConflict: 'id' }
+      );
 
     if (error) {
-      if (error.message.includes('site_config') || error.code === 'PGRST301' || error.message.includes('cache')) {
+      if (
+        error.message.includes('site_config') ||
+        error.message.includes('relation') ||
+        error.code === 'PGRST301' ||
+        error.code === '42P01' ||
+        error.message.includes('cache')
+      ) {
         return {
           success: false,
-          message: `No se encontró la tabla 'public.site_config' en Supabase. Debes ejecutar el script SQL de creación en Supabase SQL Editor.`
+          message: `No se encontró la tabla 'public.site_config' en Supabase o faltan políticas RLS. Debes ejecutar el script SQL en el SQL Editor de tu proyecto Supabase.`
         };
       }
       return { success: false, message: `Error en Supabase: ${error.message}` };
     }
 
-    return { success: true, message: '¡Configuración guardada correctamente en Supabase!' };
+    return { 
+      success: true, 
+      message: '¡Configuración guardada en la nube! Los cambios ahora se reflejan globalmente en cualquier dispositivo y navegador.' 
+    };
   } catch (err: any) {
     return { success: false, message: `Error de conexión con Supabase: ${err?.message || err}` };
   }

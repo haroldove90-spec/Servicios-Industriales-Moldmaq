@@ -1,6 +1,6 @@
 import React, { useState, useRef } from 'react';
 import { SiteConfig, HeroSlide, ValueAddedItem, ServiceItem, GalleryImage, CoverageLocationItem } from '../types';
-import { uploadImageFile, syncToSupabase, saveSiteConfig } from '../lib/supabaseClient';
+import { uploadImageFile, syncToSupabase, saveSiteConfig, cleanSupabaseUrl } from '../lib/supabaseClient';
 import {
   X,
   Upload,
@@ -32,47 +32,105 @@ interface AdminPanelProps {
   onUpdateConfig: (newConfig: SiteConfig) => void;
 }
 
-export const SUPABASE_SQL_SETUP = `-- 1. Crear tabla para guardar la configuración del sitio
+export const SUPABASE_SQL_SETUP = `-- ==============================================================================
+-- SCRIPT SQL PARA SUPABASE - SERVICIOS INDUSTRIALES MOLDMAQ S.A.
+-- Ejecutar en Supabase -> SQL Editor -> New Query -> Run
+-- Permite que los cambios se guarden en la nube y se vean en cualquier dispositivo
+-- ==============================================================================
+
+-- 1. Crear tabla para guardar la configuración completa del sitio web
 create table if not exists public.site_config (
   id text primary key,
   content jsonb not null,
   updated_at timestamp with time zone default timezone('utc'::text, now())
 );
 
--- 2. Crear tabla de usuarios administradores
+-- 2. Habilitar Row Level Security (RLS)
+alter table public.site_config enable row level security;
+
+-- 3. Limpiar políticas previas para evitar conflictos
+drop policy if exists "Acceso Publico site_config" on public.site_config;
+drop policy if exists "Acceso Total public.site_config" on public.site_config;
+drop policy if exists "Permitir lectura publica site_config" on public.site_config;
+drop policy if exists "Permitir guardar site_config" on public.site_config;
+
+-- 4. Permitir lectura y escritura universal (necesario para que cualquier visitante vea la web y el admin guarde)
+create policy "Acceso Total public.site_config"
+on public.site_config
+for all
+to public, anon, authenticated
+using (true)
+with check (true);
+
+-- 5. Tabla para usuarios administradores (login del panel)
 create table if not exists public.admin_users (
   id uuid primary key default gen_random_uuid(),
   username text unique not null,
-  password text not null,
+  password text,
+  password_hash text,
   created_at timestamp with time zone default timezone('utc'::text, now())
 );
 
--- Insertar o actualizar credenciales requeridas
-insert into public.admin_users (username, password)
-values ('admin_1', 'Admin_123')
-on conflict (username) do update set password = 'Admin_123';
+-- Asegurar columnas y remover restricciones conflictivas si la tabla ya existía
+alter table public.admin_users add column if not exists username text;
+alter table public.admin_users add column if not exists password text;
+alter table public.admin_users add column if not exists password_hash text;
 
--- 3. Habilitar permisos RLS
-alter table public.site_config enable row level security;
-drop policy if exists "Acceso Publico site_config" on public.site_config;
-create policy "Acceso Publico site_config" on public.site_config for all using (true) with check (true);
+do $$
+begin
+  alter table public.admin_users alter column password_hash drop not null;
+exception when others then null;
+end $$;
 
 alter table public.admin_users enable row level security;
 drop policy if exists "Acceso Lectura admin_users" on public.admin_users;
-create policy "Acceso Lectura admin_users" on public.admin_users for select using (true);
+create policy "Acceso Lectura admin_users"
+on public.admin_users
+for select
+to public, anon, authenticated
+using (true);
 
--- 4. Crear Bucket 'moldmaq-media' para guardar imágenes
-insert into storage.buckets (id, name, public) values ('moldmaq-media', 'moldmaq-media', true) on conflict (id) do update set public = true;
+-- 6. Insertar o actualizar credenciales del usuario administrador (llenando password y password_hash)
+insert into public.admin_users (username, password, password_hash)
+values ('admin_1', 'Admin_123', 'Admin_123')
+on conflict (username) do update set password = 'Admin_123', password_hash = 'Admin_123';
 
--- 5. Habilitar politicas de acceso publico para el bucket
+-- 7. Crear y asegurar el bucket de almacenamiento para imágenes y logo
+insert into storage.buckets (id, name, public, file_size_limit, allowed_mime_types)
+values (
+  'moldmaq-media',
+  'moldmaq-media',
+  true,
+  52428800,
+  array['image/jpeg', 'image/png', 'image/webp', 'image/gif', 'image/svg+xml']
+)
+on conflict (id) do update set public = true;
+
+-- 8. Políticas de acceso para el bucket de imágenes
 drop policy if exists "Permitir ver imagenes publicas" on storage.objects;
-create policy "Permitir ver imagenes publicas" on storage.objects for select using (bucket_id = 'moldmaq-media');
+create policy "Permitir ver imagenes publicas"
+on storage.objects for select
+to public, anon, authenticated
+using (bucket_id = 'moldmaq-media');
 
 drop policy if exists "Permitir subir imagenes publicas" on storage.objects;
-create policy "Permitir subir imagenes publicas" on storage.objects for insert with check (bucket_id = 'moldmaq-media');
+create policy "Permitir subir imagenes publicas"
+on storage.objects for insert
+to public, anon, authenticated
+with check (bucket_id = 'moldmaq-media');
 
 drop policy if exists "Permitir actualizar imagenes publicas" on storage.objects;
-create policy "Permitir actualizar imagenes publicas" on storage.objects for update using (bucket_id = 'moldmaq-media');`;
+create policy "Permitir actualizar imagenes publicas"
+on storage.objects for update
+to public, anon, authenticated
+using (bucket_id = 'moldmaq-media')
+with check (bucket_id = 'moldmaq-media');
+
+drop policy if exists "Permitir eliminar imagenes publicas" on storage.objects;
+create policy "Permitir eliminar imagenes publicas"
+on storage.objects for delete
+to public, anon, authenticated
+using (bucket_id = 'moldmaq-media');`;
 
 interface ColorPickerInputProps {
   label: string;
@@ -161,6 +219,9 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({
   const sliderFileInputRefs = useRef<(HTMLInputElement | null)[]>([]);
   const galleryFileInputRef = useRef<HTMLInputElement>(null);
   const [uploadProgress, setUploadProgress] = useState<{ current: number; total: number } | null>(null);
+
+  // Extract Project ID from Supabase URL dynamically
+  const currentProjectId = cleanSupabaseUrl(formData.supabaseUrl).replace(/^https?:\/\//i, '').split('.')[0] || 'glqyclphjelrdminvetb';
 
   const handleFaviconUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -316,7 +377,7 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({
         newImages.push({
           id: `gal-${Date.now()}-${i}-${Math.random().toString(36).substring(2, 6)}`,
           url: url,
-          title: fileNameWithoutExt ? fileNameWithoutExt : `Unidad Vazquez ${formData.galleryImages.length + i + 1}`
+          title: fileNameWithoutExt ? fileNameWithoutExt : `Trabajo Moldmaq ${formData.galleryImages.length + i + 1}`
         });
       }
       setFormData(prev => ({
@@ -343,12 +404,12 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({
           <div>
             <div className="flex items-center gap-2 flex-wrap">
               <span className="text-xs sm:text-sm font-bold text-white uppercase tracking-wider">
-                ADMIN MODE: VAZQUE MULTITRANSPORT
+                ADMIN MODE: MOLDMAQ S.A.
               </span>
               <span className="opacity-50 text-xs hidden sm:inline">|</span>
               <span className="flex items-center gap-1.5 text-xs text-emerald-400 font-medium">
                 <div className="w-2 h-2 rounded-full bg-green-500 animate-pulse"></div>
-                Conectado a Supabase (snjcjrjyoouzhixymbnq)
+                Supabase Cloud: {currentProjectId}
               </span>
             </div>
             <p className="text-xs text-slate-400 mt-0.5">
@@ -426,7 +487,7 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({
             {saveStatus.type === 'error' && (
               <div className="pt-3 border-t border-red-200/80 text-xs text-red-900 space-y-3">
                 <p className="font-medium leading-relaxed">
-                  ⚠️ <strong>Causa del Error:</strong> Tu proyecto en Supabase (<code>snjcjrjyoouzhixymbnq</code>) está recién creado y aún no tiene la tabla <code>site_config</code> ni el bucket <code>vazquez-media</code>.
+                  ⚠️ <strong>Causa del Error:</strong> Tu proyecto en Supabase (<code>{currentProjectId}</code>) aún no tiene la tabla <code>site_config</code> o las políticas de acceso RLS no han sido ejecutadas.
                 </p>
                 <div className="flex flex-wrap items-center gap-2.5 pt-1">
                   <button
@@ -448,12 +509,12 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({
                   </button>
 
                   <a
-                    href="https://supabase.com/dashboard/project/snjcjrjyoouzhixymbnq/sql/new"
+                    href={`https://supabase.com/dashboard/project/${currentProjectId}/sql/new`}
                     target="_blank"
                     rel="noopener noreferrer"
                     className="inline-flex items-center gap-1.5 bg-blue-600 hover:bg-blue-700 text-white font-bold px-4 py-2 rounded-lg text-xs transition-all shadow-xs"
                   >
-                    <span>2. Abrir SQL Editor en Supabase ↗</span>
+                    <span>2. Abrir SQL Editor en Supabase ({currentProjectId}) ↗</span>
                   </a>
 
                   <button
@@ -3579,10 +3640,10 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({
               <div className="bg-emerald-50/80 p-5 rounded-2xl border border-emerald-200 space-y-3">
                 <div className="flex items-center gap-2 text-emerald-900 font-extrabold text-base">
                   <Database className="w-5 h-5 text-[#1D7946]" />
-                  <span>Configuración del Proyecto Supabase (vazquezadmin)</span>
+                  <span>Configuración de Base de Datos y Sincronización Global</span>
                 </div>
                 <p className="text-xs text-emerald-800 leading-relaxed font-medium">
-                  Su proyecto de Supabase está preconfigurado para sincronización en la nube en tiempo real. Cuando realice cambios desde este panel autoadministrable, se actualizarán en Supabase y se cargarán automáticamente en su página web alojada en Hostinger.
+                  Al ejecutar el script SQL en su proyecto de Supabase, <strong>todos los cambios que guarde (textos, teléfonos, servicios, imágenes y colores) se guardarán en la nube de forma global</strong>. Cualquier usuario en cualquier computadora o teléfono móvil verá exactamente la información actualizada en vivo.
                 </p>
               </div>
 
@@ -3595,7 +3656,7 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({
                     <input
                       type="text"
                       readOnly
-                      value="snjcjrjyoouzhixymbnq"
+                      value={currentProjectId}
                       className="w-full px-4 py-2 rounded-lg border border-gray-300 text-xs font-mono bg-gray-100 text-gray-700"
                     />
                   </div>
@@ -3620,7 +3681,7 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({
                   </label>
                   <input
                     type="text"
-                    placeholder="https://snjcjrjyoouzhixymbnq.supabase.co"
+                    placeholder={`https://${currentProjectId}.supabase.co`}
                     value={formData.supabaseUrl}
                     onChange={(e) => setFormData({ ...formData, supabaseUrl: e.target.value })}
                     className="w-full px-4 py-2.5 rounded-xl border border-gray-300 text-sm font-mono"
@@ -3629,7 +3690,7 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({
 
                 <div>
                   <label className="block text-xs font-bold text-gray-700 uppercase mb-1">
-                    Supabase Anon Key (API Key)
+                    Supabase Anon Key (API Key Pública)
                   </label>
                   <input
                     type="text"
@@ -3654,31 +3715,47 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({
                 </div>
               </div>
 
-              {/* Guía para Hostinger y Código SQL de Inicialización */}
+              {/* Guía y Código SQL de Inicialización */}
               <div className="bg-blue-50/70 p-5 rounded-2xl border border-blue-200 space-y-4">
-                <div className="flex items-center gap-2 text-[#0E5197] font-extrabold text-sm uppercase tracking-wide">
-                  <Sparkles className="w-4 h-4 text-[#0E5197]" />
-                  <span>Script SQL de Inicialización en Supabase (Copiar en SQL Editor)</span>
+                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+                  <div className="flex items-center gap-2 text-[#0E5197] font-extrabold text-sm uppercase tracking-wide">
+                    <Sparkles className="w-4 h-4 text-[#0E5197]" />
+                    <span>Script SQL para Sincronización Global (Copiar en Supabase)</span>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <button
+                      type="button"
+                      onClick={handleCopySql}
+                      className="inline-flex items-center gap-1.5 bg-slate-900 hover:bg-slate-800 text-white font-bold px-3 py-1.5 rounded-lg text-xs transition-all shadow-xs cursor-pointer"
+                    >
+                      {copiedSql ? (
+                        <>
+                          <CheckCircle className="w-3.5 h-3.5 text-emerald-400" />
+                          <span>¡Copiado!</span>
+                        </>
+                      ) : (
+                        <>
+                          <Copy className="w-3.5 h-3.5 text-blue-400" />
+                          <span>Copiar SQL</span>
+                        </>
+                      )}
+                    </button>
+                    <a
+                      href={`https://supabase.com/dashboard/project/${currentProjectId}/sql/new`}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="inline-flex items-center gap-1 bg-blue-600 hover:bg-blue-700 text-white font-bold px-3 py-1.5 rounded-lg text-xs transition-all shadow-xs"
+                    >
+                      <span>Abrir SQL Editor ↗</span>
+                    </a>
+                  </div>
                 </div>
                 <p className="text-xs text-blue-900 leading-relaxed font-normal">
-                  Si aún no ha creado la tabla de configuración en su panel de Supabase, vaya al <strong>SQL Editor</strong> de su proyecto en Supabase (ID: <code>snjcjrjyoouzhixymbnq</code>) y ejecute este comando:
+                  Vaya al <strong>SQL Editor</strong> de su proyecto en Supabase (ID: <code>{currentProjectId}</code>), cree una nueva consulta (<i>New Query</i>), pegue este código y presione <strong>Run</strong>:
                 </p>
                 <div className="relative">
-                  <pre className="bg-slate-900 text-emerald-300 p-4 rounded-xl text-[11px] font-mono overflow-x-auto leading-relaxed">
-{`-- 1. Crear tabla para guardar la configuración completa del sitio
-create table if not exists public.site_config (
-  id text primary key,
-  content jsonb not null,
-  updated_at timestamp with time zone default timezone('utc'::text, now())
-);
-
--- 2. Habilitar permisos de lectura y actualización pública
-alter table public.site_config enable row level security;
-create policy "Acceso Publico site_config" on public.site_config for all using (true) with check (true);
-
--- 3. Crear Bucket 'moldmaq-media' en Supabase Storage
-insert into storage.buckets (id, name, public) values ('moldmaq-media', 'moldmaq-media', true) on conflict do nothing;
-create policy "Acceso Publico Storage Media" on storage.objects for all using (bucket_id = 'moldmaq-media') with check (bucket_id = 'moldmaq-media');`}
+                  <pre className="bg-slate-900 text-emerald-300 p-4 rounded-xl text-[11px] font-mono overflow-x-auto leading-relaxed max-h-[350px]">
+{SUPABASE_SQL_SETUP}
                   </pre>
                 </div>
 

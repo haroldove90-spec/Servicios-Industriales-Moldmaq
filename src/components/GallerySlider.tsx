@@ -7,13 +7,17 @@ interface GallerySliderProps {
   subtitle: string;
   images: GalleryImage[];
   galleryBgColor?: string;
+  galleryTitleColor?: string;
+  gallerySubtitleColor?: string;
 }
 
 export const GallerySlider: React.FC<GallerySliderProps> = ({
   title,
   subtitle,
   images,
-  galleryBgColor = "#ffffff"
+  galleryBgColor = "#ffffff",
+  galleryTitleColor = "#111827",
+  gallerySubtitleColor = "#D97706",
 }) => {
   const [selectedImage, setSelectedImage] = useState<GalleryImage | null>(null);
   const scrollRef = useRef<HTMLDivElement>(null);
@@ -63,10 +67,16 @@ export const GallerySlider: React.FC<GallerySliderProps> = ({
               <Factory className="w-3.5 h-3.5 text-[#D97706]" />
               <span>Instalaciones y Proyectos</span>
             </div>
-            <h2 className="text-3xl sm:text-4xl font-extrabold text-gray-900 tracking-tight">
+            <h2
+              style={{ color: galleryTitleColor }}
+              className="text-3xl sm:text-4xl font-extrabold tracking-tight"
+            >
               {title}
             </h2>
-            <p className="text-base sm:text-lg font-semibold text-[#D97706] mt-1">
+            <p
+              style={{ color: gallerySubtitleColor }}
+              className="text-base sm:text-lg font-semibold mt-1"
+            >
               {subtitle}
             </p>
           </div>

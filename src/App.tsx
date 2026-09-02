@@ -227,6 +227,13 @@ export default function App() {
           slides={config.heroSlides}
           whatsappNumber={config.whatsappNumber}
           defaultMessage={config.whatsappMessage}
+          heroButtonBgColor={config.heroPrimaryBtnBgColor || config.heroButtonBgColor}
+          heroButtonTextColor={config.heroPrimaryBtnTextColor || config.heroButtonTextColor}
+          heroSecButtonText={config.heroSecButtonText}
+          heroSecButtonBgColor={config.heroSecondaryBtnBgColor || config.heroSecButtonBgColor}
+          heroSecButtonTextColor={config.heroSecondaryBtnTextColor || config.heroSecButtonTextColor}
+          heroTitleColor={config.heroTitleColor}
+          heroSubtitleColor={config.heroSubtitleColor}
         />
 
         {/* 4. Welcome Message Below Slider */}
@@ -235,6 +242,26 @@ export default function App() {
           subtitle={config.welcomeMessageSubtitle}
           body={config.welcomeMessageBody}
           coverageAreas={config.coverageAreas}
+          welcomeBgColor={config.welcomeBgColor}
+          welcomeCardBgColor={config.welcomeCardBgColor}
+          welcomeCardBorderColor={config.welcomeCardBorderColor}
+          welcomeTagline={config.welcomeTagline}
+          welcomeTaglineColor={config.welcomeTaglineColor}
+          welcomeStripBgColor={config.welcomeStripBgColor || config.welcomeBottomStripBgColor}
+          welcomeStripTextColor={config.welcomeStripTextColor || config.welcomeBottomStripTextColor}
+          welcomeStripNotice={config.welcomeStripNotice}
+          welcomeStripUrgent={config.welcomeStripUrgent}
+          welcomeStripEmail={config.welcomeStripEmail}
+          welcomeBadgeText={config.welcomeBadgeText}
+          welcomeBadgeBgColor={config.welcomeBadgeBgColor}
+          welcomeBadgeTextColor={config.welcomeBadgeTextColor}
+          welcomeTitleColor={config.welcomeTitleColor}
+          welcomeSubtitleColor={config.welcomeSubtitleColor}
+          welcomeBodyColor={config.welcomeBodyColor}
+          welcomeCoverageTitle={config.welcomeCoverageTitle}
+          welcomeAreaBgColor={config.welcomeAreaBgColor}
+          welcomeAreaTextColor={config.welcomeAreaTextColor}
+          welcomeAreaBorderColor={config.welcomeAreaBorderColor}
         />
 
         {/* 5. About Us & 3 Value Added Points (#nosotros) */}
@@ -259,6 +286,22 @@ export default function App() {
           quoteBoxButtonText={config.aboutQuoteBoxButtonText}
           whatsappNumber={config.whatsappNumber}
           aboutBgColor={config.aboutBgColor}
+          aboutBadgeBgColor={config.aboutBadgeBgColor}
+          aboutBadgeTextColor={config.aboutBadgeTextColor}
+          aboutTitleColor={config.aboutTitleColor}
+          aboutHeadlineColor={config.aboutHeadlineColor}
+          aboutDescriptionColor={config.aboutDescriptionColor}
+          aboutCardBgColor={config.aboutCardBgColor}
+          aboutCardBorderColor={config.aboutCardBorderColor}
+          aboutCardIconColor={config.aboutCardIconColor}
+          aboutCardTitleColor={config.aboutCardTitleColor}
+          aboutCardTextColor={config.aboutCardTextColor}
+          aboutQuoteBoxBgColor={config.aboutQuoteBoxBgColor}
+          aboutQuoteBoxBorderColor={config.aboutQuoteBoxBorderColor}
+          aboutQuoteBoxTitleColor={config.aboutQuoteBoxTitleColor}
+          aboutQuoteBoxSubtitleColor={config.aboutQuoteBoxSubtitleColor}
+          aboutQuoteBoxButtonBgColor={config.aboutQuoteBoxButtonBgColor}
+          aboutQuoteBoxButtonTextColor={config.aboutQuoteBoxButtonTextColor}
         />
 
         {/* 6. Services Section (#servicios) */}
@@ -268,6 +311,18 @@ export default function App() {
           services={config.servicesList}
           whatsappNumber={config.whatsappNumber}
           servicesBgColor={config.servicesBgColor}
+          servicesBadgeBgColor={config.servicesBadgeBgColor}
+          servicesBadgeTextColor={config.servicesBadgeTextColor}
+          servicesTitleColor={config.servicesTitleColor}
+          servicesSubtitleColor={config.servicesSubtitleColor}
+          servicesCardBgColor={config.servicesCardBgColor}
+          servicesCardBorderColor={config.servicesCardBorderColor}
+          servicesCardIconColor={config.servicesCardIconColor}
+          servicesCardTitleColor={config.servicesCardTitleColor}
+          servicesCardTextColor={config.servicesCardTextColor}
+          servicesCardCtaColor={config.servicesCardCtaColor}
+          servicesCardBadgeBgColor={config.servicesCardBadgeBgColor}
+          servicesCardBadgeTextColor={config.servicesCardBadgeTextColor}
         />
 
         {/* 7. Horizontal Moving Business Gallery Slider */}
@@ -276,6 +331,8 @@ export default function App() {
           subtitle={config.gallerySubtitle}
           images={config.galleryImages}
           galleryBgColor={config.galleryBgColor}
+          galleryTitleColor={config.galleryTitleColor}
+          gallerySubtitleColor={config.gallerySubtitleColor}
         />
 
         {/* 8. Contact Section (#contacto) */}
@@ -305,6 +362,15 @@ export default function App() {
           contactMapTitle={config.contactMapTitle}
           contactMapSubtitle={config.contactMapSubtitle}
           contactMapAddress={config.contactMapAddress}
+          contactTitleColor={config.contactTitleColor}
+          contactSubtitleColor={config.contactSubtitleColor}
+          contactCardBgColor={config.contactCardBgColor}
+          contactCardBorderColor={config.contactCardBorderColor}
+          contactIconColor={config.contactIconColor}
+          contactFormButtonBgColor={config.contactFormButtonBgColor}
+          contactFormButtonTextColor={config.contactFormButtonTextColor}
+          contactDirectWaButtonBgColor={config.contactDirectWaButtonBgColor}
+          contactDirectWaButtonTextColor={config.contactDirectWaButtonTextColor}
         />
       </main>
 
@@ -326,6 +392,15 @@ export default function App() {
         onOpenAdmin={handleOpenAdmin}
         footerBgColor={config.footerBgColor}
         footerTextColor={config.footerTextColor}
+        footerHeadingsColor={config.footerHeadingsColor}
+        footerAccentColor={config.footerAccentColor}
+        footerNavTitle={config.footerNavTitle}
+        footerPlantTitle={config.footerPlantTitle}
+        footerDescriptionText={config.footerDescriptionText}
+        footerWaButtonText={config.footerWaButtonText}
+        footerWaButtonBgColor={config.footerWaButtonBgColor}
+        footerWaButtonTextColor={config.footerWaButtonTextColor}
+        footerCopyrightText={config.footerCopyrightText}
       />
 
       {/* Floating WhatsApp Action Button */}

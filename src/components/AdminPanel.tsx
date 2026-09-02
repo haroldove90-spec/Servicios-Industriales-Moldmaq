@@ -74,6 +74,67 @@ create policy "Permitir subir imagenes publicas" on storage.objects for insert w
 drop policy if exists "Permitir actualizar imagenes publicas" on storage.objects;
 create policy "Permitir actualizar imagenes publicas" on storage.objects for update using (bucket_id = 'moldmaq-media');`;
 
+interface ColorPickerInputProps {
+  label: string;
+  value?: string;
+  onChange: (val: string) => void;
+  defaultColor?: string;
+  description?: string;
+}
+
+export const ColorPickerInput: React.FC<ColorPickerInputProps> = ({
+  label,
+  value,
+  onChange,
+  defaultColor = '#000000',
+  description
+}) => {
+  const currentColor = value || defaultColor;
+  // Ensure valid hex color for html input type color
+  const safeHex = currentColor.startsWith('#') && (currentColor.length === 7 || currentColor.length === 4)
+    ? currentColor
+    : (defaultColor.startsWith('#') && defaultColor.length === 7 ? defaultColor : '#0F3B68');
+
+  return (
+    <div className="p-3 bg-white rounded-xl border border-gray-200 space-y-1.5 shadow-2xs hover:border-blue-400 transition-colors">
+      <div className="flex items-center justify-between gap-1">
+        <label className="text-[11px] font-bold text-gray-700 uppercase tracking-wide truncate max-w-[200px]" title={label}>
+          {label}
+        </label>
+        {value && value.toLowerCase() !== defaultColor.toLowerCase() && (
+          <button
+            type="button"
+            onClick={() => onChange(defaultColor)}
+            className="text-[10px] text-gray-400 hover:text-red-600 font-bold cursor-pointer shrink-0"
+            title="Restablecer color predeterminado"
+          >
+            Restablecer
+          </button>
+        )}
+      </div>
+      {description && <p className="text-[10px] text-gray-500 leading-tight">{description}</p>}
+      <div className="flex items-center gap-2 pt-0.5">
+        <input
+          type="color"
+          value={safeHex}
+          onChange={(e) => onChange(e.target.value)}
+          className="w-8 h-8 rounded-lg cursor-pointer border border-gray-300 shrink-0 p-0.5"
+        />
+        <input
+          type="text"
+          value={currentColor}
+          onChange={(e) => onChange(e.target.value)}
+          className="w-full px-2.5 py-1 text-xs border border-gray-300 rounded-lg font-mono uppercase text-gray-800 font-bold focus:ring-1 focus:ring-[#0F3B68]"
+        />
+        <div 
+          className="w-6 h-6 rounded-md border border-gray-300 shadow-2xs shrink-0" 
+          style={{ backgroundColor: currentColor }} 
+        />
+      </div>
+    </div>
+  );
+};
+
 export const AdminPanel: React.FC<AdminPanelProps> = ({
   isOpen,
   onClose,
@@ -82,7 +143,7 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({
   onUpdateConfig,
 }) => {
   const [formData, setFormData] = useState<SiteConfig>(config);
-  const [activeTab, setActiveTab] = useState<'general' | 'contacts' | 'slider' | 'content' | 'services' | 'gallery' | 'supabase'>('general');
+  const [activeTab, setActiveTab] = useState<'general' | 'colors' | 'contacts' | 'slider' | 'content' | 'services' | 'gallery' | 'footer' | 'supabase'>('general');
   const [isUploading, setIsUploading] = useState(false);
   const [saveStatus, setSaveStatus] = useState<{ type: 'success' | 'error' | null; message: string }>({ type: null, message: '' });
   const [copiedSql, setCopiedSql] = useState(false);
@@ -416,11 +477,19 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({
               <span className="text-slate-400 font-bold uppercase tracking-wider text-[11px]">Accesos Rápidos:</span>
               <button
                 type="button"
+                onClick={() => setActiveTab('colors')}
+                className="inline-flex items-center gap-1 bg-purple-500/20 hover:bg-purple-500/30 text-purple-300 px-2.5 py-1 rounded-md font-bold text-[11px] border border-purple-500/40 transition-colors cursor-pointer"
+              >
+                <Palette className="w-3 h-3 text-purple-400" />
+                <span>🎨 Colores de Botones, Recuadros, Títulos...</span>
+              </button>
+              <button
+                type="button"
                 onClick={() => setActiveTab('contacts')}
                 className="inline-flex items-center gap-1 bg-amber-500/20 hover:bg-amber-500/30 text-amber-300 px-2.5 py-1 rounded-md font-bold text-[11px] border border-amber-500/40 transition-colors cursor-pointer"
               >
                 <MapPin className="w-3 h-3 text-amber-400" />
-                <span>📍 Ir a Contacto, Mapa Google & Teléfonos</span>
+                <span>📍 Contacto, Mapa Google & Teléfonos</span>
               </button>
               <button
                 type="button"
@@ -428,7 +497,7 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({
                 className="inline-flex items-center gap-1 bg-blue-500/20 hover:bg-blue-500/30 text-blue-300 px-2.5 py-1 rounded-md font-bold text-[11px] border border-blue-500/40 transition-colors cursor-pointer"
               >
                 <Sparkles className="w-3 h-3 text-blue-400" />
-                <span>⭐ Ir a Editar Título "Líderes en Maquinados..."</span>
+                <span>⭐ Editar Título "Líderes en Maquinados..."</span>
               </button>
             </div>
             <span className="text-[11px] text-slate-400 font-medium hidden sm:inline">Haga clic en cualquier pestaña para editar</span>
@@ -447,7 +516,20 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({
                 }`}
               >
                 <Palette className="w-3.5 h-3.5 sm:w-4 sm:h-4 shrink-0 text-blue-400" />
-                <span>1. Identidad & Colores</span>
+                <span>1. Identidad & Logo</span>
+              </button>
+
+              <button
+                type="button"
+                onClick={() => setActiveTab('colors')}
+                className={`flex items-center gap-1.5 sm:gap-2 px-3 py-2 sm:px-3.5 sm:py-2.5 rounded-lg font-bold text-xs uppercase tracking-wider transition-all cursor-pointer ${
+                  activeTab === 'colors'
+                    ? 'bg-purple-600 text-white shadow-md ring-2 ring-purple-400'
+                    : 'text-purple-300 hover:text-white hover:bg-purple-950/60 bg-slate-900 border border-purple-500/40'
+                }`}
+              >
+                <Palette className="w-3.5 h-3.5 sm:w-4 sm:h-4 shrink-0 text-purple-400" />
+                <span className="font-extrabold">2. 🎨 Colores & Estilos Web</span>
               </button>
 
               <button
@@ -460,7 +542,7 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({
                 }`}
               >
                 <MapPin className="w-3.5 h-3.5 sm:w-4 sm:h-4 shrink-0 text-amber-400" />
-                <span className="font-extrabold">2. 📍 Contacto, Mapa Google & Teléfonos</span>
+                <span className="font-extrabold">3. 📍 Contacto & Mapa Google</span>
               </button>
 
               <button
@@ -473,7 +555,7 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({
                 }`}
               >
                 <ImageIcon className="w-3.5 h-3.5 sm:w-4 sm:h-4 shrink-0 text-blue-400" />
-                <span>3. Slider Principal ({formData.heroSlides.length})</span>
+                <span>4. Slider Principal ({formData.heroSlides.length})</span>
               </button>
 
               <button
@@ -486,7 +568,7 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({
                 }`}
               >
                 <FileText className="w-3.5 h-3.5 sm:w-4 sm:h-4 shrink-0 text-blue-400" />
-                <span className="font-extrabold">4. ⭐ Bienvenida & Nosotros ("Líderes...")</span>
+                <span className="font-extrabold">5. ⭐ Bienvenida & Nosotros ("Líderes...")</span>
               </button>
 
               <button
@@ -499,7 +581,7 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({
                 }`}
               >
                 <Sparkles className="w-3.5 h-3.5 sm:w-4 sm:h-4 shrink-0 text-blue-400" />
-                <span>5. Servicios</span>
+                <span>6. Servicios</span>
               </button>
 
               <button
@@ -512,7 +594,20 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({
                 }`}
               >
                 <ImageIcon className="w-3.5 h-3.5 sm:w-4 sm:h-4 shrink-0 text-blue-400" />
-                <span>6. Galería ({formData.galleryImages.length})</span>
+                <span>7. Galería ({formData.galleryImages.length})</span>
+              </button>
+
+              <button
+                type="button"
+                onClick={() => setActiveTab('footer')}
+                className={`flex items-center gap-1.5 sm:gap-2 px-3 py-2 sm:px-3.5 sm:py-2.5 rounded-lg font-bold text-xs uppercase tracking-wider transition-all cursor-pointer ${
+                  activeTab === 'footer'
+                    ? 'bg-blue-600 text-white shadow-md ring-2 ring-blue-400'
+                    : 'text-slate-300 hover:text-white hover:bg-slate-800 bg-slate-900 border border-slate-800'
+                }`}
+              >
+                <FileText className="w-3.5 h-3.5 sm:w-4 sm:h-4 shrink-0 text-blue-400" />
+                <span>8. Pie de Página</span>
               </button>
 
               <button
@@ -525,7 +620,7 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({
                 }`}
               >
                 <Database className="w-3.5 h-3.5 sm:w-4 sm:h-4 shrink-0" />
-                <span className="font-extrabold text-white">7. Supabase DB</span>
+                <span className="font-extrabold text-white">9. Supabase DB</span>
               </button>
             </div>
           </div>
@@ -1503,7 +1598,583 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({
             </div>
           )}
 
-          {/* TAB 2: CONTACTO, TELÉFONOS, MAPA DE GOOGLE & COBERTURA */}
+          {/* TAB 2: 🎨 PALETA GLOBAL & COLORES DE TODA LA WEB */}
+          {activeTab === 'colors' && (
+            <div className="space-y-6">
+              {/* Header Banner */}
+              <div className="bg-linear-to-r from-purple-900 to-indigo-900 text-white p-6 rounded-2xl shadow-md border border-purple-800 space-y-2">
+                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                  <div className="space-y-1">
+                    <h3 className="font-extrabold text-lg flex items-center gap-2">
+                      <Palette className="w-5 h-5 text-purple-300" />
+                      <span>Centro de Control de Colores & Estilos Visuales</span>
+                    </h3>
+                    <p className="text-xs text-purple-200 leading-relaxed max-w-2xl">
+                      Personalice en tiempo real los colores de fondos, botones, recuadros, barras, iconos, títulos, subtítulos y textos de toda la página web sin excepción. Todos los cambios se reflejan inmediatamente en la vista previa.
+                    </p>
+                  </div>
+                  <button
+                    type="button"
+                    onClick={handleSave}
+                    className="inline-flex items-center gap-2 bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs px-5 py-2.5 rounded-xl shadow-md transition-all shrink-0 cursor-pointer"
+                  >
+                    <Save className="w-4 h-4" />
+                    <span>Guardar Colores</span>
+                  </button>
+                </div>
+              </div>
+
+              {/* 1. COLORES DE BOTONES */}
+              <div className="bg-gray-50 p-5 rounded-2xl border border-gray-200 space-y-4">
+                <div className="flex items-center justify-between">
+                  <h4 className="font-extrabold text-sm text-gray-900 flex items-center gap-2">
+                    <span className="w-2.5 h-2.5 rounded-full bg-amber-500"></span>
+                    <span>1. Colores de Botones (Fondo y Texto)</span>
+                  </h4>
+                  <span className="text-[11px] font-bold bg-amber-100 text-amber-900 px-2.5 py-0.5 rounded-full">Botones de Toda la Web</span>
+                </div>
+                <p className="text-xs text-gray-600">
+                  Defina los fondos y contrastes de texto para cada botón de acción de la plataforma.
+                </p>
+
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
+                  <ColorPickerInput
+                    label="Botón Cotizar Barra Sup. (Fondo)"
+                    value={formData.topBarButtonBgColor}
+                    defaultColor="#D97706"
+                    onChange={(val) => setFormData({ ...formData, topBarButtonBgColor: val })}
+                  />
+                  <ColorPickerInput
+                    label="Botón Cotizar Barra Sup. (Texto)"
+                    value={formData.topBarButtonTextColor}
+                    defaultColor="#ffffff"
+                    onChange={(val) => setFormData({ ...formData, topBarButtonTextColor: val })}
+                  />
+                  <ColorPickerInput
+                    label="Botón CTA Cabecera Header (Fondo)"
+                    value={formData.headerCtaBgColor}
+                    defaultColor="#D97706"
+                    onChange={(val) => setFormData({ ...formData, headerCtaBgColor: val })}
+                  />
+                  <ColorPickerInput
+                    label="Botón CTA Cabecera Header (Texto)"
+                    value={formData.headerCtaTextColor}
+                    defaultColor="#ffffff"
+                    onChange={(val) => setFormData({ ...formData, headerCtaTextColor: val })}
+                  />
+                  <ColorPickerInput
+                    label="Botón Principal Slider (Fondo)"
+                    value={formData.heroPrimaryBtnBgColor || formData.heroButtonBgColor}
+                    defaultColor="#D97706"
+                    onChange={(val) => setFormData({ ...formData, heroPrimaryBtnBgColor: val, heroButtonBgColor: val })}
+                  />
+                  <ColorPickerInput
+                    label="Botón Principal Slider (Texto)"
+                    value={formData.heroPrimaryBtnTextColor || formData.heroButtonTextColor}
+                    defaultColor="#ffffff"
+                    onChange={(val) => setFormData({ ...formData, heroPrimaryBtnTextColor: val, heroButtonTextColor: val })}
+                  />
+                  <ColorPickerInput
+                    label="Botón Secundario Slider (Fondo)"
+                    value={formData.heroSecondaryBtnBgColor || formData.heroSecButtonBgColor}
+                    defaultColor="rgba(255, 255, 255, 0.1)"
+                    onChange={(val) => setFormData({ ...formData, heroSecondaryBtnBgColor: val, heroSecButtonBgColor: val })}
+                  />
+                  <ColorPickerInput
+                    label="Botón Secundario Slider (Texto)"
+                    value={formData.heroSecondaryBtnTextColor || formData.heroSecButtonTextColor}
+                    defaultColor="#ffffff"
+                    onChange={(val) => setFormData({ ...formData, heroSecondaryBtnTextColor: val, heroSecButtonTextColor: val })}
+                  />
+                  <ColorPickerInput
+                    label="Botón Cotizar Nosotros (Fondo)"
+                    value={formData.aboutQuoteBoxButtonBgColor}
+                    defaultColor="#D97706"
+                    onChange={(val) => setFormData({ ...formData, aboutQuoteBoxButtonBgColor: val })}
+                  />
+                  <ColorPickerInput
+                    label="Botón Cotizar Nosotros (Texto)"
+                    value={formData.aboutQuoteBoxButtonTextColor}
+                    defaultColor="#ffffff"
+                    onChange={(val) => setFormData({ ...formData, aboutQuoteBoxButtonTextColor: val })}
+                  />
+                  <ColorPickerInput
+                    label="Botón Formulario Contacto (Fondo)"
+                    value={formData.contactFormButtonBgColor}
+                    defaultColor="#0F3B68"
+                    onChange={(val) => setFormData({ ...formData, contactFormButtonBgColor: val })}
+                  />
+                  <ColorPickerInput
+                    label="Botón Formulario Contacto (Texto)"
+                    value={formData.contactFormButtonTextColor}
+                    defaultColor="#ffffff"
+                    onChange={(val) => setFormData({ ...formData, contactFormButtonTextColor: val })}
+                  />
+                  <ColorPickerInput
+                    label="Botón WhatsApp Contacto (Fondo)"
+                    value={formData.contactDirectWaButtonBgColor || formData.contactWaButtonBgColor}
+                    defaultColor="#25D366"
+                    onChange={(val) => setFormData({ ...formData, contactDirectWaButtonBgColor: val, contactWaButtonBgColor: val })}
+                  />
+                  <ColorPickerInput
+                    label="Botón WhatsApp Contacto (Texto)"
+                    value={formData.contactDirectWaButtonTextColor || formData.contactWaButtonTextColor}
+                    defaultColor="#ffffff"
+                    onChange={(val) => setFormData({ ...formData, contactDirectWaButtonTextColor: val, contactWaButtonTextColor: val })}
+                  />
+                  <ColorPickerInput
+                    label="Botón WhatsApp Pie Página (Fondo)"
+                    value={formData.footerWaButtonBgColor}
+                    defaultColor="#25D366"
+                    onChange={(val) => setFormData({ ...formData, footerWaButtonBgColor: val })}
+                  />
+                  <ColorPickerInput
+                    label="Botón WhatsApp Pie Página (Texto)"
+                    value={formData.footerWaButtonTextColor}
+                    defaultColor="#ffffff"
+                    onChange={(val) => setFormData({ ...formData, footerWaButtonTextColor: val })}
+                  />
+                  <ColorPickerInput
+                    label="Botón Flotante WhatsApp (Fondo)"
+                    value={formData.floatingWaBgColor}
+                    defaultColor="#25D366"
+                    onChange={(val) => setFormData({ ...formData, floatingWaBgColor: val })}
+                  />
+                  <ColorPickerInput
+                    label="Botón Flotante WhatsApp (Texto)"
+                    value={formData.floatingWaTextColor}
+                    defaultColor="#ffffff"
+                    onChange={(val) => setFormData({ ...formData, floatingWaTextColor: val })}
+                  />
+                </div>
+              </div>
+
+              {/* 2. COLORES DE RECUADROS, TARJETAS Y BORDES */}
+              <div className="bg-gray-50 p-5 rounded-2xl border border-gray-200 space-y-4">
+                <div className="flex items-center justify-between">
+                  <h4 className="font-extrabold text-sm text-gray-900 flex items-center gap-2">
+                    <span className="w-2.5 h-2.5 rounded-full bg-blue-600"></span>
+                    <span>2. Colores de Recuadros, Tarjetas y Bordes</span>
+                  </h4>
+                  <span className="text-[11px] font-bold bg-blue-100 text-[#0F3B68] px-2.5 py-0.5 rounded-full">Recuadros y Cajas</span>
+                </div>
+                <p className="text-xs text-gray-600">
+                  Modifique los fondos y bordes de los recuadros de contenido, tarjetas de servicios y cajas de información.
+                </p>
+
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
+                  <ColorPickerInput
+                    label="Tarjeta Bienvenida (Fondo)"
+                    value={formData.welcomeCardBgColor}
+                    defaultColor="#ffffff"
+                    onChange={(val) => setFormData({ ...formData, welcomeCardBgColor: val })}
+                  />
+                  <ColorPickerInput
+                    label="Tarjeta Bienvenida (Borde)"
+                    value={formData.welcomeCardBorderColor}
+                    defaultColor="#e2e8f0"
+                    onChange={(val) => setFormData({ ...formData, welcomeCardBorderColor: val })}
+                  />
+                  <ColorPickerInput
+                    label="Pastillas Cobertura (Fondo)"
+                    value={formData.welcomeAreaBgColor}
+                    defaultColor="#f8fafc"
+                    onChange={(val) => setFormData({ ...formData, welcomeAreaBgColor: val })}
+                  />
+                  <ColorPickerInput
+                    label="Pastillas Cobertura (Borde)"
+                    value={formData.welcomeAreaBorderColor}
+                    defaultColor="#cbd5e1"
+                    onChange={(val) => setFormData({ ...formData, welcomeAreaBorderColor: val })}
+                  />
+                  <ColorPickerInput
+                    label="Pastillas Cobertura (Texto)"
+                    value={formData.welcomeAreaTextColor}
+                    defaultColor="#334155"
+                    onChange={(val) => setFormData({ ...formData, welcomeAreaTextColor: val })}
+                  />
+                  <ColorPickerInput
+                    label="Tarjetas Características Nosotros (Fondo)"
+                    value={formData.aboutCardBgColor}
+                    defaultColor="#ffffff"
+                    onChange={(val) => setFormData({ ...formData, aboutCardBgColor: val })}
+                  />
+                  <ColorPickerInput
+                    label="Tarjetas Características Nosotros (Borde)"
+                    value={formData.aboutCardBorderColor}
+                    defaultColor="#e2e8f0"
+                    onChange={(val) => setFormData({ ...formData, aboutCardBorderColor: val })}
+                  />
+                  <ColorPickerInput
+                    label="Recuadro Cotización Nosotros (Fondo)"
+                    value={formData.aboutQuoteBoxBgColor}
+                    defaultColor="#0F3B68"
+                    onChange={(val) => setFormData({ ...formData, aboutQuoteBoxBgColor: val })}
+                  />
+                  <ColorPickerInput
+                    label="Recuadro Cotización Nosotros (Borde)"
+                    value={formData.aboutQuoteBoxBorderColor}
+                    defaultColor="#0F3B68"
+                    onChange={(val) => setFormData({ ...formData, aboutQuoteBoxBorderColor: val })}
+                  />
+                  <ColorPickerInput
+                    label="Tarjetas Servicios (Fondo)"
+                    value={formData.servicesCardBgColor || formData.serviceCardBgColor}
+                    defaultColor="#ffffff"
+                    onChange={(val) => setFormData({ ...formData, servicesCardBgColor: val, serviceCardBgColor: val })}
+                  />
+                  <ColorPickerInput
+                    label="Tarjetas Servicios (Borde)"
+                    value={formData.servicesCardBorderColor || formData.serviceCardBorderColor}
+                    defaultColor="#e2e8f0"
+                    onChange={(val) => setFormData({ ...formData, servicesCardBorderColor: val, serviceCardBorderColor: val })}
+                  />
+                  <ColorPickerInput
+                    label="Tarjetas de Contacto (Fondo)"
+                    value={formData.contactCardBgColor}
+                    defaultColor="#ffffff"
+                    onChange={(val) => setFormData({ ...formData, contactCardBgColor: val })}
+                  />
+                  <ColorPickerInput
+                    label="Tarjetas de Contacto (Borde)"
+                    value={formData.contactCardBorderColor}
+                    defaultColor="#e2e8f0"
+                    onChange={(val) => setFormData({ ...formData, contactCardBorderColor: val })}
+                  />
+                </div>
+              </div>
+
+              {/* 3. COLORES DE BARRAS Y FONDOS DE SECCIÓN */}
+              <div className="bg-gray-50 p-5 rounded-2xl border border-gray-200 space-y-4">
+                <div className="flex items-center justify-between">
+                  <h4 className="font-extrabold text-sm text-gray-900 flex items-center gap-2">
+                    <span className="w-2.5 h-2.5 rounded-full bg-emerald-600"></span>
+                    <span>3. Colores de Barras y Fondos de Sección</span>
+                  </h4>
+                  <span className="text-[11px] font-bold bg-emerald-100 text-emerald-900 px-2.5 py-0.5 rounded-full">Barras y Secciones</span>
+                </div>
+                <p className="text-xs text-gray-600">
+                  Configure los fondos de las barras superiores, menús y de cada una de las secciones principales del sitio.
+                </p>
+
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
+                  <ColorPickerInput
+                    label="Barra Superior Top Bar (Fondo)"
+                    value={formData.topBarBgColor}
+                    defaultColor="#0F3B68"
+                    onChange={(val) => setFormData({ ...formData, topBarBgColor: val })}
+                  />
+                  <ColorPickerInput
+                    label="Cabecera Principal Header (Fondo)"
+                    value={formData.headerBgColor}
+                    defaultColor="#ffffff"
+                    onChange={(val) => setFormData({ ...formData, headerBgColor: val })}
+                  />
+                  <ColorPickerInput
+                    label="Menú Móvil (Fondo)"
+                    value={formData.mobileMenuBgColor}
+                    defaultColor="#ffffff"
+                    onChange={(val) => setFormData({ ...formData, mobileMenuBgColor: val })}
+                  />
+                  <ColorPickerInput
+                    label="Menú Móvil (Borde)"
+                    value={formData.mobileMenuBorderColor}
+                    defaultColor="#e2e8f0"
+                    onChange={(val) => setFormData({ ...formData, mobileMenuBorderColor: val })}
+                  />
+                  <ColorPickerInput
+                    label="Sección Bienvenida (Fondo)"
+                    value={formData.welcomeBgColor}
+                    defaultColor="#f1f5f9"
+                    onChange={(val) => setFormData({ ...formData, welcomeBgColor: val })}
+                  />
+                  <ColorPickerInput
+                    label="Franja de Aviso Bienvenida (Fondo)"
+                    value={formData.welcomeStripBgColor || formData.welcomeBottomStripBgColor}
+                    defaultColor="#0F3B68"
+                    onChange={(val) => setFormData({ ...formData, welcomeStripBgColor: val, welcomeBottomStripBgColor: val })}
+                  />
+                  <ColorPickerInput
+                    label="Franja de Aviso Bienvenida (Texto)"
+                    value={formData.welcomeStripTextColor || formData.welcomeBottomStripTextColor}
+                    defaultColor="#ffffff"
+                    onChange={(val) => setFormData({ ...formData, welcomeStripTextColor: val, welcomeBottomStripTextColor: val })}
+                  />
+                  <ColorPickerInput
+                    label="Sección Nosotros (Fondo)"
+                    value={formData.aboutBgColor}
+                    defaultColor="#ffffff"
+                    onChange={(val) => setFormData({ ...formData, aboutBgColor: val })}
+                  />
+                  <ColorPickerInput
+                    label="Sección Servicios (Fondo)"
+                    value={formData.servicesBgColor}
+                    defaultColor="#f8fafc"
+                    onChange={(val) => setFormData({ ...formData, servicesBgColor: val })}
+                  />
+                  <ColorPickerInput
+                    label="Sección Galería Flota (Fondo)"
+                    value={formData.galleryBgColor}
+                    defaultColor="#ffffff"
+                    onChange={(val) => setFormData({ ...formData, galleryBgColor: val })}
+                  />
+                  <ColorPickerInput
+                    label="Sección Contacto (Fondo)"
+                    value={formData.contactBgColor}
+                    defaultColor="#f8fafc"
+                    onChange={(val) => setFormData({ ...formData, contactBgColor: val })}
+                  />
+                  <ColorPickerInput
+                    label="Pie de Página Footer (Fondo)"
+                    value={formData.footerBgColor}
+                    defaultColor="#0B132B"
+                    onChange={(val) => setFormData({ ...formData, footerBgColor: val })}
+                  />
+                </div>
+              </div>
+
+              {/* 4. COLORES DE ÍCONOS Y DISTINTIVOS / BADGES */}
+              <div className="bg-gray-50 p-5 rounded-2xl border border-gray-200 space-y-4">
+                <div className="flex items-center justify-between">
+                  <h4 className="font-extrabold text-sm text-gray-900 flex items-center gap-2">
+                    <span className="w-2.5 h-2.5 rounded-full bg-cyan-600"></span>
+                    <span>4. Colores de Íconos y Distintivos (Badges)</span>
+                  </h4>
+                  <span className="text-[11px] font-bold bg-cyan-100 text-cyan-900 px-2.5 py-0.5 rounded-full">Íconos & Insignias</span>
+                </div>
+                <p className="text-xs text-gray-600">
+                  Personalice el color de los iconos de servicios, tarjetas de contacto e insignias de calidad.
+                </p>
+
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
+                  <ColorPickerInput
+                    label="Íconos Barra Superior"
+                    value={formData.topBarIconColor}
+                    defaultColor="#D97706"
+                    onChange={(val) => setFormData({ ...formData, topBarIconColor: val })}
+                  />
+                  <ColorPickerInput
+                    label="Insignia / Badge Bienvenida (Fondo)"
+                    value={formData.welcomeBadgeBgColor}
+                    defaultColor="rgba(15, 59, 104, 0.08)"
+                    onChange={(val) => setFormData({ ...formData, welcomeBadgeBgColor: val })}
+                  />
+                  <ColorPickerInput
+                    label="Insignia / Badge Bienvenida (Texto)"
+                    value={formData.welcomeBadgeTextColor}
+                    defaultColor="#0F3B68"
+                    onChange={(val) => setFormData({ ...formData, welcomeBadgeTextColor: val })}
+                  />
+                  <ColorPickerInput
+                    label="Insignia / Badge Nosotros (Fondo)"
+                    value={formData.aboutBadgeBgColor}
+                    defaultColor="rgba(15, 59, 104, 0.08)"
+                    onChange={(val) => setFormData({ ...formData, aboutBadgeBgColor: val })}
+                  />
+                  <ColorPickerInput
+                    label="Insignia / Badge Nosotros (Texto)"
+                    value={formData.aboutBadgeTextColor}
+                    defaultColor="#0F3B68"
+                    onChange={(val) => setFormData({ ...formData, aboutBadgeTextColor: val })}
+                  />
+                  <ColorPickerInput
+                    label="Íconos Características Nosotros"
+                    value={formData.aboutCardIconColor || formData.aboutIconColor}
+                    defaultColor="#0F3B68"
+                    onChange={(val) => setFormData({ ...formData, aboutCardIconColor: val, aboutIconColor: val })}
+                  />
+                  <ColorPickerInput
+                    label="Íconos Tarjetas de Servicios"
+                    value={formData.servicesCardIconColor || formData.serviceCardIconColor}
+                    defaultColor="#0F3B68"
+                    onChange={(val) => setFormData({ ...formData, servicesCardIconColor: val, serviceCardIconColor: val })}
+                  />
+                  <ColorPickerInput
+                    label="Insignia Servicios (Fondo)"
+                    value={formData.servicesCardBadgeBgColor || formData.serviceCardBadgeBgColor}
+                    defaultColor="#eff6ff"
+                    onChange={(val) => setFormData({ ...formData, servicesCardBadgeBgColor: val, serviceCardBadgeBgColor: val })}
+                  />
+                  <ColorPickerInput
+                    label="Insignia Servicios (Texto)"
+                    value={formData.servicesCardBadgeTextColor || formData.serviceCardBadgeTextColor}
+                    defaultColor="#0F3B68"
+                    onChange={(val) => setFormData({ ...formData, servicesCardBadgeTextColor: val, serviceCardBadgeTextColor: val })}
+                  />
+                  <ColorPickerInput
+                    label="Íconos Tarjetas de Contacto"
+                    value={formData.contactIconColor}
+                    defaultColor="#0F3B68"
+                    onChange={(val) => setFormData({ ...formData, contactIconColor: val })}
+                  />
+                  <ColorPickerInput
+                    label="Acentos & Íconos Pie de Página"
+                    value={formData.footerAccentColor}
+                    defaultColor="#D97706"
+                    onChange={(val) => setFormData({ ...formData, footerAccentColor: val })}
+                  />
+                </div>
+              </div>
+
+              {/* 5. COLORES DE TÍTULOS, SUBTÍTULOS Y TEXTOS */}
+              <div className="bg-gray-50 p-5 rounded-2xl border border-gray-200 space-y-4">
+                <div className="flex items-center justify-between">
+                  <h4 className="font-extrabold text-sm text-gray-900 flex items-center gap-2">
+                    <span className="w-2.5 h-2.5 rounded-full bg-rose-600"></span>
+                    <span>5. Colores de Títulos, Subtítulos y Textos</span>
+                  </h4>
+                  <span className="text-[11px] font-bold bg-rose-100 text-rose-900 px-2.5 py-0.5 rounded-full">Tipografía & Encabezados</span>
+                </div>
+                <p className="text-xs text-gray-600">
+                  Modifique los colores de los títulos principales, subtítulos destacados y párrafos descriptivos.
+                </p>
+
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
+                  <ColorPickerInput
+                    label="Nombre de Marca / Logo (Texto)"
+                    value={formData.brandNameColor}
+                    defaultColor="#0F3B68"
+                    onChange={(val) => setFormData({ ...formData, brandNameColor: val })}
+                  />
+                  <ColorPickerInput
+                    label="Sufijo S.A. de Marca (Texto)"
+                    value={formData.brandSuffixColor}
+                    defaultColor="#D97706"
+                    onChange={(val) => setFormData({ ...formData, brandSuffixColor: val })}
+                  />
+                  <ColorPickerInput
+                    label="Subtítulo del Logo (Texto)"
+                    value={formData.brandSubtitleColor}
+                    defaultColor="#475569"
+                    onChange={(val) => setFormData({ ...formData, brandSubtitleColor: val })}
+                  />
+                  <ColorPickerInput
+                    label="Títulos Diapositivas Slider"
+                    value={formData.heroTitleColor}
+                    defaultColor="#ffffff"
+                    onChange={(val) => setFormData({ ...formData, heroTitleColor: val })}
+                  />
+                  <ColorPickerInput
+                    label="Subtítulos Diapositivas Slider"
+                    value={formData.heroSubtitleColor}
+                    defaultColor="#e2e8f0"
+                    onChange={(val) => setFormData({ ...formData, heroSubtitleColor: val })}
+                  />
+                  <ColorPickerInput
+                    label="Título Mensaje Bienvenida"
+                    value={formData.welcomeTitleColor}
+                    defaultColor="#0F3B68"
+                    onChange={(val) => setFormData({ ...formData, welcomeTitleColor: val })}
+                  />
+                  <ColorPickerInput
+                    label="Subtítulo Mensaje Bienvenida"
+                    value={formData.welcomeSubtitleColor}
+                    defaultColor="#D97706"
+                    onChange={(val) => setFormData({ ...formData, welcomeSubtitleColor: val })}
+                  />
+                  <ColorPickerInput
+                    label="Cuerpo Texto Bienvenida"
+                    value={formData.welcomeBodyColor}
+                    defaultColor="#475569"
+                    onChange={(val) => setFormData({ ...formData, welcomeBodyColor: val })}
+                  />
+                  <ColorPickerInput
+                    label="Título Sección Nosotros"
+                    value={formData.aboutTitleColor}
+                    defaultColor="#0F3B68"
+                    onChange={(val) => setFormData({ ...formData, aboutTitleColor: val })}
+                  />
+                  <ColorPickerInput
+                    label="Subtítulo Sección Nosotros"
+                    value={formData.aboutSubtitleColor}
+                    defaultColor="#D97706"
+                    onChange={(val) => setFormData({ ...formData, aboutSubtitleColor: val })}
+                  />
+                  <ColorPickerInput
+                    label="⭐ Encabezado Destacado Nosotros ('Líderes...')"
+                    value={formData.aboutHeadlineColor}
+                    defaultColor="#0F3B68"
+                    onChange={(val) => setFormData({ ...formData, aboutHeadlineColor: val })}
+                    description="Color para el título grande 'Líderes en Maquinados CNC...'"
+                  />
+                  <ColorPickerInput
+                    label="Descripción Empresa Nosotros"
+                    value={formData.aboutDescriptionColor}
+                    defaultColor="#475569"
+                    onChange={(val) => setFormData({ ...formData, aboutDescriptionColor: val })}
+                  />
+                  <ColorPickerInput
+                    label="Título Sección Servicios"
+                    value={formData.servicesTitleColor}
+                    defaultColor="#0F3B68"
+                    onChange={(val) => setFormData({ ...formData, servicesTitleColor: val })}
+                  />
+                  <ColorPickerInput
+                    label="Subtítulo Sección Servicios"
+                    value={formData.servicesSubtitleColor}
+                    defaultColor="#D97706"
+                    onChange={(val) => setFormData({ ...formData, servicesSubtitleColor: val })}
+                  />
+                  <ColorPickerInput
+                    label="Títulos Tarjetas de Servicios"
+                    value={formData.servicesCardTitleColor || formData.serviceCardTitleColor}
+                    defaultColor="#0F3B68"
+                    onChange={(val) => setFormData({ ...formData, servicesCardTitleColor: val, serviceCardTitleColor: val })}
+                  />
+                  <ColorPickerInput
+                    label="Descripción Tarjetas de Servicios"
+                    value={formData.servicesCardTextColor || formData.serviceCardDescColor}
+                    defaultColor="#475569"
+                    onChange={(val) => setFormData({ ...formData, servicesCardTextColor: val, serviceCardDescColor: val })}
+                  />
+                  <ColorPickerInput
+                    label="Enlace 'Cotizar' en Servicios"
+                    value={formData.servicesCardCtaColor || formData.serviceCardCtaColor}
+                    defaultColor="#D97706"
+                    onChange={(val) => setFormData({ ...formData, servicesCardCtaColor: val, serviceCardCtaColor: val })}
+                  />
+                  <ColorPickerInput
+                    label="Título Galería de Fotos"
+                    value={formData.galleryTitleColor}
+                    defaultColor="#111827"
+                    onChange={(val) => setFormData({ ...formData, galleryTitleColor: val })}
+                  />
+                  <ColorPickerInput
+                    label="Subtítulo Galería de Fotos"
+                    value={formData.gallerySubtitleColor}
+                    defaultColor="#D97706"
+                    onChange={(val) => setFormData({ ...formData, gallerySubtitleColor: val })}
+                  />
+                  <ColorPickerInput
+                    label="Título Sección Contacto"
+                    value={formData.contactTitleColor}
+                    defaultColor="#0F3B68"
+                    onChange={(val) => setFormData({ ...formData, contactTitleColor: val })}
+                  />
+                  <ColorPickerInput
+                    label="Subtítulo Sección Contacto"
+                    value={formData.contactSubtitleColor}
+                    defaultColor="#D97706"
+                    onChange={(val) => setFormData({ ...formData, contactSubtitleColor: val })}
+                  />
+                  <ColorPickerInput
+                    label="Encabezados Pie de Página"
+                    value={formData.footerHeadingsColor}
+                    defaultColor="#ffffff"
+                    onChange={(val) => setFormData({ ...formData, footerHeadingsColor: val })}
+                  />
+                  <ColorPickerInput
+                    label="Textos Normales Pie de Página"
+                    value={formData.footerTextColor}
+                    defaultColor="#94a3b8"
+                    onChange={(val) => setFormData({ ...formData, footerTextColor: val })}
+                  />
+                </div>
+              </div>
+            </div>
+          )}
+
+          {/* TAB 3: CONTACTO, TELÉFONOS, MAPA DE GOOGLE & COBERTURA */}
           {activeTab === 'contacts' && (
             <div className="space-y-6">
               {/* 1. Textos Generales de la Sección Contacto */}
@@ -2367,25 +3038,41 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({
                 </div>
 
                 {/* TÍTULO DESTACADO "LÍDERES EN MAQUINADOS CNC..." */}
-                <div className="p-4 bg-amber-50 rounded-2xl border-2 border-amber-400/80 shadow-xs space-y-2">
-                  <div className="flex items-center justify-between">
+                <div className="p-5 bg-linear-to-r from-amber-50 to-orange-50 rounded-2xl border-2 border-amber-400 shadow-sm space-y-3">
+                  <div className="flex flex-wrap items-center justify-between gap-2">
                     <label className="text-xs font-black text-amber-950 uppercase tracking-wide flex items-center gap-1.5">
                       <Sparkles className="w-4 h-4 text-amber-600" />
                       <span>Título / Encabezado Destacado ("Líderes en Maquinados...")</span>
                     </label>
-                    <span className="text-[10px] font-extrabold bg-amber-200 text-amber-900 px-2 py-0.5 rounded-md uppercase">
+                    <span className="text-[10px] font-extrabold bg-amber-200 text-amber-900 px-2.5 py-0.5 rounded-full uppercase tracking-wider">
                       Texto Principal de Nosotros
                     </span>
                   </div>
-                  <input
-                    type="text"
-                    value={formData.aboutHeadline ?? 'Líderes en Maquinados CNC, Fabricación de Moldes y Soluciones Industriales'}
-                    onChange={(e) => setFormData({ ...formData, aboutHeadline: e.target.value })}
-                    placeholder="Líderes en Maquinados CNC, Fabricación de Moldes y Soluciones Industriales"
-                    className="w-full px-4 py-3 rounded-xl border-2 border-amber-300 bg-white text-base font-extrabold text-gray-900 focus:ring-2 focus:ring-amber-500 focus:border-amber-500 shadow-2xs"
-                  />
-                  <p className="text-xs text-amber-800 font-medium leading-relaxed">
-                    💡 <b>Edite aquí directamente</b> el texto que aparece en letras grandes arriba de la descripción en la sección Nosotros: <i>"Líderes en Maquinados CNC, Fabricación de Moldes y Soluciones Industriales"</i>.
+                  <div>
+                    <label className="block text-[11px] font-bold text-amber-900 mb-1">
+                      Texto del Título (Aparece en letras grandes arriba de la descripción):
+                    </label>
+                    <input
+                      type="text"
+                      value={formData.aboutHeadline ?? 'Líderes en Maquinados CNC, Fabricación de Moldes y Soluciones Industriales'}
+                      onChange={(e) => setFormData({ ...formData, aboutHeadline: e.target.value })}
+                      placeholder="Líderes en Maquinados CNC, Fabricación de Moldes y Soluciones Industriales"
+                      className="w-full px-4 py-3 rounded-xl border-2 border-amber-400 bg-white text-base font-extrabold text-gray-900 focus:ring-2 focus:ring-amber-500 focus:border-amber-500 shadow-xs"
+                    />
+                  </div>
+                  
+                  <div className="pt-1">
+                    <ColorPickerInput
+                      label="Color del Título 'Líderes en Maquinados...'"
+                      value={formData.aboutHeadlineColor}
+                      defaultColor="#0F3B68"
+                      onChange={(val) => setFormData({ ...formData, aboutHeadlineColor: val })}
+                      description="Modifique el color del texto de este encabezado destacado"
+                    />
+                  </div>
+
+                  <p className="text-xs text-amber-900/90 font-medium leading-relaxed bg-amber-100/70 p-2.5 rounded-lg border border-amber-300/60">
+                    💡 <b>Edición en vivo:</b> Modifique tanto el texto como el color de las letras del título destacado. Se actualiza inmediatamente en la sección "Nosotros" de su página web.
                   </p>
                 </div>
 
@@ -2730,7 +3417,163 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({
             </div>
           )}
 
-          {/* TAB 7: SUPABASE DATABASE */}
+          {/* TAB 8: 🦶 PIE DE PÁGINA & REDES */}
+          {activeTab === 'footer' && (
+            <div className="space-y-6">
+              {/* Header Banner */}
+              <div className="bg-linear-to-r from-slate-900 to-blue-950 text-white p-6 rounded-2xl shadow-md border border-slate-800 space-y-2">
+                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                  <div className="space-y-1">
+                    <h3 className="font-extrabold text-lg flex items-center gap-2">
+                      <FileText className="w-5 h-5 text-blue-400" />
+                      <span>Edición del Pie de Página (Footer)</span>
+                    </h3>
+                    <p className="text-xs text-slate-300 leading-relaxed max-w-2xl">
+                      Configure todos los textos descriptivos, títulos de columnas, texto legal de derechos de autor y personalice todos los colores del pie de página.
+                    </p>
+                  </div>
+                  <button
+                    type="button"
+                    onClick={handleSave}
+                    className="inline-flex items-center gap-2 bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs px-5 py-2.5 rounded-xl shadow-md transition-all shrink-0 cursor-pointer"
+                  >
+                    <Save className="w-4 h-4" />
+                    <span>Guardar Cambios</span>
+                  </button>
+                </div>
+              </div>
+
+              {/* 1. Textos del Pie de Página */}
+              <div className="bg-gray-50 p-5 rounded-2xl border border-gray-200 space-y-4">
+                <div className="flex items-center justify-between">
+                  <h4 className="font-extrabold text-sm text-gray-900 flex items-center gap-2">
+                    <span className="w-2.5 h-2.5 rounded-full bg-blue-600"></span>
+                    <span>1. Textos y Columnas del Pie de Página</span>
+                  </h4>
+                  <span className="text-[11px] font-bold bg-blue-100 text-[#0F3B68] px-2.5 py-0.5 rounded-full">Contenido</span>
+                </div>
+
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div>
+                    <label className="block text-xs font-bold text-gray-700 uppercase mb-1">
+                      Título Columna de Navegación
+                    </label>
+                    <input
+                      type="text"
+                      value={formData.footerNavTitle || ''}
+                      onChange={(e) => setFormData({ ...formData, footerNavTitle: e.target.value })}
+                      placeholder="Navegación"
+                      className="w-full px-4 py-2.5 rounded-xl border border-gray-300 text-sm font-semibold"
+                    />
+                  </div>
+
+                  <div>
+                    <label className="block text-xs font-bold text-gray-700 uppercase mb-1">
+                      Título Columna de Ubicación / Planta
+                    </label>
+                    <input
+                      type="text"
+                      value={formData.footerPlantTitle || ''}
+                      onChange={(e) => setFormData({ ...formData, footerPlantTitle: e.target.value })}
+                      placeholder="Nuestra Planta"
+                      className="w-full px-4 py-2.5 rounded-xl border border-gray-300 text-sm font-semibold"
+                    />
+                  </div>
+
+                  <div className="md:col-span-2">
+                    <label className="block text-xs font-bold text-gray-700 uppercase mb-1">
+                      Descripción de la Empresa en el Pie
+                    </label>
+                    <textarea
+                      rows={2}
+                      value={formData.footerDescription || ''}
+                      onChange={(e) => setFormData({ ...formData, footerDescription: e.target.value })}
+                      placeholder="Especialistas en maquinado CNC de alta precisión, pailería, corte con plasma y fabricación de piezas industriales bajo los más estrictos estándares de calidad."
+                      className="w-full px-4 py-2.5 rounded-xl border border-gray-300 text-xs"
+                    />
+                  </div>
+
+                  <div>
+                    <label className="block text-xs font-bold text-gray-700 uppercase mb-1">
+                      Texto del Botón de WhatsApp en Pie
+                    </label>
+                    <input
+                      type="text"
+                      value={formData.footerWaButtonText || ''}
+                      onChange={(e) => setFormData({ ...formData, footerWaButtonText: e.target.value })}
+                      placeholder="Contactar por WhatsApp"
+                      className="w-full px-4 py-2.5 rounded-xl border border-gray-300 text-sm font-semibold"
+                    />
+                  </div>
+
+                  <div>
+                    <label className="block text-xs font-bold text-gray-700 uppercase mb-1">
+                      Texto Legal de Derechos Reservados (Copyright)
+                    </label>
+                    <input
+                      type="text"
+                      value={formData.footerCopyrightText || ''}
+                      onChange={(e) => setFormData({ ...formData, footerCopyrightText: e.target.value })}
+                      placeholder="© 2025 Servicios Industriales Moldmaq S.A. de C.V. Todos los derechos reservados."
+                      className="w-full px-4 py-2.5 rounded-xl border border-gray-300 text-sm"
+                    />
+                  </div>
+                </div>
+              </div>
+
+              {/* 2. Colores del Pie de Página */}
+              <div className="bg-gray-50 p-5 rounded-2xl border border-gray-200 space-y-4">
+                <div className="flex items-center justify-between">
+                  <h4 className="font-extrabold text-sm text-gray-900 flex items-center gap-2">
+                    <span className="w-2.5 h-2.5 rounded-full bg-purple-600"></span>
+                    <span>2. Colores del Pie de Página</span>
+                  </h4>
+                  <span className="text-[11px] font-bold bg-purple-100 text-purple-900 px-2.5 py-0.5 rounded-full">Estilos</span>
+                </div>
+
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
+                  <ColorPickerInput
+                    label="Fondo del Pie de Página"
+                    value={formData.footerBgColor}
+                    defaultColor="#0B132B"
+                    onChange={(val) => setFormData({ ...formData, footerBgColor: val })}
+                  />
+                  <ColorPickerInput
+                    label="Encabezados de Columnas"
+                    value={formData.footerHeadingsColor}
+                    defaultColor="#ffffff"
+                    onChange={(val) => setFormData({ ...formData, footerHeadingsColor: val })}
+                  />
+                  <ColorPickerInput
+                    label="Textos y Enlaces del Pie"
+                    value={formData.footerTextColor}
+                    defaultColor="#94a3b8"
+                    onChange={(val) => setFormData({ ...formData, footerTextColor: val })}
+                  />
+                  <ColorPickerInput
+                    label="Color de Acentos & Íconos"
+                    value={formData.footerAccentColor}
+                    defaultColor="#D97706"
+                    onChange={(val) => setFormData({ ...formData, footerAccentColor: val })}
+                  />
+                  <ColorPickerInput
+                    label="Botón WhatsApp (Fondo)"
+                    value={formData.footerWaButtonBgColor}
+                    defaultColor="#25D366"
+                    onChange={(val) => setFormData({ ...formData, footerWaButtonBgColor: val })}
+                  />
+                  <ColorPickerInput
+                    label="Botón WhatsApp (Texto)"
+                    value={formData.footerWaButtonTextColor}
+                    defaultColor="#ffffff"
+                    onChange={(val) => setFormData({ ...formData, footerWaButtonTextColor: val })}
+                  />
+                </div>
+              </div>
+            </div>
+          )}
+
+          {/* TAB 9: SUPABASE DATABASE */}
           {activeTab === 'supabase' && (
             <div className="space-y-6">
               <div className="bg-emerald-50/80 p-5 rounded-2xl border border-emerald-200 space-y-3">

@@ -6,6 +6,7 @@ interface TopBarProps {
   whatsappNumber: string;
   bgColor?: string;
   textColor?: string;
+  iconColor?: string;
   noticeText?: string;
   coverageText?: string;
   buttonText?: string;
@@ -18,6 +19,7 @@ export const TopBar: React.FC<TopBarProps> = ({
   whatsappNumber,
   bgColor = '#020617',
   textColor = '#cbd5e1',
+  iconColor = '#fbbf24',
   noticeText = 'Atención a Plantas Industriales y Maquinados Urgentes',
   coverageText = 'Zona Metropolitana, CDMX, Edo. Mex, Querétaro y Bajío',
   buttonText = 'Cotizar Maquinado',
@@ -40,13 +42,13 @@ export const TopBar: React.FC<TopBarProps> = ({
         <div className="flex items-center gap-4 text-[11px] sm:text-xs">
           {hasNotice && (
             <div className="flex items-center gap-1.5 font-medium tracking-tight">
-              <Clock className="w-3.5 h-3.5 opacity-90 text-amber-400" />
+              <Clock style={{ color: iconColor }} className="w-3.5 h-3.5 opacity-90" />
               <span>{noticeText}</span>
             </div>
           )}
           {hasCoverage && (
             <div className={`hidden lg:flex items-center gap-1.5 font-medium ${hasNotice ? 'border-l border-white/20 pl-4' : ''}`}>
-              <MapPin className="w-3.5 h-3.5 opacity-90 text-amber-400" />
+              <MapPin style={{ color: iconColor }} className="w-3.5 h-3.5 opacity-90" />
               <span className="opacity-90">{coverageText}</span>
             </div>
           )}
@@ -56,7 +58,7 @@ export const TopBar: React.FC<TopBarProps> = ({
         <div className="flex flex-wrap items-center justify-center gap-3 sm:gap-4 font-medium text-xs">
           {validPhones.length > 0 && (
             <div className="flex items-center gap-2">
-              <Phone className="w-3.5 h-3.5 opacity-90 text-blue-400" />
+              <Phone style={{ color: iconColor }} className="w-3.5 h-3.5 opacity-90" />
               <span className="hidden sm:inline opacity-80 font-normal">Teléfonos:</span>
               {validPhones.map((phone, idx) => (
                 <a

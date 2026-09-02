@@ -8,12 +8,26 @@ interface HeroSliderProps {
   slides: HeroSlide[];
   whatsappNumber: string;
   defaultMessage: string;
+  heroButtonBgColor?: string;
+  heroButtonTextColor?: string;
+  heroSecButtonText?: string;
+  heroSecButtonBgColor?: string;
+  heroSecButtonTextColor?: string;
+  heroTitleColor?: string;
+  heroSubtitleColor?: string;
 }
 
 export const HeroSlider: React.FC<HeroSliderProps> = ({
   slides,
   whatsappNumber,
   defaultMessage,
+  heroButtonBgColor = "#D97706",
+  heroButtonTextColor = "#ffffff",
+  heroSecButtonText = "Ver Soluciones",
+  heroSecButtonBgColor = "rgba(255, 255, 255, 0.1)",
+  heroSecButtonTextColor = "#ffffff",
+  heroTitleColor = "#ffffff",
+  heroSubtitleColor = "#e2e8f0"
 }) => {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [direction, setDirection] = useState(1); // 1 = right, -1 = left
@@ -115,7 +129,8 @@ export const HeroSlider: React.FC<HeroSliderProps> = ({
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.2, duration: 0.5 }}
-              className="text-2xl sm:text-4xl lg:text-5xl font-bold text-white mb-2 sm:mb-4 leading-tight drop-shadow-md"
+              style={{ color: heroTitleColor }}
+              className="text-2xl sm:text-4xl lg:text-5xl font-bold mb-2 sm:mb-4 leading-tight drop-shadow-md"
             >
               {currentSlide.title}
             </motion.h1>
@@ -127,7 +142,8 @@ export const HeroSlider: React.FC<HeroSliderProps> = ({
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.3, duration: 0.5 }}
-              className="text-sm sm:text-lg text-gray-200 font-normal leading-relaxed drop-shadow-xs max-w-xl"
+              style={{ color: heroSubtitleColor }}
+              className="text-sm sm:text-lg font-normal leading-relaxed drop-shadow-xs max-w-xl"
             >
               {currentSlide.subtitle}
             </motion.p>
@@ -145,19 +161,23 @@ export const HeroSlider: React.FC<HeroSliderProps> = ({
                 href={waUrl}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-flex items-center gap-2 sm:gap-2.5 bg-[#D97706] hover:bg-amber-600 text-white font-bold text-xs sm:text-sm px-5 sm:px-6 py-2.5 sm:py-3 rounded-md transition-all shadow-lg hover:shadow-amber-900/40 cursor-pointer"
+                style={{ backgroundColor: heroButtonBgColor, color: heroButtonTextColor }}
+                className="inline-flex items-center gap-2 sm:gap-2.5 hover:opacity-90 font-bold text-xs sm:text-sm px-5 sm:px-6 py-2.5 sm:py-3 rounded-md transition-all shadow-lg cursor-pointer"
               >
-                <WhatsAppIcon className="w-4 h-4 sm:w-5 sm:h-5 text-white shrink-0" />
+                <WhatsAppIcon className="w-4 h-4 sm:w-5 sm:h-5 shrink-0" style={{ color: heroButtonTextColor }} />
                 <span>{currentSlide.buttonText}</span>
               </a>
             )}
 
-            <a
-              href="#servicios"
-              className="inline-flex items-center gap-2 bg-white/10 hover:bg-white/20 backdrop-blur-sm text-white font-bold text-xs sm:text-sm border border-white/30 px-5 sm:px-6 py-2.5 sm:py-3 rounded-md transition-all cursor-pointer"
-            >
-              Ver Soluciones
-            </a>
+            {heroSecButtonText && heroSecButtonText.trim() !== '' && (
+              <a
+                href="#servicios"
+                style={{ backgroundColor: heroSecButtonBgColor, color: heroSecButtonTextColor }}
+                className="inline-flex items-center gap-2 hover:opacity-90 backdrop-blur-sm font-bold text-xs sm:text-sm border border-white/30 px-5 sm:px-6 py-2.5 sm:py-3 rounded-md transition-all cursor-pointer"
+              >
+                {heroSecButtonText}
+              </a>
+            )}
           </motion.div>
         </div>
       </div>

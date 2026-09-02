@@ -33,6 +33,17 @@ interface ContactSectionProps {
   contactMapTitle?: string;
   contactMapSubtitle?: string;
   contactMapAddress?: string;
+
+  // New styling props
+  contactTitleColor?: string;
+  contactSubtitleColor?: string;
+  contactCardBgColor?: string;
+  contactCardBorderColor?: string;
+  contactIconColor?: string;
+  contactFormButtonBgColor?: string;
+  contactFormButtonTextColor?: string;
+  contactDirectWaButtonBgColor?: string;
+  contactDirectWaButtonTextColor?: string;
 }
 
 export const ContactSection: React.FC<ContactSectionProps> = ({
@@ -61,6 +72,16 @@ export const ContactSection: React.FC<ContactSectionProps> = ({
   contactMapTitle = "Ubicación de Planta y Talleres Industriales",
   contactMapSubtitle = "Visítenos en nuestras instalaciones o solicite una visita técnica a su empresa",
   contactMapAddress = "Servicios Industriales Moldmaq S.A. de C.V. - Estado de México, CDMX y Zona Bajío",
+
+  contactTitleColor = "#111827",
+  contactSubtitleColor = "#D97706",
+  contactCardBgColor = "#ffffff",
+  contactCardBorderColor = "#e2e8f0",
+  contactIconColor = "#0F3B68",
+  contactFormButtonBgColor = "#D97706",
+  contactFormButtonTextColor = "#ffffff",
+  contactDirectWaButtonBgColor = "#D97706",
+  contactDirectWaButtonTextColor = "#ffffff",
 }) => {
   const [companyName, setCompanyName] = useState('');
   const [location, setLocation] = useState('');
@@ -78,8 +99,9 @@ export const ContactSection: React.FC<ContactSectionProps> = ({
 
   // Helper to build embeddable iframe URL from user's Google Maps link
   const getGoogleMapsEmbedUrl = (rawUrl?: string): string => {
+    const defaultLocation = contactMapAddress || 'Servicios Industriales Moldmaq S.A. de C.V.';
     if (!rawUrl || rawUrl.trim() === '') {
-      return 'https://maps.google.com/maps?q=Mexico&t=&z=13&ie=UTF8&iwloc=&output=embed';
+      return `https://maps.google.com/maps?q=${encodeURIComponent(defaultLocation)}&t=&z=14&ie=UTF8&iwloc=&output=embed`;
     }
     const trimmed = rawUrl.trim();
 
@@ -94,7 +116,12 @@ export const ContactSection: React.FC<ContactSectionProps> = ({
       return trimmed;
     }
 
-    // If it's a short URL (maps.app.goo.gl), standard URL or custom address
+    // If it's a short URL (maps.app.goo.gl) - short links are blocked in iframes by Google X-Frame-Options
+    // so we use the address or place name to generate a fully functioning embed iframe!
+    if (trimmed.includes('maps.app.goo.gl') || trimmed.includes('goo.gl/maps')) {
+      return `https://maps.google.com/maps?q=${encodeURIComponent(contactMapAddress || 'Estado de México, CDMX')}&t=&z=14&ie=UTF8&iwloc=&output=embed`;
+    }
+
     return `https://maps.google.com/maps?q=${encodeURIComponent(trimmed)}&t=&z=14&ie=UTF8&iwloc=&output=embed`;
   };
 
@@ -140,10 +167,16 @@ export const ContactSection: React.FC<ContactSectionProps> = ({
           <div className="inline-block bg-[#D97706]/10 text-[#D97706] font-extrabold text-xs uppercase tracking-widest px-3.5 py-1 rounded-full">
             Contacto & Cotizaciones Técnicas
           </div>
-          <h2 className="text-3xl sm:text-4xl font-extrabold text-gray-900 tracking-tight">
+          <h2
+            style={{ color: contactTitleColor }}
+            className="text-3xl sm:text-4xl font-extrabold tracking-tight"
+          >
             {title}
           </h2>
-          <p className="text-base sm:text-lg font-semibold text-[#D97706]">
+          <p
+            style={{ color: contactSubtitleColor }}
+            className="text-base sm:text-lg font-semibold"
+          >
             {subtitle}
           </p>
           <p className="text-base text-gray-700 leading-relaxed max-w-2xl mx-auto">
@@ -155,14 +188,23 @@ export const ContactSection: React.FC<ContactSectionProps> = ({
           {/* Contact Direct Cards (Phone, WhatsApp, FB, Coverage) */}
           <div className="lg:col-span-5 space-y-6">
             {/* Primary WhatsApp Card */}
-            <div className="bg-amber-50/70 border-2 border-[#D97706] p-6 rounded-2xl shadow-md relative overflow-hidden">
+            <div
+              style={{
+                backgroundColor: contactCardBgColor,
+                borderColor: contactCardBorderColor
+              }}
+              className="border-2 p-6 rounded-2xl shadow-md relative overflow-hidden transition-colors"
+            >
               <div className="flex items-center gap-4 mb-4">
-                <div className="w-12 h-12 rounded-full bg-[#D97706] text-white flex items-center justify-center shrink-0 shadow-md">
-                  <WhatsAppIcon className="w-7 h-7 text-white shrink-0" />
+                <div
+                  style={{ backgroundColor: contactDirectWaButtonBgColor }}
+                  className="w-12 h-12 rounded-full text-white flex items-center justify-center shrink-0 shadow-md transition-colors"
+                >
+                  <WhatsAppIcon className="w-7 h-7 shrink-0" style={{ color: contactDirectWaButtonTextColor }} />
                 </div>
                 <div>
                   <h3 className="font-extrabold text-xl text-gray-900">{contactWaCardTitle}</h3>
-                  <p className="text-sm text-amber-800 font-semibold">{contactWaCardSubtitle}</p>
+                  <p className="text-sm font-semibold" style={{ color: contactSubtitleColor }}>{contactWaCardSubtitle}</p>
                 </div>
               </div>
 
@@ -170,17 +212,27 @@ export const ContactSection: React.FC<ContactSectionProps> = ({
                 href={`https://wa.me/${whatsappNumber.replace(/\D/g, '') || '525558724410'}?text=${encodeURIComponent(whatsappMessage || 'Hola, deseo solicitar una cotización técnica con Servicios Industriales Moldmaq S.A.')}`}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="flex items-center justify-center gap-2.5 bg-[#D97706] hover:bg-amber-600 text-white font-extrabold text-sm sm:text-base px-6 py-3.5 rounded-xl w-full text-center transition-all shadow-md transform hover:-translate-y-0.5 cursor-pointer"
+                style={{
+                  backgroundColor: contactDirectWaButtonBgColor,
+                  color: contactDirectWaButtonTextColor
+                }}
+                className="flex items-center justify-center gap-2.5 hover:opacity-95 font-extrabold text-sm sm:text-base px-6 py-3.5 rounded-xl w-full text-center transition-all shadow-md transform hover:-translate-y-0.5 cursor-pointer"
               >
-                <WhatsAppIcon className="w-5 h-5 text-white shrink-0" />
+                <WhatsAppIcon className="w-5 h-5 shrink-0" style={{ color: contactDirectWaButtonTextColor }} />
                 <span>{contactWaButtonText}: {whatsappNumber}</span>
               </a>
             </div>
 
             {/* Direct Telephones Card */}
-            <div className="bg-white p-6 rounded-2xl border border-gray-200 shadow-xs space-y-4">
+            <div
+              style={{
+                backgroundColor: contactCardBgColor,
+                borderColor: contactCardBorderColor
+              }}
+              className="p-6 rounded-2xl border shadow-xs space-y-4 transition-colors"
+            >
               <div className="flex items-center gap-3 border-b border-gray-100 pb-3">
-                <Phone className="w-6 h-6 text-[#0F3B68]" />
+                <Phone className="w-6 h-6" style={{ color: contactIconColor }} />
                 <h3 className="font-bold text-lg text-gray-900">{contactPhonesTitle}</h3>
               </div>
 
@@ -189,9 +241,9 @@ export const ContactSection: React.FC<ContactSectionProps> = ({
                   <a
                     key={idx}
                     href={`tel:${cleanPhone(p)}`}
-                    className="flex items-center gap-2.5 p-3 rounded-xl bg-slate-50 hover:bg-blue-50 border border-slate-200 hover:border-[#0F3B68] text-gray-900 font-bold text-sm transition-all group cursor-pointer"
+                    className="flex items-center gap-2.5 p-3 rounded-xl bg-slate-50 hover:bg-blue-50 border border-slate-200 text-gray-900 font-bold text-sm transition-all group cursor-pointer"
                   >
-                    <Phone className="w-4 h-4 text-[#0F3B68] group-hover:scale-110 transition-transform" />
+                    <Phone className="w-4 h-4 group-hover:scale-110 transition-transform" style={{ color: contactIconColor }} />
                     <span>{p}</span>
                   </a>
                 ))}
@@ -199,7 +251,13 @@ export const ContactSection: React.FC<ContactSectionProps> = ({
             </div>
 
             {/* Facebook Page */}
-            <div className="bg-slate-50 p-6 rounded-2xl border border-slate-200 space-y-4">
+            <div
+              style={{
+                backgroundColor: contactCardBgColor,
+                borderColor: contactCardBorderColor
+              }}
+              className="p-6 rounded-2xl border space-y-4 transition-colors"
+            >
               <div className="flex items-center gap-3">
                 <Facebook className="w-6 h-6 text-blue-600 shrink-0" />
                 <div>
@@ -235,7 +293,7 @@ export const ContactSection: React.FC<ContactSectionProps> = ({
                       type="button"
                       onClick={() => handleOpenLocationMap(item)}
                       title={`Abrir mapa de ${item.name} en Google Maps`}
-                      className="group inline-flex items-center gap-1.5 px-3 py-1.5 bg-white hover:bg-amber-500 text-gray-800 hover:text-white font-bold text-xs rounded-lg border border-gray-200 hover:border-amber-600 shadow-2xs hover:shadow-xs transition-all cursor-pointer transform hover:-translate-y-0.5"
+                      className="group inline-flex items-center gap-1.5 px-3 py-1.5 bg-slate-50 hover:bg-amber-500 text-gray-800 hover:text-white font-bold text-xs rounded-lg border border-gray-200 hover:border-amber-600 shadow-2xs hover:shadow-xs transition-all cursor-pointer transform hover:-translate-y-0.5"
                     >
                       <MapPin className="w-3.5 h-3.5 text-[#D97706] group-hover:text-white transition-colors" />
                       <span>{item.name}</span>
@@ -248,7 +306,13 @@ export const ContactSection: React.FC<ContactSectionProps> = ({
           </div>
 
           {/* Direct Interactive Quote Form */}
-          <div className="lg:col-span-7 bg-white p-8 sm:p-10 rounded-2xl border border-gray-200 shadow-md">
+          <div
+            style={{
+              backgroundColor: contactCardBgColor,
+              borderColor: contactCardBorderColor
+            }}
+            className="lg:col-span-7 p-8 sm:p-10 rounded-2xl border shadow-md transition-colors"
+          >
             <div className="mb-6">
               <span className="text-xs font-extrabold uppercase tracking-wider text-[#0F3B68] bg-blue-50 px-3 py-1 rounded-full border border-blue-100">
                 Cotización en Línea
@@ -328,9 +392,13 @@ export const ContactSection: React.FC<ContactSectionProps> = ({
 
               <button
                 type="submit"
-                className="w-full flex items-center justify-center gap-2.5 bg-[#D97706] hover:bg-amber-600 text-white font-extrabold text-base px-6 py-4 rounded-xl transition-all shadow-lg hover:shadow-amber-900/30 transform hover:-translate-y-0.5 cursor-pointer"
+                style={{
+                  backgroundColor: contactFormButtonBgColor,
+                  color: contactFormButtonTextColor
+                }}
+                className="w-full flex items-center justify-center gap-2.5 hover:opacity-95 font-extrabold text-base px-6 py-4 rounded-xl transition-all shadow-lg transform hover:-translate-y-0.5 cursor-pointer"
               >
-                <WhatsAppIcon className="w-5 h-5 text-white shrink-0" />
+                <WhatsAppIcon className="w-5 h-5 shrink-0" style={{ color: contactFormButtonTextColor }} />
                 <span>{contactFormButtonText}</span>
               </button>
             </form>

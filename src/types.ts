@@ -77,6 +77,7 @@ export interface SiteConfig {
   // Contact & Top Bar
   faviconUrl?: string;
   topPhones: string[];
+  contactEmails?: string[];
   whatsappNumber: string;
   whatsappMessage: string;
   facebookPage: string;
@@ -229,11 +230,21 @@ export interface SiteConfig {
 
   // Phones Card
   contactPhonesTitle?: string;
+  contactPhonesSubtitle?: string;
   contactPhonesCardBgColor?: string;
   contactPhonesCardBorderColor?: string;
   contactPhonesTitleColor?: string;
   contactPhonePillBgColor?: string;
   contactPhonePillTextColor?: string;
+
+  // Emails Card
+  contactEmailsTitle?: string;
+  contactEmailsSubtitle?: string;
+  contactEmailsCardBgColor?: string;
+  contactEmailsCardBorderColor?: string;
+  contactEmailsTitleColor?: string;
+  contactEmailPillBgColor?: string;
+  contactEmailPillTextColor?: string;
 
   // Facebook Card
   contactFacebookTitle?: string;

@@ -1,8 +1,9 @@
 import React from 'react';
-import { Phone, MessageCircle, Clock, MapPin } from 'lucide-react';
+import { Phone, MessageCircle, Clock, MapPin, Mail } from 'lucide-react';
 
 interface TopBarProps {
   phones: string[];
+  emails?: string[];
   whatsappNumber: string;
   bgColor?: string;
   textColor?: string;
@@ -16,6 +17,7 @@ interface TopBarProps {
 
 export const TopBar: React.FC<TopBarProps> = ({
   phones,
+  emails = [],
   whatsappNumber,
   bgColor = '#020617',
   textColor = '#cbd5e1',
@@ -28,6 +30,7 @@ export const TopBar: React.FC<TopBarProps> = ({
 }) => {
   const cleanPhone = (phone: string) => phone.replace(/\D/g, '');
   const validPhones = (phones || []).filter((p) => p && p.trim() !== '');
+  const validEmails = (emails || []).filter((e) => e && e.trim() !== '');
   const hasNotice = noticeText && noticeText.trim() !== '';
   const hasCoverage = coverageText && coverageText.trim() !== '';
   const hasButton = buttonText && buttonText.trim() !== '' && whatsappNumber && whatsappNumber.trim() !== '';
@@ -54,8 +57,19 @@ export const TopBar: React.FC<TopBarProps> = ({
           )}
         </div>
 
-        {/* Right: Telephones list & WhatsApp */}
+        {/* Right: Telephones, Emails & WhatsApp */}
         <div className="flex flex-wrap items-center justify-center gap-3 sm:gap-4 font-medium text-xs">
+          {validEmails.length > 0 && (
+            <a
+              href={`mailto:${validEmails[0]}`}
+              title={`Enviar correo a ${validEmails[0]}`}
+              className="hidden lg:flex items-center gap-1.5 hover:opacity-100 transition-opacity font-semibold"
+            >
+              <Mail style={{ color: iconColor }} className="w-3.5 h-3.5 opacity-90" />
+              <span className="truncate max-w-[200px]">{validEmails[0]}</span>
+            </a>
+          )}
+
           {validPhones.length > 0 && (
             <div className="flex items-center gap-2">
               <Phone style={{ color: iconColor }} className="w-3.5 h-3.5 opacity-90" />
@@ -64,6 +78,7 @@ export const TopBar: React.FC<TopBarProps> = ({
                 <a
                   key={idx}
                   href={`tel:${cleanPhone(phone)}`}
+                  title={`Llamar al ${phone}`}
                   className="hover:opacity-100 transition-opacity underline-offset-2 hover:underline font-semibold"
                 >
                   {phone}

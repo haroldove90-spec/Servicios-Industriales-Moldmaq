@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Phone, MapPin, Facebook, ExternalLink, Navigation, CheckCircle2 } from 'lucide-react';
+import { Phone, MapPin, Facebook, ExternalLink, Navigation, CheckCircle2, Mail } from 'lucide-react';
 import { WhatsAppIcon } from './WhatsAppIcon';
 import { CoverageLocationItem } from '../types';
 
@@ -8,6 +8,7 @@ interface ContactSectionProps {
   subtitle: string;
   message: string;
   phones: string[];
+  emails?: string[];
   whatsappNumber: string;
   whatsappMessage?: string;
   facebookPage: string;
@@ -20,6 +21,9 @@ interface ContactSectionProps {
   contactWaCardSubtitle?: string;
   contactWaButtonText?: string;
   contactPhonesTitle?: string;
+  contactPhonesSubtitle?: string;
+  contactEmailsTitle?: string;
+  contactEmailsSubtitle?: string;
   contactFacebookTitle?: string;
   contactFacebookSubtitle?: string;
   contactCoverageTitle?: string;
@@ -39,6 +43,10 @@ interface ContactSectionProps {
   contactSubtitleColor?: string;
   contactCardBgColor?: string;
   contactCardBorderColor?: string;
+  contactPhonesCardBgColor?: string;
+  contactPhonesCardBorderColor?: string;
+  contactEmailsCardBgColor?: string;
+  contactEmailsCardBorderColor?: string;
   contactIconColor?: string;
   contactFormButtonBgColor?: string;
   contactFormButtonTextColor?: string;
@@ -51,6 +59,7 @@ export const ContactSection: React.FC<ContactSectionProps> = ({
   subtitle,
   message,
   phones,
+  emails = [],
   whatsappNumber,
   whatsappMessage,
   facebookPage,
@@ -61,6 +70,9 @@ export const ContactSection: React.FC<ContactSectionProps> = ({
   contactWaCardSubtitle = "Respuesta inmediata de ingenieros de proyecto",
   contactWaButtonText = "Enviar WhatsApp",
   contactPhonesTitle = "Líneas de Atención a Planta",
+  contactPhonesSubtitle = "Haga clic en cualquier número para iniciar una llamada directa",
+  contactEmailsTitle = "Correos Electrónicos de Atención",
+  contactEmailsSubtitle = "Haga clic en cualquier correo para redactar y enviar un mensaje directo",
   contactFacebookTitle = "Página Oficial de Facebook",
   contactFacebookSubtitle = "Siga nuestros proyectos y casos de éxito",
   contactCoverageTitle = "Cobertura y Atención en Sitio:",
@@ -77,6 +89,10 @@ export const ContactSection: React.FC<ContactSectionProps> = ({
   contactSubtitleColor = "#D97706",
   contactCardBgColor = "#ffffff",
   contactCardBorderColor = "#e2e8f0",
+  contactPhonesCardBgColor,
+  contactPhonesCardBorderColor,
+  contactEmailsCardBgColor,
+  contactEmailsCardBorderColor,
   contactIconColor = "#0F3B68",
   contactFormButtonBgColor = "#D97706",
   contactFormButtonTextColor = "#ffffff",
@@ -89,6 +105,29 @@ export const ContactSection: React.FC<ContactSectionProps> = ({
   const [details, setDetails] = useState('');
 
   const cleanPhone = (p: string) => p.replace(/\D/g, '');
+
+  const validPhones = (phones || []).filter(p => p && p.trim() !== '');
+  const validEmails = (emails || []).filter(e => e && e.trim() !== '');
+
+  const handleSendEmailQuote = (e: React.MouseEvent) => {
+    e.preventDefault();
+    if (!companyName.trim() || !location.trim()) {
+      alert('Por favor ingrese al menos su Empresa y Ubicación para cotizar.');
+      return;
+    }
+    const targetEmail = validEmails[0] || 'ventas@moldmaq.com.mx';
+    const subject = encodeURIComponent(`Solicitud de Cotización: ${serviceType} - ${companyName}`);
+    const body = encodeURIComponent(
+      `Estimado equipo de Servicios Industriales Moldmaq S.A.,\n\n` +
+      `Deseo solicitar una cotización técnica con los siguientes detalles:\n\n` +
+      `• Servicio requerido: ${serviceType}\n` +
+      `• Empresa / Solicitante: ${companyName}\n` +
+      `• Ubicación / Planta: ${location}\n` +
+      `• Especificaciones y Requerimientos:\n${details || 'Por definir'}\n\n` +
+      `Quedo en espera de su pronta respuesta.`
+    );
+    window.location.href = `mailto:${targetEmail}?subject=${subject}&body=${body}`;
+  };
 
   const handleSendQuote = (e: React.FormEvent) => {
     e.preventDefault();
@@ -224,31 +263,104 @@ export const ContactSection: React.FC<ContactSectionProps> = ({
             </div>
 
             {/* Direct Telephones Card */}
-            <div
-              style={{
-                backgroundColor: contactCardBgColor,
-                borderColor: contactCardBorderColor
-              }}
-              className="p-6 rounded-2xl border shadow-xs space-y-4 transition-colors"
-            >
-              <div className="flex items-center gap-3 border-b border-gray-100 pb-3">
-                <Phone className="w-6 h-6" style={{ color: contactIconColor }} />
-                <h3 className="font-bold text-lg text-gray-900">{contactPhonesTitle}</h3>
-              </div>
+            {validPhones.length > 0 && (
+              <div
+                style={{
+                  backgroundColor: contactPhonesCardBgColor || contactCardBgColor,
+                  borderColor: contactPhonesCardBorderColor || contactCardBorderColor
+                }}
+                className="p-6 rounded-2xl border shadow-xs space-y-4 transition-colors"
+              >
+                <div className="border-b border-gray-100 pb-3">
+                  <div className="flex items-center gap-3">
+                    <div
+                      style={{ backgroundColor: `${contactIconColor}15` }}
+                      className="w-10 h-10 rounded-xl flex items-center justify-center shrink-0"
+                    >
+                      <Phone className="w-5 h-5" style={{ color: contactIconColor }} />
+                    </div>
+                    <div>
+                      <h3 className="font-bold text-lg text-gray-900">{contactPhonesTitle || 'Líneas de Atención a Planta'}</h3>
+                      <p className="text-xs text-gray-500 font-medium">
+                        {contactPhonesSubtitle || 'Haga clic en cualquier número para iniciar una llamada directa'}
+                      </p>
+                    </div>
+                  </div>
+                </div>
 
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-1">
-                {phones && phones.map((p, idx) => (
-                  <a
-                    key={idx}
-                    href={`tel:${cleanPhone(p)}`}
-                    className="flex items-center gap-2.5 p-3 rounded-xl bg-slate-50 hover:bg-blue-50 border border-slate-200 text-gray-900 font-bold text-sm transition-all group cursor-pointer"
-                  >
-                    <Phone className="w-4 h-4 group-hover:scale-110 transition-transform" style={{ color: contactIconColor }} />
-                    <span>{p}</span>
-                  </a>
-                ))}
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-1">
+                  {validPhones.map((p, idx) => {
+                    const cleaned = cleanPhone(p);
+                    return (
+                      <a
+                        key={idx}
+                        href={`tel:${cleaned}`}
+                        title={`Llamar directamente a ${p}`}
+                        className="flex items-center justify-between gap-2 p-3 rounded-xl bg-slate-50 hover:bg-amber-50/80 border border-slate-200 hover:border-amber-400 text-gray-900 font-bold text-sm transition-all group cursor-pointer shadow-2xs hover:shadow-xs transform hover:-translate-y-0.5"
+                      >
+                        <div className="flex items-center gap-2.5 min-w-0">
+                          <Phone className="w-4 h-4 text-[#D97706] group-hover:scale-110 transition-transform shrink-0" />
+                          <span className="truncate">{p}</span>
+                        </div>
+                        <span className="text-[11px] text-[#D97706] bg-amber-100/70 group-hover:bg-amber-200 px-2 py-0.5 rounded-md font-bold shrink-0 transition-colors">
+                          Llamar 📞
+                        </span>
+                      </a>
+                    );
+                  })}
+                </div>
               </div>
-            </div>
+            )}
+
+            {/* Direct Emails Card */}
+            {validEmails.length > 0 && (
+              <div
+                style={{
+                  backgroundColor: contactEmailsCardBgColor || contactCardBgColor,
+                  borderColor: contactEmailsCardBorderColor || contactCardBorderColor
+                }}
+                className="p-6 rounded-2xl border shadow-xs space-y-4 transition-colors"
+              >
+                <div className="border-b border-gray-100 pb-3">
+                  <div className="flex items-center gap-3">
+                    <div
+                      style={{ backgroundColor: `${contactIconColor}15` }}
+                      className="w-10 h-10 rounded-xl flex items-center justify-center shrink-0"
+                    >
+                      <Mail className="w-5 h-5 text-blue-600" />
+                    </div>
+                    <div>
+                      <h3 className="font-bold text-lg text-gray-900">{contactEmailsTitle || 'Correos Electrónicos de Atención'}</h3>
+                      <p className="text-xs text-gray-500 font-medium">
+                        {contactEmailsSubtitle || 'Haga clic en cualquier correo para redactar y enviar un mensaje directo'}
+                      </p>
+                    </div>
+                  </div>
+                </div>
+
+                <div className="grid grid-cols-1 gap-2.5 pt-1">
+                  {validEmails.map((email, idx) => (
+                    <a
+                      key={idx}
+                      href={`mailto:${email.trim()}?subject=${encodeURIComponent('Solicitud de Información / Cotización - Moldmaq S.A.')}`}
+                      title={`Enviar correo electrónico a ${email}`}
+                      className="flex items-center justify-between gap-3 p-3.5 rounded-xl bg-slate-50 hover:bg-blue-50/80 border border-slate-200 hover:border-blue-400 text-gray-900 font-bold text-sm transition-all group cursor-pointer shadow-2xs hover:shadow-xs transform hover:-translate-y-0.5"
+                    >
+                      <div className="flex items-center gap-2.5 min-w-0">
+                        <div className="w-7 h-7 rounded-lg bg-blue-100 text-blue-700 flex items-center justify-center shrink-0 group-hover:bg-blue-600 group-hover:text-white transition-colors">
+                          <Mail className="w-3.5 h-3.5 shrink-0" />
+                        </div>
+                        <span className="truncate font-semibold text-slate-800 group-hover:text-blue-900 text-xs sm:text-sm">{email}</span>
+                      </div>
+                      <span className="inline-flex items-center gap-1 text-[11px] text-blue-700 bg-blue-100/70 group-hover:bg-blue-200 px-2.5 py-1 rounded-md font-bold shrink-0 transition-colors">
+                        <span>Redactar</span>
+                        <ExternalLink className="w-3 h-3" />
+                      </span>
+                    </a>
+                  ))}
+                </div>
+              </div>
+            )}
 
             {/* Facebook Page */}
             <div
@@ -390,17 +502,30 @@ export const ContactSection: React.FC<ContactSectionProps> = ({
                 />
               </div>
 
-              <button
-                type="submit"
-                style={{
-                  backgroundColor: contactFormButtonBgColor,
-                  color: contactFormButtonTextColor
-                }}
-                className="w-full flex items-center justify-center gap-2.5 hover:opacity-95 font-extrabold text-base px-6 py-4 rounded-xl transition-all shadow-lg transform hover:-translate-y-0.5 cursor-pointer"
-              >
-                <WhatsAppIcon className="w-5 h-5 shrink-0" style={{ color: contactFormButtonTextColor }} />
-                <span>{contactFormButtonText}</span>
-              </button>
+              <div className="space-y-2.5 pt-1">
+                <button
+                  type="submit"
+                  style={{
+                    backgroundColor: contactFormButtonBgColor,
+                    color: contactFormButtonTextColor
+                  }}
+                  className="w-full flex items-center justify-center gap-2.5 hover:opacity-95 font-extrabold text-base px-6 py-4 rounded-xl transition-all shadow-lg transform hover:-translate-y-0.5 cursor-pointer"
+                >
+                  <WhatsAppIcon className="w-5 h-5 shrink-0" style={{ color: contactFormButtonTextColor }} />
+                  <span>{contactFormButtonText}</span>
+                </button>
+
+                {validEmails.length > 0 && (
+                  <button
+                    type="button"
+                    onClick={handleSendEmailQuote}
+                    className="w-full flex items-center justify-center gap-2 bg-slate-100 hover:bg-blue-50 text-slate-700 hover:text-blue-900 border border-slate-200 hover:border-blue-300 font-bold text-sm px-4 py-3 rounded-xl transition-all cursor-pointer"
+                  >
+                    <Mail className="w-4 h-4 text-blue-600 shrink-0" />
+                    <span>O Enviar Cotización por Correo ({validEmails[0]})</span>
+                  </button>
+                )}
+              </div>
             </form>
           </div>
         </div>

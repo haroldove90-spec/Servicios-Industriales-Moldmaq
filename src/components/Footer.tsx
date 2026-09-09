@@ -1,6 +1,6 @@
 import React from 'react';
 import { Logo } from './Logo';
-import { Phone, MessageCircle, MapPin, Settings } from 'lucide-react';
+import { Phone, MessageCircle, MapPin, Settings, Mail } from 'lucide-react';
 import { WhatsAppIcon } from './WhatsAppIcon';
 
 interface FooterProps {
@@ -17,6 +17,7 @@ interface FooterProps {
   showLogoText?: boolean;
   whatsappNumber: string;
   phones: string[];
+  emails?: string[];
   onOpenAdmin: () => void;
   footerBgColor?: string;
   footerTextColor?: string;
@@ -47,6 +48,7 @@ export const Footer: React.FC<FooterProps> = ({
   showLogoText,
   whatsappNumber,
   phones,
+  emails = [],
   onOpenAdmin,
   footerBgColor = "#0f172a",
   footerTextColor = "#94a3b8",
@@ -177,6 +179,18 @@ export const Footer: React.FC<FooterProps> = ({
                 >
                   <Phone className="w-4 h-4" style={{ color: footerAccentColor }} />
                   <span>{p}</span>
+                </a>
+              ))}
+              {emails && emails.length > 0 && emails.map((e, idx) => (
+                <a
+                  key={idx}
+                  href={`mailto:${e.trim()}`}
+                  style={{ color: footerTextColor }}
+                  title={`Enviar correo a ${e}`}
+                  className="flex items-center gap-2 hover:opacity-100 transition-colors"
+                >
+                  <Mail className="w-4 h-4" style={{ color: footerAccentColor }} />
+                  <span className="truncate">{e}</span>
                 </a>
               ))}
               <a

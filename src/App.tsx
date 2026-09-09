@@ -182,6 +182,7 @@ export default function App() {
       {(config.showTopBar ?? true) && (
         <TopBar
           phones={config.topPhones}
+          emails={config.contactEmails}
           whatsappNumber={config.whatsappNumber}
           bgColor={config.topBarBgColor}
           textColor={config.topBarTextColor}
@@ -342,6 +343,7 @@ export default function App() {
           subtitle={config.contactSubtitle}
           message={config.contactMessage}
           phones={config.topPhones}
+          emails={config.contactEmails}
           whatsappNumber={config.whatsappNumber}
           whatsappMessage={config.whatsappMessage}
           facebookPage={config.facebookPage}
@@ -352,6 +354,9 @@ export default function App() {
           contactWaCardSubtitle={config.contactWaCardSubtitle}
           contactWaButtonText={config.contactWaButtonText}
           contactPhonesTitle={config.contactPhonesTitle}
+          contactPhonesSubtitle={config.contactPhonesSubtitle}
+          contactEmailsTitle={config.contactEmailsTitle}
+          contactEmailsSubtitle={config.contactEmailsSubtitle}
           contactFacebookTitle={config.contactFacebookTitle}
           contactFacebookSubtitle={config.contactFacebookSubtitle}
           contactCoverageTitle={config.contactCoverageTitle}
@@ -367,6 +372,10 @@ export default function App() {
           contactSubtitleColor={config.contactSubtitleColor}
           contactCardBgColor={config.contactCardBgColor}
           contactCardBorderColor={config.contactCardBorderColor}
+          contactPhonesCardBgColor={config.contactPhonesCardBgColor}
+          contactPhonesCardBorderColor={config.contactPhonesCardBorderColor}
+          contactEmailsCardBgColor={config.contactEmailsCardBgColor}
+          contactEmailsCardBorderColor={config.contactEmailsCardBorderColor}
           contactIconColor={config.contactIconColor}
           contactFormButtonBgColor={config.contactFormButtonBgColor}
           contactFormButtonTextColor={config.contactFormButtonTextColor}
@@ -390,6 +399,7 @@ export default function App() {
         showLogoText={config.showLogoText}
         whatsappNumber={config.whatsappNumber}
         phones={config.topPhones}
+        emails={config.contactEmails}
         onOpenAdmin={handleOpenAdmin}
         footerBgColor={config.footerBgColor}
         footerTextColor={config.footerTextColor}

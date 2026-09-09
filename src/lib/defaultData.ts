@@ -57,6 +57,10 @@ export const DEFAULT_SITE_CONFIG: SiteConfig = {
     "+52 55 7201 8840",
     "800 665 3627"
   ],
+  contactEmails: [
+    "ventas@moldmaq.com.mx",
+    "contacto@moldmaq.com.mx"
+  ],
   whatsappNumber: "525558724410",
   whatsappMessage: "Hola, me interesa cotizar un servicio de maquinado, moldes o mantenimiento con Servicios Industriales Moldmaq S.A.",
   facebookPage: "moldmaqindustriales",
@@ -320,11 +324,20 @@ export const DEFAULT_SITE_CONFIG: SiteConfig = {
   contactWaButtonTextColor: "#ffffff",
 
   contactPhonesTitle: "Líneas de Atención a Planta",
+  contactPhonesSubtitle: "Haga clic en cualquier número para iniciar una llamada directa",
   contactPhonesCardBgColor: "#ffffff",
   contactPhonesCardBorderColor: "#e2e8f0",
   contactPhonesTitleColor: "#111827",
   contactPhonePillBgColor: "#f8fafc",
   contactPhonePillTextColor: "#111827",
+
+  contactEmailsTitle: "Correos Electrónicos de Atención",
+  contactEmailsSubtitle: "Haga clic en cualquier correo para redactar y enviar un mensaje directo a nuestro equipo",
+  contactEmailsCardBgColor: "#ffffff",
+  contactEmailsCardBorderColor: "#e2e8f0",
+  contactEmailsTitleColor: "#111827",
+  contactEmailPillBgColor: "#f8fafc",
+  contactEmailPillTextColor: "#111827",
 
   contactFacebookTitle: "Página Oficial de Facebook",
   contactFacebookSubtitle: "Siga nuestros proyectos y casos de éxito",

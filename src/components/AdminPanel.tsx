@@ -21,7 +21,8 @@ import {
   Copy,
   MapPin,
   Navigation,
-  ExternalLink
+  ExternalLink,
+  Mail
 } from 'lucide-react';
 
 interface AdminPanelProps {
@@ -2647,54 +2648,193 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({
                 </div>
 
                 {/* Direct Phone Lines */}
-                <div className="p-4 bg-white rounded-xl border border-gray-200 space-y-3">
+                <div className="p-4 bg-white rounded-xl border border-gray-200 space-y-4">
                   <div className="flex items-center justify-between">
-                    <span className="text-xs font-bold text-gray-800 uppercase tracking-wide">
-                      Teléfonos de Atención a Planta
-                    </span>
+                    <div className="flex items-center gap-2">
+                      <div className="w-7 h-7 rounded-lg bg-amber-100 text-amber-700 flex items-center justify-center">
+                        <Phone className="w-4 h-4" />
+                      </div>
+                      <div>
+                        <span className="text-xs font-bold text-gray-800 uppercase tracking-wide">
+                          Teléfonos de Atención a Planta
+                        </span>
+                        <p className="text-[11px] text-gray-500">
+                          Al hacer clic en la web, el cliente final iniciará una llamada directa (<code className="bg-slate-100 px-1 py-0.5 rounded text-[10px]">tel:</code>).
+                        </p>
+                      </div>
+                    </div>
                     <button
                       type="button"
-                      onClick={() => setFormData({ ...formData, topPhones: [...formData.topPhones, '+52 55 0000 0000'] })}
-                      className="inline-flex items-center gap-1 text-xs font-bold text-[#0F3B68] hover:underline"
+                      onClick={() => setFormData({ ...formData, topPhones: [...(formData.topPhones || []), '+52 55 0000 0000'] })}
+                      className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-[#0F3B68] text-white rounded-lg text-xs font-bold hover:bg-[#0F3B68]/90 transition-colors cursor-pointer shadow-2xs"
                     >
                       <Plus className="w-3.5 h-3.5" />
                       <span>+ Agregar Teléfono</span>
                     </button>
                   </div>
 
-                  <div>
-                    <label className="block text-xs font-bold text-gray-700 uppercase mb-1">
-                      Título de la Sección de Teléfonos
-                    </label>
-                    <input
-                      type="text"
-                      value={formData.contactPhonesTitle ?? 'Líneas de Atención a Planta'}
-                      onChange={(e) => setFormData({ ...formData, contactPhonesTitle: e.target.value })}
-                      placeholder="Líneas de Atención a Planta"
-                      className="w-full px-3 py-2 rounded-xl border border-gray-300 text-sm font-bold focus:ring-2 focus:ring-[#0F3B68]"
-                    />
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-1">
+                    <div>
+                      <label className="block text-xs font-bold text-gray-700 uppercase mb-1">
+                        Título de la Sección de Teléfonos
+                      </label>
+                      <input
+                        type="text"
+                        value={formData.contactPhonesTitle ?? 'Líneas de Atención a Planta'}
+                        onChange={(e) => setFormData({ ...formData, contactPhonesTitle: e.target.value })}
+                        placeholder="Líneas de Atención a Planta"
+                        className="w-full px-3 py-2 rounded-xl border border-gray-300 text-sm font-bold focus:ring-2 focus:ring-[#0F3B68]"
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-xs font-bold text-gray-700 uppercase mb-1">
+                        Subtítulo Explicativo de Teléfonos
+                      </label>
+                      <input
+                        type="text"
+                        value={formData.contactPhonesSubtitle ?? 'Haga clic en cualquier número para iniciar una llamada directa'}
+                        onChange={(e) => setFormData({ ...formData, contactPhonesSubtitle: e.target.value })}
+                        placeholder="Haga clic en cualquier número para iniciar una llamada directa"
+                        className="w-full px-3 py-2 rounded-xl border border-gray-300 text-sm font-medium focus:ring-2 focus:ring-[#0F3B68]"
+                      />
+                    </div>
                   </div>
 
                   <div className="space-y-2 pt-1">
-                    {formData.topPhones.map((phone, idx) => (
-                      <div key={idx} className="flex items-center gap-2">
+                    <label className="block text-xs font-bold text-gray-700 uppercase">
+                      Lista de Números Telefónicos ({formData.topPhones ? formData.topPhones.length : 0})
+                    </label>
+                    {(!formData.topPhones || formData.topPhones.length === 0) && (
+                      <p className="text-xs text-gray-400 italic py-2">No hay teléfonos configurados. Haga clic en "+ Agregar Teléfono".</p>
+                    )}
+                    {formData.topPhones && formData.topPhones.map((phone, idx) => (
+                      <div key={idx} className="flex items-center gap-2 bg-slate-50 p-2 rounded-xl border border-slate-200">
+                        <span className="text-xs font-bold text-gray-400 w-5 text-center shrink-0">#{idx + 1}</span>
                         <input
                           type="text"
                           value={phone}
+                          placeholder="+52 55 5872 4410"
                           onChange={(e) => {
                             const newPhones = [...formData.topPhones];
                             newPhones[idx] = e.target.value;
                             setFormData({ ...formData, topPhones: newPhones });
                           }}
-                          className="flex-1 px-3 py-2 rounded-xl border border-gray-300 text-sm font-bold focus:ring-2 focus:ring-[#0F3B68]"
+                          className="flex-1 px-3 py-1.5 bg-white rounded-lg border border-gray-300 text-sm font-bold focus:ring-2 focus:ring-[#0F3B68]"
                         />
+                        <a
+                          href={`tel:${phone.replace(/\D/g, '')}`}
+                          title="Probar enlace de llamada tel:"
+                          className="px-2.5 py-1.5 bg-amber-50 hover:bg-amber-100 text-amber-800 text-xs font-bold rounded-lg border border-amber-200 shrink-0 transition-colors flex items-center gap-1"
+                        >
+                          <Phone className="w-3.5 h-3.5" />
+                          <span className="hidden sm:inline">Probar llamada</span>
+                        </a>
                         <button
                           type="button"
                           onClick={() => {
                             const newPhones = formData.topPhones.filter((_, i) => i !== idx);
                             setFormData({ ...formData, topPhones: newPhones });
                           }}
-                          className="p-2 text-red-600 hover:bg-red-50 rounded-lg cursor-pointer"
+                          title="Eliminar este teléfono"
+                          className="p-1.5 text-red-600 hover:bg-red-50 rounded-lg cursor-pointer shrink-0 transition-colors"
+                        >
+                          <Trash2 className="w-4 h-4" />
+                        </button>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+
+                {/* Direct Email Lines */}
+                <div className="p-4 bg-white rounded-xl border border-gray-200 space-y-4">
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center gap-2">
+                      <div className="w-7 h-7 rounded-lg bg-blue-100 text-blue-700 flex items-center justify-center">
+                        <Mail className="w-4 h-4" />
+                      </div>
+                      <div>
+                        <span className="text-xs font-bold text-gray-800 uppercase tracking-wide">
+                          Correos Electrónicos de Contacto
+                        </span>
+                        <p className="text-[11px] text-gray-500">
+                          Al hacer clic en la web, el cliente final abrirá su gestor de correo (<code className="bg-slate-100 px-1 py-0.5 rounded text-[10px]">mailto:</code>) para enviar un mensaje.
+                        </p>
+                      </div>
+                    </div>
+                    <button
+                      type="button"
+                      onClick={() => setFormData({ ...formData, contactEmails: [...(formData.contactEmails || []), 'contacto@moldmaq.com.mx'] })}
+                      className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-[#0F3B68] text-white rounded-lg text-xs font-bold hover:bg-[#0F3B68]/90 transition-colors cursor-pointer shadow-2xs"
+                    >
+                      <Plus className="w-3.5 h-3.5" />
+                      <span>+ Agregar Correo</span>
+                    </button>
+                  </div>
+
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-1">
+                    <div>
+                      <label className="block text-xs font-bold text-gray-700 uppercase mb-1">
+                        Título de la Sección de Correos
+                      </label>
+                      <input
+                        type="text"
+                        value={formData.contactEmailsTitle ?? 'Correos Electrónicos de Atención'}
+                        onChange={(e) => setFormData({ ...formData, contactEmailsTitle: e.target.value })}
+                        placeholder="Correos Electrónicos de Atención"
+                        className="w-full px-3 py-2 rounded-xl border border-gray-300 text-sm font-bold focus:ring-2 focus:ring-[#0F3B68]"
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-xs font-bold text-gray-700 uppercase mb-1">
+                        Subtítulo Explicativo de Correos
+                      </label>
+                      <input
+                        type="text"
+                        value={formData.contactEmailsSubtitle ?? 'Haga clic en cualquier correo para redactar y enviar un mensaje directo'}
+                        onChange={(e) => setFormData({ ...formData, contactEmailsSubtitle: e.target.value })}
+                        placeholder="Haga clic en cualquier correo para redactar y enviar un mensaje directo"
+                        className="w-full px-3 py-2 rounded-xl border border-gray-300 text-sm font-medium focus:ring-2 focus:ring-[#0F3B68]"
+                      />
+                    </div>
+                  </div>
+
+                  <div className="space-y-2 pt-1">
+                    <label className="block text-xs font-bold text-gray-700 uppercase">
+                      Lista de Correos Electrónicos ({formData.contactEmails ? formData.contactEmails.length : 0})
+                    </label>
+                    {(!formData.contactEmails || formData.contactEmails.length === 0) && (
+                      <p className="text-xs text-gray-400 italic py-2">No hay correos configurados. Haga clic en "+ Agregar Correo".</p>
+                    )}
+                    {formData.contactEmails && formData.contactEmails.map((email, idx) => (
+                      <div key={idx} className="flex items-center gap-2 bg-slate-50 p-2 rounded-xl border border-slate-200">
+                        <span className="text-xs font-bold text-gray-400 w-5 text-center shrink-0">#{idx + 1}</span>
+                        <input
+                          type="email"
+                          value={email}
+                          placeholder="ventas@moldmaq.com.mx"
+                          onChange={(e) => {
+                            const newEmails = [...(formData.contactEmails || [])];
+                            newEmails[idx] = e.target.value;
+                            setFormData({ ...formData, contactEmails: newEmails });
+                          }}
+                          className="flex-1 px-3 py-1.5 bg-white rounded-lg border border-gray-300 text-sm font-bold focus:ring-2 focus:ring-[#0F3B68]"
+                        />
+                        <a
+                          href={`mailto:${email.trim()}?subject=${encodeURIComponent('Solicitud de Información / Cotización - Moldmaq S.A.')}`}
+                          title="Probar enlace mailto:"
+                          className="px-2.5 py-1.5 bg-blue-50 hover:bg-blue-100 text-blue-800 text-xs font-bold rounded-lg border border-blue-200 shrink-0 transition-colors flex items-center gap-1"
+                        >
+                          <Mail className="w-3.5 h-3.5" />
+                          <span className="hidden sm:inline">Probar mailto:</span>
+                        </a>
+                        <button
+                          type="button"
+                          onClick={() => {
+                            const newEmails = (formData.contactEmails || []).filter((_, i) => i !== idx);
+                            setFormData({ ...formData, contactEmails: newEmails });
+                          }}
+                          title="Eliminar este correo"
+                          className="p-1.5 text-red-600 hover:bg-red-50 rounded-lg cursor-pointer shrink-0 transition-colors"
                         >
                           <Trash2 className="w-4 h-4" />
                         </button>

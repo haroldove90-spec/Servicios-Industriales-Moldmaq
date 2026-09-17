@@ -363,6 +363,7 @@ export default function App() {
           contactFormTitle={config.contactFormTitle}
           contactFormSubtitle={config.contactFormSubtitle}
           contactFormButtonText={config.contactFormButtonText}
+          quoteServiceOptions={config.quoteServiceOptions}
           showContactMap={config.showContactMap}
           contactMapUrl={config.contactMapUrl}
           contactMapTitle={config.contactMapTitle}

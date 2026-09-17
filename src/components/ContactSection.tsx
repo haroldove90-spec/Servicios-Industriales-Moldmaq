@@ -1,7 +1,8 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Phone, MapPin, Facebook, ExternalLink, Navigation, CheckCircle2, Mail } from 'lucide-react';
 import { WhatsAppIcon } from './WhatsAppIcon';
-import { CoverageLocationItem } from '../types';
+import { CoverageLocationItem, QuoteServiceOption } from '../types';
+import { DEFAULT_QUOTE_SERVICES } from '../lib/defaultData';
 
 interface ContactSectionProps {
   title: string;
@@ -30,6 +31,7 @@ interface ContactSectionProps {
   contactFormTitle?: string;
   contactFormSubtitle?: string;
   contactFormButtonText?: string;
+  quoteServiceOptions?: QuoteServiceOption[];
   
   // Google Maps props
   showContactMap?: boolean;
@@ -79,6 +81,7 @@ export const ContactSection: React.FC<ContactSectionProps> = ({
   contactFormTitle = "Solicitar Cotización de Maquinados o Moldes",
   contactFormSubtitle = "Llene el formulario con los datos de su proyecto para canalizarlo con el ingeniero especialista.",
   contactFormButtonText = "Enviar Cotización Técnica por WhatsApp",
+  quoteServiceOptions = DEFAULT_QUOTE_SERVICES,
   showContactMap = true,
   contactMapUrl = "https://maps.app.goo.gl/LQcL7r4fDj9WjZZp8",
   contactMapTitle = "Ubicación de Planta y Talleres Industriales",
@@ -99,10 +102,32 @@ export const ContactSection: React.FC<ContactSectionProps> = ({
   contactDirectWaButtonBgColor = "#D97706",
   contactDirectWaButtonTextColor = "#ffffff",
 }) => {
+  const activeServices = React.useMemo(() => {
+    const list = (quoteServiceOptions && quoteServiceOptions.length > 0)
+      ? quoteServiceOptions
+      : DEFAULT_QUOTE_SERVICES;
+    return list.filter((s) => s.active !== false && s.name && s.name.trim() !== '');
+  }, [quoteServiceOptions]);
+
   const [companyName, setCompanyName] = useState('');
   const [location, setLocation] = useState('');
-  const [serviceType, setServiceType] = useState('Maquinados CNC de Precisión');
+  const [serviceType, setServiceType] = useState(() => {
+    const first = (quoteServiceOptions && quoteServiceOptions.length > 0)
+      ? quoteServiceOptions.find((s) => s.active !== false && s.name && s.name.trim() !== '')?.name
+      : undefined;
+    return first || 'Diseño y Fabricación de Molde de Inyección';
+  });
   const [details, setDetails] = useState('');
+
+  // Keep selected serviceType synced if activeServices list changes
+  useEffect(() => {
+    if (activeServices.length > 0) {
+      const exists = activeServices.some((s) => s.name === serviceType);
+      if (!exists) {
+        setServiceType(activeServices[0].name);
+      }
+    }
+  }, [activeServices, serviceType]);
 
   const cleanPhone = (p: string) => p.replace(/\D/g, '');
 
@@ -445,17 +470,19 @@ export const ContactSection: React.FC<ContactSectionProps> = ({
                 <select
                   value={serviceType}
                   onChange={(e) => setServiceType(e.target.value)}
-                  className="w-full px-4 py-3 rounded-xl border border-gray-300 focus:ring-2 focus:ring-[#0F3B68] focus:border-[#0F3B68] text-sm font-medium bg-white"
+                  className="w-full px-4 py-3 rounded-xl border border-gray-300 focus:ring-2 focus:ring-[#0F3B68] focus:border-[#0F3B68] text-sm font-medium bg-white text-gray-900"
                 >
-                  <option value="Diseño y Fabricación de Molde">Diseño y Fabricación de Molde de Inyección</option>
-                  <option value="Reparación de Moldes / Troqueles">Reparación o Modificación de Moldes y Troqueles</option>
-                  <option value="Maquinados CNC de Precisión">Maquinados CNC de Precisión (Fresado / Torno)</option>
-                  <option value="Mantenimiento Industrial en Planta">Mantenimiento Industrial Preventivo / Correctivo</option>
-                  <option value="Pailería y Soldadura Especializada">Pailería y Soldadura Especializada (TIG/MIG)</option>
-                  <option value="Fabricación de Refacciones sobre Muestra">Fabricación de Refacciones Industriales sobre Muestra</option>
-                  <option value="Corte por Hilo / Electroerosión EDM">Electroerosión por Hilo y Penetración (EDM)</option>
-                  <option value="Automatización y Robótica">Automatización y Control de Procesos</option>
-                  <option value="Montaje y Reubicación de Maquinaria">Montaje y Reubicación de Maquinaria Pesada</option>
+                  {activeServices.length > 0 ? (
+                    activeServices.map((opt) => (
+                      <option key={opt.id} value={opt.name}>
+                        {opt.name}
+                      </option>
+                    ))
+                  ) : (
+                    <option value="Maquinados CNC y Moldes Industriales">
+                      Maquinados CNC y Moldes Industriales
+                    </option>
+                  )}
                 </select>
               </div>
 

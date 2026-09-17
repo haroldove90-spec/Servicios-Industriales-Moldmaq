@@ -1,4 +1,16 @@
-import { SiteConfig } from '../types';
+import { SiteConfig, QuoteServiceOption } from '../types';
+
+export const DEFAULT_QUOTE_SERVICES: QuoteServiceOption[] = [
+  { id: 'srv-1', name: 'Diseño y Fabricación de Molde de Inyección', active: true },
+  { id: 'srv-2', name: 'Reparación o Modificación de Moldes y Troqueles', active: true },
+  { id: 'srv-3', name: 'Maquinados CNC de Precisión (Fresado / Torno)', active: true },
+  { id: 'srv-4', name: 'Mantenimiento Industrial Preventivo / Correctivo', active: true },
+  { id: 'srv-5', name: 'Pailería y Soldadura Especializada (TIG/MIG)', active: true },
+  { id: 'srv-6', name: 'Fabricación de Refacciones Industriales sobre Muestra', active: true },
+  { id: 'srv-7', name: 'Electroerosión por Hilo y Penetración (EDM)', active: true },
+  { id: 'srv-8', name: 'Automatización y Control de Procesos', active: true },
+  { id: 'srv-9', name: 'Montaje y Reubicación de Maquinaria Pesada', active: true },
+];
 
 export const DEFAULT_SITE_CONFIG: SiteConfig = {
   pageTitle: "Servicios Industriales Moldmaq S.A. | Maquinados CNC, Moldes y Mantenimiento Industrial",
@@ -366,6 +378,7 @@ export const DEFAULT_SITE_CONFIG: SiteConfig = {
   contactFormLabelColor: "#374151",
   contactFormButtonBgColor: "#D97706",
   contactFormButtonTextColor: "#ffffff",
+  quoteServiceOptions: DEFAULT_QUOTE_SERVICES,
 
   showContactMap: true,
   contactMapUrl: "https://maps.app.goo.gl/LQcL7r4fDj9WjZZp8",

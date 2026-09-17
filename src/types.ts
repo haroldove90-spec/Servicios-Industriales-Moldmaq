@@ -33,6 +33,12 @@ export interface CoverageLocationItem {
   mapUrl?: string;
 }
 
+export interface QuoteServiceOption {
+  id: string;
+  name: string;
+  active: boolean;
+}
+
 export interface SiteConfig {
   pageTitle: string;
   logoUrl: string;
@@ -276,6 +282,7 @@ export interface SiteConfig {
   contactFormLabelColor?: string;
   contactFormButtonBgColor?: string;
   contactFormButtonTextColor?: string;
+  quoteServiceOptions?: QuoteServiceOption[];
 
   // Google Maps
   showContactMap?: boolean;

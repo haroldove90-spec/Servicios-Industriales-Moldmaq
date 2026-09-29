@@ -118,7 +118,7 @@ export const AdminLogin: React.FC<AdminLoginProps> = ({ config, onLoginSuccess, 
                 required
                 value={username}
                 onChange={(e) => setUsername(e.target.value)}
-                placeholder="Ingresa tu usuario (ej: admin_1)"
+                placeholder="Ingresa tu usuario"
                 className="w-full pl-10 pr-4 py-3 rounded-xl border border-gray-300 focus:ring-2 focus:ring-[#0F3B68] focus:border-transparent text-sm font-medium transition-all outline-none"
               />
             </div>
@@ -161,7 +161,7 @@ export const AdminLogin: React.FC<AdminLoginProps> = ({ config, onLoginSuccess, 
 
           <div className="pt-2 text-center border-t border-gray-100">
             <p className="text-[11px] text-gray-400 font-medium">
-              Credenciales de acceso: <strong className="text-gray-700">admin_1</strong> / <strong className="text-gray-700">Admin_123</strong>
+              Acceso exclusivo para personal administrativo autorizado
             </p>
           </div>
         </form>

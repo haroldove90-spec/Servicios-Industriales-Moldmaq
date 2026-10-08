@@ -217,7 +217,29 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({
   // Sync formData whenever config is reloaded or modal is opened
   React.useEffect(() => {
     if (isOpen) {
-      setFormData(config);
+      const enrichedSlides = (config.heroSlides || []).map((slide, idx) => ({
+        ...slide,
+        topSubtitlePart1: slide.topSubtitlePart1 !== undefined && slide.topSubtitlePart1 !== ''
+          ? slide.topSubtitlePart1
+          : (idx === 0 ? 'MAQUINADOS CNC & MOLDES' :
+             idx === 1 ? 'MOLDES DE ALTA PRECISIÓN' :
+             idx === 2 ? 'MANTENIMIENTO INDUSTRIAL' :
+             (config.heroTopSubtitlePart1 || 'MAQUINADOS CNC & MOLDES')),
+        topSubtitleColor1: slide.topSubtitleColor1 || config.heroTopSubtitleColor1 || '#FBBF24',
+        topSubtitlePart2: slide.topSubtitlePart2 !== undefined && slide.topSubtitlePart2 !== ''
+          ? slide.topSubtitlePart2
+          : (idx === 0 ? 'MANTENIMIENTO INDUSTRIAL' :
+             idx === 1 ? 'ELECTROEROSIÓN Y CNC' :
+             idx === 2 ? 'PAILERÍA Y MONTAJES' :
+             (config.heroTopSubtitlePart2 || 'MANTENIMIENTO INDUSTRIAL')),
+        topSubtitleColor2: slide.topSubtitleColor2 || config.heroTopSubtitleColor2 || '#ffffff',
+        topSubtitleSeparator: slide.topSubtitleSeparator || config.heroTopSubtitleSeparator || '•',
+      }));
+
+      setFormData({
+        ...config,
+        heroSlides: enrichedSlides.length > 0 ? enrichedSlides : config.heroSlides,
+      });
     }
   }, [config, isOpen]);
 
@@ -350,7 +372,12 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({
       imageUrl: '',
       title: 'Maquinados CNC de Precisión y Moldes',
       subtitle: 'Fabricación especializada y mantenimiento industrial para plantas de manufactura.',
-      buttonText: 'Cotizar Proyecto'
+      buttonText: 'Cotizar Proyecto',
+      topSubtitlePart1: formData.heroTopSubtitlePart1 || 'MAQUINADOS CNC & MOLDES',
+      topSubtitleColor1: formData.heroTopSubtitleColor1 || '#FBBF24',
+      topSubtitlePart2: formData.heroTopSubtitlePart2 || 'MANTENIMIENTO INDUSTRIAL',
+      topSubtitleColor2: formData.heroTopSubtitleColor2 || '#ffffff',
+      topSubtitleSeparator: formData.heroTopSubtitleSeparator || '•',
     };
     setFormData(prev => ({
       ...prev,
@@ -3186,16 +3213,34 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({
 
               {/* MÓDULO: SUBTÍTULO SUPERIOR (ARRIBA DEL TÍTULO PRINCIPAL) - 2 TEXTOS Y 2 COLORES */}
               <div className="bg-slate-900 text-white p-5 rounded-2xl border border-slate-700 shadow-md space-y-4">
-                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-slate-800 pb-3">
+                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-slate-800 pb-3">
                   <div>
                     <h3 className="font-extrabold text-sm sm:text-base text-amber-400 flex items-center gap-2">
                       <Sparkles className="w-4 h-4 text-amber-400" />
-                      Subtítulo Superior del Slider (Arriba del Título Principal)
+                      Subtítulo Superior Global / Plantilla Rápida (2 Textos y 2 Colores)
                     </h3>
                     <p className="text-xs text-slate-300 mt-0.5">
-                      Edite los 2 textos y sus 2 colores correspondientes que se muestran en el encabezado superior de las diapositivas.
+                      Configuración general por defecto. Puede aplicarla a todas las imágenes con un clic o personalizar cada imagen individualmente abajo.
                     </p>
                   </div>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      const newSlides = formData.heroSlides.map(slide => ({
+                        ...slide,
+                        topSubtitlePart1: formData.heroTopSubtitlePart1 || 'MAQUINADOS CNC & MOLDES',
+                        topSubtitleColor1: formData.heroTopSubtitleColor1 || '#FBBF24',
+                        topSubtitlePart2: formData.heroTopSubtitlePart2 || 'MANTENIMIENTO INDUSTRIAL',
+                        topSubtitleColor2: formData.heroTopSubtitleColor2 || '#ffffff',
+                        topSubtitleSeparator: formData.heroTopSubtitleSeparator || '•',
+                      }));
+                      setFormData({ ...formData, heroSlides: newSlides });
+                    }}
+                    className="inline-flex items-center gap-2 px-3 py-1.5 rounded-xl bg-amber-500 hover:bg-amber-400 text-slate-950 font-extrabold text-xs transition-all shrink-0 cursor-pointer shadow-md"
+                  >
+                    <Sparkles className="w-3.5 h-3.5" />
+                    <span>Copiar a las {formData.heroSlides.length} diapositivas</span>
+                  </button>
                 </div>
 
                 {/* Previsualización en vivo idéntica a la vista web */}
@@ -3409,42 +3454,124 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({
                     />
                   </div>
 
-                  {/* Subtítulo Superior personalizado opcional por Diapositiva */}
-                  <div className="bg-white p-3 rounded-xl border border-gray-200 space-y-2">
-                    <span className="text-[11px] font-bold text-[#0E5197] uppercase tracking-wide block">
-                      Subtítulo Superior para esta Diapositiva (Opcional)
-                    </span>
-                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                      <div>
-                        <label className="block text-[10px] font-bold text-gray-500 uppercase mb-1">
-                          Parte 1 (Dejar vacío para usar general)
-                        </label>
-                        <input
-                          type="text"
-                          placeholder={formData.heroTopSubtitlePart1 || "MAQUINADOS CNC & MOLDES"}
-                          value={slide.topSubtitlePart1 ?? ''}
-                          onChange={(e) => {
+                  {/* Subtítulo Superior para esta Diapositiva #{idx + 1} (2 Textos y 2 Colores) */}
+                  <div className="bg-slate-900 text-white p-4 rounded-xl border border-slate-700 shadow-sm space-y-3">
+                    <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-slate-800 pb-2">
+                      <div className="flex items-center gap-2">
+                        <Sparkles className="w-3.5 h-3.5 text-amber-400" />
+                        <span className="text-xs font-bold uppercase tracking-wider text-amber-400">
+                          Subtítulo Superior Diapositiva #{idx + 1} (2 Textos y 2 Colores)
+                        </span>
+                      </div>
+                      <button
+                        type="button"
+                        onClick={() => {
+                          const newSlides = [...formData.heroSlides];
+                          newSlides[idx] = {
+                            ...newSlides[idx],
+                            topSubtitlePart1: formData.heroTopSubtitlePart1 || 'MAQUINADOS CNC & MOLDES',
+                            topSubtitleColor1: formData.heroTopSubtitleColor1 || '#FBBF24',
+                            topSubtitlePart2: formData.heroTopSubtitlePart2 || 'MANTENIMIENTO INDUSTRIAL',
+                            topSubtitleColor2: formData.heroTopSubtitleColor2 || '#ffffff',
+                          };
+                          setFormData({ ...formData, heroSlides: newSlides });
+                        }}
+                        className="text-[10px] text-slate-400 hover:text-amber-300 font-bold underline cursor-pointer"
+                      >
+                        Restablecer a valores globales
+                      </button>
+                    </div>
+
+                    {/* Previsualización en tiempo real de esta diapositiva */}
+                    <div className="p-3 rounded-lg bg-black/70 border border-slate-700 flex flex-col items-center justify-center text-center">
+                      <span className="text-[9px] uppercase font-bold tracking-wider text-slate-400 mb-1.5">
+                        Vista previa en vivo para Diapositiva #{idx + 1}
+                      </span>
+                      <div className="inline-flex flex-wrap items-center justify-center gap-1.5 text-xs font-medium uppercase tracking-widest px-3 py-1.5 rounded-lg bg-slate-900/90 shadow-inner">
+                        <span
+                          style={{ color: slide.topSubtitleColor1 || formData.heroTopSubtitleColor1 || '#FBBF24' }}
+                          className="font-bold drop-shadow-xs"
+                        >
+                          {slide.topSubtitlePart1 || formData.heroTopSubtitlePart1 || 'MAQUINADOS CNC & MOLDES'}
+                        </span>
+                        <span className="opacity-50 text-white select-none">
+                          {slide.topSubtitleSeparator || formData.heroTopSubtitleSeparator || '•'}
+                        </span>
+                        <span
+                          style={{ color: slide.topSubtitleColor2 || formData.heroTopSubtitleColor2 || '#ffffff' }}
+                          className="font-medium drop-shadow-xs"
+                        >
+                          {slide.topSubtitlePart2 || formData.heroTopSubtitlePart2 || 'MANTENIMIENTO INDUSTRIAL'}
+                        </span>
+                      </div>
+                    </div>
+
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-3 pt-1">
+                      {/* Bloque Parte 1 */}
+                      <div className="bg-slate-800/80 p-3 rounded-lg border border-slate-700 space-y-2.5">
+                        <span className="text-[11px] font-bold uppercase tracking-wider text-amber-400 block border-b border-slate-700/60 pb-1">
+                          1ª Parte del Subtítulo (Destacado)
+                        </span>
+                        <div>
+                          <label className="block text-[10px] font-bold text-slate-300 uppercase mb-1">
+                            Texto de la 1ª Parte
+                          </label>
+                          <input
+                            type="text"
+                            value={slide.topSubtitlePart1 ?? ''}
+                            onChange={(e) => {
+                              const newSlides = [...formData.heroSlides];
+                              newSlides[idx] = { ...newSlides[idx], topSubtitlePart1: e.target.value };
+                              setFormData({ ...formData, heroSlides: newSlides });
+                            }}
+                            placeholder={formData.heroTopSubtitlePart1 || "MAQUINADOS CNC & MOLDES"}
+                            className="w-full px-2.5 py-1.5 rounded-lg border border-slate-600 bg-slate-950 text-white text-xs font-bold placeholder-slate-500 focus:border-amber-400 outline-none"
+                          />
+                        </div>
+                        <ColorPickerInput
+                          label="Color de la 1ª Parte"
+                          value={slide.topSubtitleColor1 || formData.heroTopSubtitleColor1 || '#FBBF24'}
+                          defaultColor="#FBBF24"
+                          description="Color del primer texto en esta diapositiva"
+                          onChange={(val) => {
                             const newSlides = [...formData.heroSlides];
-                            newSlides[idx] = { ...newSlides[idx], topSubtitlePart1: e.target.value };
+                            newSlides[idx] = { ...newSlides[idx], topSubtitleColor1: val };
                             setFormData({ ...formData, heroSlides: newSlides });
                           }}
-                          className="w-full px-3 py-1.5 rounded-lg border border-gray-300 text-xs"
                         />
                       </div>
-                      <div>
-                        <label className="block text-[10px] font-bold text-gray-500 uppercase mb-1">
-                          Parte 2 (Dejar vacío para usar general)
-                        </label>
-                        <input
-                          type="text"
-                          placeholder={formData.heroTopSubtitlePart2 || "MANTENIMIENTO INDUSTRIAL"}
-                          value={slide.topSubtitlePart2 ?? ''}
-                          onChange={(e) => {
+
+                      {/* Bloque Parte 2 */}
+                      <div className="bg-slate-800/80 p-3 rounded-lg border border-slate-700 space-y-2.5">
+                        <span className="text-[11px] font-bold uppercase tracking-wider text-blue-300 block border-b border-slate-700/60 pb-1">
+                          2ª Parte del Subtítulo
+                        </span>
+                        <div>
+                          <label className="block text-[10px] font-bold text-slate-300 uppercase mb-1">
+                            Texto de la 2ª Parte
+                          </label>
+                          <input
+                            type="text"
+                            value={slide.topSubtitlePart2 ?? ''}
+                            onChange={(e) => {
+                              const newSlides = [...formData.heroSlides];
+                              newSlides[idx] = { ...newSlides[idx], topSubtitlePart2: e.target.value };
+                              setFormData({ ...formData, heroSlides: newSlides });
+                            }}
+                            placeholder={formData.heroTopSubtitlePart2 || "MANTENIMIENTO INDUSTRIAL"}
+                            className="w-full px-2.5 py-1.5 rounded-lg border border-slate-600 bg-slate-950 text-white text-xs font-bold placeholder-slate-500 focus:border-blue-400 outline-none"
+                          />
+                        </div>
+                        <ColorPickerInput
+                          label="Color de la 2ª Parte"
+                          value={slide.topSubtitleColor2 || formData.heroTopSubtitleColor2 || '#ffffff'}
+                          defaultColor="#ffffff"
+                          description="Color del segundo texto en esta diapositiva"
+                          onChange={(val) => {
                             const newSlides = [...formData.heroSlides];
-                            newSlides[idx] = { ...newSlides[idx], topSubtitlePart2: e.target.value };
+                            newSlides[idx] = { ...newSlides[idx], topSubtitleColor2: val };
                             setFormData({ ...formData, heroSlides: newSlides });
                           }}
-                          className="w-full px-3 py-1.5 rounded-lg border border-gray-300 text-xs"
                         />
                       </div>
                     </div>

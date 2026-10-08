@@ -5,7 +5,10 @@ export interface HeroSlide {
   subtitle: string;
   buttonText: string;
   topSubtitlePart1?: string;
+  topSubtitleColor1?: string;
   topSubtitlePart2?: string;
+  topSubtitleColor2?: string;
+  topSubtitleSeparator?: string;
 }
 
 export interface ValueAddedItem {

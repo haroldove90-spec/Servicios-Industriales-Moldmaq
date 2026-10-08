@@ -121,7 +121,7 @@ export const HeroSlider: React.FC<HeroSliderProps> = ({
       {/* Content Overlay */}
       <div className="relative z-10 max-w-7xl mx-auto h-full px-4 sm:px-6 lg:px-8 flex flex-col justify-center">
         <div className="max-w-2xl space-y-4 sm:space-y-6">
-          {/* Subtítulo superior compuesto (2 partes, 2 colores y separador configurable) */}
+          {/* Subtítulo superior compuesto (2 partes, 2 colores y separador configurable por diapositiva) */}
           {(() => {
             const topPart1 = currentSlide.topSubtitlePart1 !== undefined && currentSlide.topSubtitlePart1 !== ''
               ? currentSlide.topSubtitlePart1
@@ -129,9 +129,9 @@ export const HeroSlider: React.FC<HeroSliderProps> = ({
             const topPart2 = currentSlide.topSubtitlePart2 !== undefined && currentSlide.topSubtitlePart2 !== ''
               ? currentSlide.topSubtitlePart2
               : heroTopSubtitlePart2;
-            const color1 = heroTopSubtitleColor1 || '#FBBF24';
-            const color2 = heroTopSubtitleColor2 || '#ffffff';
-            const separator = heroTopSubtitleSeparator !== undefined ? heroTopSubtitleSeparator : '•';
+            const color1 = currentSlide.topSubtitleColor1 || heroTopSubtitleColor1 || '#FBBF24';
+            const color2 = currentSlide.topSubtitleColor2 || heroTopSubtitleColor2 || '#ffffff';
+            const separator = currentSlide.topSubtitleSeparator || heroTopSubtitleSeparator || '•';
 
             if (!topPart1 && !topPart2) return null;
 

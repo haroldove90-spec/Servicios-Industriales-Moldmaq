@@ -89,21 +89,33 @@ export const DEFAULT_SITE_CONFIG: SiteConfig = {
       imageUrl: "https://images.unsplash.com/photo-1581092160607-ee22621dd758?auto=format&fit=crop&w=1600&q=80",
       title: "Soluciones Integrales en Maquinados CNC y Moldes de Alta Precisión",
       subtitle: "Ingeniería de vanguardia, fabricación especializada y mantenimiento industrial para plantas de manufactura en todo México.",
-      buttonText: "Cotizar por WhatsApp"
+      buttonText: "Cotizar por WhatsApp",
+      topSubtitlePart1: "MAQUINADOS CNC & MOLDES",
+      topSubtitleColor1: "#FBBF24",
+      topSubtitlePart2: "MANTENIMIENTO INDUSTRIAL",
+      topSubtitleColor2: "#ffffff"
     },
     {
       id: "slide-2",
       imageUrl: "https://images.unsplash.com/photo-1581092335397-9583fe92d232?auto=format&fit=crop&w=1600&q=80",
       title: "Diseño, Fabricación y Reparación de Moldes y Troqueles",
       subtitle: "Tolerancias micrométricas, electroerosión por hilo, centros de maquinado CNC de última generación y aceros certificados.",
-      buttonText: "Solicitar Asesoría Técnica"
+      buttonText: "Solicitar Asesoría Técnica",
+      topSubtitlePart1: "MOLDES DE ALTA PRECISIÓN",
+      topSubtitleColor1: "#FBBF24",
+      topSubtitlePart2: "ELECTROEROSIÓN Y CNC",
+      topSubtitleColor2: "#ffffff"
     },
     {
       id: "slide-3",
       imageUrl: "https://images.unsplash.com/photo-1504917599217-d4dc5ebe6122?auto=format&fit=crop&w=1600&q=80",
       title: "Mantenimiento Industrial Preventivo, Correctivo y Montajes",
       subtitle: "Optimizamos el rendimiento de sus líneas de producción con técnicos certificados, pailería y soldadura especializada.",
-      buttonText: "Contactar a un Ingeniero"
+      buttonText: "Contactar a un Ingeniero",
+      topSubtitlePart1: "MANTENIMIENTO INDUSTRIAL",
+      topSubtitleColor1: "#FBBF24",
+      topSubtitlePart2: "PAILERÍA Y MONTAJES",
+      topSubtitleColor2: "#ffffff"
     }
   ],
 

@@ -51,6 +51,11 @@ export const DEFAULT_SITE_CONFIG: SiteConfig = {
   heroSecButtonTextColor: "#ffffff",
   heroTitleColor: "#ffffff",
   heroSubtitleColor: "#e2e8f0",
+  heroTopSubtitlePart1: "MAQUINADOS CNC & MOLDES",
+  heroTopSubtitleColor1: "#FBBF24",
+  heroTopSubtitlePart2: "MANTENIMIENTO INDUSTRIAL",
+  heroTopSubtitleColor2: "#ffffff",
+  heroTopSubtitleSeparator: "•",
 
   // Top Bar Defaults
   showTopBar: true,

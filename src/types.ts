@@ -4,6 +4,8 @@ export interface HeroSlide {
   title: string;
   subtitle: string;
   buttonText: string;
+  topSubtitlePart1?: string;
+  topSubtitlePart2?: string;
 }
 
 export interface ValueAddedItem {
@@ -98,6 +100,11 @@ export interface SiteConfig {
   heroSecButtonTextColor?: string;
   heroTitleColor?: string;
   heroSubtitleColor?: string;
+  heroTopSubtitlePart1?: string;
+  heroTopSubtitleColor1?: string;
+  heroTopSubtitlePart2?: string;
+  heroTopSubtitleColor2?: string;
+  heroTopSubtitleSeparator?: string;
 
   // Welcome section below slider
   welcomeMessageTitle: string;

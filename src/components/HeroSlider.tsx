@@ -15,6 +15,11 @@ interface HeroSliderProps {
   heroSecButtonTextColor?: string;
   heroTitleColor?: string;
   heroSubtitleColor?: string;
+  heroTopSubtitlePart1?: string;
+  heroTopSubtitleColor1?: string;
+  heroTopSubtitlePart2?: string;
+  heroTopSubtitleColor2?: string;
+  heroTopSubtitleSeparator?: string;
 }
 
 export const HeroSlider: React.FC<HeroSliderProps> = ({
@@ -27,7 +32,12 @@ export const HeroSlider: React.FC<HeroSliderProps> = ({
   heroSecButtonBgColor = "rgba(255, 255, 255, 0.1)",
   heroSecButtonTextColor = "#ffffff",
   heroTitleColor = "#ffffff",
-  heroSubtitleColor = "#e2e8f0"
+  heroSubtitleColor = "#e2e8f0",
+  heroTopSubtitlePart1 = "MAQUINADOS CNC & MOLDES",
+  heroTopSubtitleColor1 = "#FBBF24",
+  heroTopSubtitlePart2 = "MANTENIMIENTO INDUSTRIAL",
+  heroTopSubtitleColor2 = "#ffffff",
+  heroTopSubtitleSeparator = "•"
 }) => {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [direction, setDirection] = useState(1); // 1 = right, -1 = left
@@ -111,17 +121,44 @@ export const HeroSlider: React.FC<HeroSliderProps> = ({
       {/* Content Overlay */}
       <div className="relative z-10 max-w-7xl mx-auto h-full px-4 sm:px-6 lg:px-8 flex flex-col justify-center">
         <div className="max-w-2xl space-y-4 sm:space-y-6">
-          <motion.div
-            key={`badge-${currentIndex}`}
-            initial={{ opacity: 0, y: 15 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.1, duration: 0.4 }}
-            className="inline-flex items-center gap-2 text-white/90 text-xs sm:text-sm font-medium uppercase tracking-widest mb-1"
-          >
-            <span className="text-amber-400 font-bold">Maquinados CNC & Moldes</span>
-            <span className="opacity-50">•</span>
-            <span>Mantenimiento Industrial</span>
-          </motion.div>
+          {/* Subtítulo superior compuesto (2 partes, 2 colores y separador configurable) */}
+          {(() => {
+            const topPart1 = currentSlide.topSubtitlePart1 !== undefined && currentSlide.topSubtitlePart1 !== ''
+              ? currentSlide.topSubtitlePart1
+              : heroTopSubtitlePart1;
+            const topPart2 = currentSlide.topSubtitlePart2 !== undefined && currentSlide.topSubtitlePart2 !== ''
+              ? currentSlide.topSubtitlePart2
+              : heroTopSubtitlePart2;
+            const color1 = heroTopSubtitleColor1 || '#FBBF24';
+            const color2 = heroTopSubtitleColor2 || '#ffffff';
+            const separator = heroTopSubtitleSeparator !== undefined ? heroTopSubtitleSeparator : '•';
+
+            if (!topPart1 && !topPart2) return null;
+
+            return (
+              <motion.div
+                key={`badge-${currentIndex}`}
+                initial={{ opacity: 0, y: 15 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.1, duration: 0.4 }}
+                className="inline-flex flex-wrap items-center gap-2 text-xs sm:text-sm font-medium uppercase tracking-widest mb-1"
+              >
+                {topPart1 && (
+                  <span style={{ color: color1 }} className="font-bold drop-shadow-xs">
+                    {topPart1}
+                  </span>
+                )}
+                {topPart1 && topPart2 && separator && (
+                  <span className="opacity-50 text-white select-none">{separator}</span>
+                )}
+                {topPart2 && (
+                  <span style={{ color: color2 }} className="font-medium drop-shadow-xs">
+                    {topPart2}
+                  </span>
+                )}
+              </motion.div>
+            );
+          })()}
 
           {currentSlide.title && currentSlide.title.trim() !== '' && (
             <motion.h1

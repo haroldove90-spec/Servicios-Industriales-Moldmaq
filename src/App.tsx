@@ -236,6 +236,11 @@ export default function App() {
           heroSecButtonTextColor={config.heroSecondaryBtnTextColor || config.heroSecButtonTextColor}
           heroTitleColor={config.heroTitleColor}
           heroSubtitleColor={config.heroSubtitleColor}
+          heroTopSubtitlePart1={config.heroTopSubtitlePart1}
+          heroTopSubtitleColor1={config.heroTopSubtitleColor1}
+          heroTopSubtitlePart2={config.heroTopSubtitlePart2}
+          heroTopSubtitleColor2={config.heroTopSubtitleColor2}
+          heroTopSubtitleSeparator={config.heroTopSubtitleSeparator}
         />
 
         {/* 4. Welcome Message Below Slider */}
